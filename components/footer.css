@@ -56,8 +56,13 @@
   flex-direction: column;
   gap: 16px;                     /* Figma: havolalar orasi */
 }
-.site-footer__unavailable {
-  cursor: default;
+/* Barcha footer havolalari bir xil ishlaydi: hover'da tagchiziq. */
+.site-footer__col a:hover,
+.site-footer__legal a:hover {
+  text-decoration: underline;
+}
+.site-footer__social a {
+  display: inline-flex;
 }
 
 /* ---- bo'linish chizig'i ---- */
