@@ -131,6 +131,11 @@ export function revealCards(container, from = 0) {
   ScrollTrigger?.refresh();
   if (!gsap || reducedMotion()) return;
 
+  // Sahifa fonda (boshqa tabda) bo'lsa brauzer animatsiyani to'xtatib
+  // turadi -> kartochkalar YASHIRIN holda qotib qolardi. Bunday paytda
+  // umuman animatsiya qilmaymiz: ular shundoq ham ko'rinib turadi.
+  if (document.hidden) return;
+
   const cards = [...container.children].slice(from);
   if (!cards.length) return;
   // Ekrandan tashqaridagi to'liq grid uchun kerak emas — uni
@@ -138,7 +143,7 @@ export function revealCards(container, from = 0) {
   const box = container.getBoundingClientRect();
   if (from === 0 && (box.top > window.innerHeight || box.bottom < 0)) return;
 
-  gsap.fromTo(
+  const tween = gsap.fromTo(
     cards,
     { y: 12, autoAlpha: 0 },
     {
@@ -150,6 +155,13 @@ export function revealCards(container, from = 0) {
       clearProps: "all", // tugagach inline stillar qolmasin
     }
   );
+
+  // Xavfsizlik to'ri (motion.js dagi kabi): animatsiya negadir tugamay
+  // qolsa, kartochkalarni majburan ko'rsatamiz — kontent hech qachon
+  // ko'rinmay qolib ketmasin.
+  setTimeout(() => {
+    if (tween.progress() < 1) gsap.set(cards, { clearProps: "all" });
+  }, 2500);
 }
 
 /* Raqamni eski qiymatdan yangisiga "sanab" o'tkazadi ($120 -> $145).
