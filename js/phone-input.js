@@ -51,7 +51,26 @@ export function createPhoneInput(input, onInteract) {
     if (typeof onInteract === "function") onInteract();
   });
 
-  // Davlat almashса — format va tekshiruv qaytadan.
+  // Davlat ro'yxati ochilганда — sahifa orqa fondan siljimasin.
+  // overflow:hidden qo'yгач skrollbar yo'qolib sahifa "sakrайди" —
+  // shu kenglikni padding bilan qoplaymiz.
+  const lockScroll = () => {
+    const barWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    if (barWidth > 0) document.body.style.paddingRight = barWidth + "px";
+    window.__lenis?.stop(); // yumshoq skroll (Lenis) ham to'xtasin
+  };
+  const unlockScroll = () => {
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+    window.__lenis?.start();
+  };
+  input.addEventListener("open:countryselector", lockScroll);
+  input.addEventListener("close:countryselector", unlockScroll);
+
+  // Davlat almашса — format va tekshiruv qaytadan.
   input.addEventListener("countrychange", () => {
     if (isUz()) input.value = formatUz(input.value);
     if (typeof onInteract === "function") onInteract();

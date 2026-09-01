@@ -82,27 +82,92 @@
   box-shadow: 0 0 0 2px rgba(255, 51, 51, 0.25);
 }
 
-/* --- intl-tel-input: mavjud .field__input uslubiga moslash --- */
+/* --- intl-tel-input: mavjud .field__input / dizayn uslubiga moslash --- */
 .field .iti {
   display: block;
   width: 100%;
 }
-/* kutubxona inputga o'z klassini qo'shadi; balandlik/shrift bir xil bo'lsin */
 .field .iti .field__input {
   width: 100%;
 }
 .iti__selected-dial-code {
   font-family: var(--font-system);
   font-size: 16px;
+  color: var(--black);
 }
 .iti--separate-dial-code .iti__selected-country {
   background: var(--white);
+  border-radius: 4px 0 0 4px;
 }
-/* Mobil: davlat ro'yxati va input ekrandan chiqmasin.
-   (Kutubxona kichik ekranда o'zi to'liq ekran popup ochadi, bu — zaxira.) */
+.iti__selected-country:hover,
+.iti__selected-country:focus {
+  background: #f3f3f3;
+}
+.iti__arrow {
+  border-top-color: #6d6d6d;
+}
+
+/* --- Davlat ro'yxati (popup) — chiroyliroq --- */
+.iti__country-container {
+  padding: 0;
+}
+.iti__country-list {
+  border: 1px solid var(--black);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+  background: var(--white);
+  padding: 6px;
+  max-height: 320px;
+}
+.iti__search-input-wrapper {
+  padding: 4px 4px 8px;
+}
+.iti__search-input {
+  height: 40px;
+  border: 1px solid var(--color-line-soft);
+  border-radius: 6px;
+  padding-inline: 34px 12px;   /* chapда qidiruv ikonkаси uchun joy */
+  font-family: var(--font-system);
+  font-size: 15px;
+}
+.iti__search-input:focus {
+  outline: none;
+  border-color: var(--black);
+}
+.iti__country {
+  border-radius: 6px;
+  padding: 9px 10px;
+  font-family: var(--font-system);
+  font-size: 15px;
+  line-height: 1.2;
+}
+.iti__country .iti__dial-code {
+  color: #6d6d6d;
+}
+/* klaviatura/sichqoncha bilan tanlangan qator */
+.iti__country.iti__highlight {
+  background: var(--black);
+  color: var(--white);
+}
+.iti__country.iti__highlight .iti__dial-code {
+  color: rgba(255, 255, 255, 0.7);
+}
+.iti__no-results {
+  padding: 12px 10px;
+  color: #6d6d6d;
+  font-family: var(--font-system);
+  font-size: 14px;
+}
+
+/* Mobil: kutubxona o'zi to'liq ekran popup ochadi; qidiruv/qatorlar kattaroq. */
 @media (max-width: 480px) {
-  .iti__dropdown-content {
-    max-width: calc(100vw - 24px);
+  .iti__country-list {
+    border-radius: 0;
+    max-height: none;
+  }
+  .iti__country {
+    padding: 13px 12px;
+    font-size: 16px;
   }
 }
 

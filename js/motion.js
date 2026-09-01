@@ -34,6 +34,9 @@ export function initMotion() {
     wheelMultiplier: 0.9, // g'ildirak biroz "yengil"
     easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)), // expo.out
   });
+  // Boshqa modullar (masalan telefon davlat ro'yxati) skrollни vaqtincha
+  // to'xtata olsin: window.__lenis.stop() / .start().
+  window.__lenis = lenis;
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
