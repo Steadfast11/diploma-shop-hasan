@@ -102,6 +102,7 @@ summaryEl.addEventListener("click", async (e) => {
   try {
     await api.createOrder(); // butun savatdan buyurtma
     cartStore.refresh(); // server savatni o'zi tozaladi -> header sonini yangilaymiz
+    await render(); // savat endi bo'sh -> ro'yxatni ("No products...") qayta chizamiz
     openModal({
       title: "Order placed!",
       bodyHTML: "<p>Your order was placed successfully.</p>",

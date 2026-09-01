@@ -54,7 +54,9 @@ Umumiy: **har sahifa skripti bir xil 4 bosqich** —
    narxni "snapshot" qiladi, savatni tozalaydi, `ordersCount` oshiradi)
 4. Server buyurtma yaratganda savatni o'zi tozalaydi; `cartStore.refresh()` faqat
    header sonini qayta o'qitadi (ikkinchi `DELETE /cart` yuborilmaydi)
-5. `location.href = "/pages/profile.html"` — "My orders" ko'rinadi
+5. `render()` qayta chaqiriladi → savat endi bo'sh → ekranда "No products in your bag",
+   "Go to checkout" `disabled` (tovarlar avtomatik yo'qoladi)
+6. "Order placed!" modal → "View my orders" → `location.href = "/pages/profile.html"`
 
 ## 6. Kirish
 1. `login.js` forma `submit` → `e.preventDefault()`
