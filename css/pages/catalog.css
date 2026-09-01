@@ -236,7 +236,9 @@
    RESPONSIVE — Figma faqat 1920px beradi; kichik ekranlarda
    filtr panelini yuqoriga olamiz (chapda joy qolmaydi).
    ============================================================ */
-@media (max-width: 1499px) {
+/* Absolute filtr faqat 1920px Figma frame'da o'ng kontentga tegmaydi.
+   Undan kichik ekranda ikki haqiqiy ustun ishlatamiz. */
+@media (max-width: 1919px) {
   .catalog {
     width: min(100% - 2 * var(--gutter), var(--container));
     margin-inline: auto;
@@ -251,6 +253,8 @@
   }
   .catalog__content {
     width: auto;
+    margin-inline: 0;
+    min-width: 0;
   }
   .product-grid {
     grid-template-columns: repeat(3, 1fr); /* joy kamaydi */
