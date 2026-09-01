@@ -20,14 +20,16 @@ const mainEl = document.querySelector("[data-cart-main]");
 const summaryEl = document.querySelector("[data-cart-summary]");
 
 function itemHTML(it) {
+  // rasm va nom -> mahsulot sahifasiga havola
+  const href = `/pages/product.html?id=${encodeURIComponent(it.productId)}`;
   const image = it.image
     ? `<img class="cart-item__image" src="${esc(it.image)}" alt="${esc(it.title)}" />`
     : `<div class="cart-item__image"></div>`;
   return `
     <div class="cart-item" data-id="${esc(it.productId)}">
-      ${image}
+      <a class="cart-item__media" href="${href}">${image}</a>
       <div class="cart-item__info">
-        <p class="cart-item__title">${esc(it.title)}</p>
+        <a class="cart-item__title" href="${href}">${esc(it.title)}</a>
         <p class="cart-item__price">${money(it.price)}</p>
         <button class="cart-item__remove" type="button" data-remove aria-label="O'chirish">
           <img src="/assets/icons/trash.svg" alt="" width="24" height="24" />

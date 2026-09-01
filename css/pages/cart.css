@@ -40,6 +40,10 @@
   align-items: start;
   padding-block: 17px;       /* Figma: qatorlar orasi ~190px pitch (176 + 14) */
 }
+.cart-item__media {
+  display: block;
+  width: 176px;
+}
 .cart-item__image {
   width: 176px;
   height: 176px;
@@ -51,6 +55,12 @@
   display: flex;
   flex-direction: column;
   min-height: 176px;
+}
+.cart-item__title {
+  display: block;
+}
+.cart-item__title:hover {
+  text-decoration: underline;
 }
 .cart-item__price {
   margin-top: 10px;
@@ -154,8 +164,11 @@
   .cart-item {
     grid-template-columns: 96px 1fr;
   }
+  .cart-item__media,
   .cart-item__image {
     width: 96px;
+  }
+  .cart-item__image {
     height: 96px;
   }
   .cart-item .qty {
