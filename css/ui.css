@@ -415,10 +415,11 @@ a,
 img.img-fallback:not(.is-loaded) {
   opacity: 0;
 }
-/* Yuklangach yumshoq ochiladi. Ataylab TRANSITION emas, ANIMATSIYA:
-   animatsiya ishlamay qolsa ham opacity o'zining oddiy 1 qiymatida
-   qoladi -> rasm hech qachon ko'rinmay qolib ketmaydi. */
-img.img-fallback.is-loaded {
+/* Yuklangach ko'rinadi (yuqoridagi :not(...) qoidasi endi mos kelmaydi).
+   Fade esa ALOHIDA "img-fade" klassi bilan qo'shiladi — uni JS faqat
+   sahifa ekranda bo'lganda qo'yadi. Sabab: fon tabda animatsiya 0% da
+   (opacity: 0) qotib qoladi va rasm ko'rinmay ketardi. */
+img.img-fallback.is-loaded.img-fade {
   animation: img-fade-in 0.6s var(--ease-soft);
 }
 @keyframes img-fade-in {

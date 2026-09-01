@@ -12,7 +12,7 @@ import { initLayout } from "../components.js";
 import * as cartStore from "../cart-store.js";
 import * as api from "../api.js";
 import { isLoggedIn } from "../auth.js";
-import { money, esc, showError, toast, friendlyError, openModal, countUp } from "../ui.js";
+import { money, esc, showError, toast, friendlyError, openModal, countUp, playOnce } from "../ui.js";
 
 initLayout();
 
@@ -135,10 +135,7 @@ mainEl.addEventListener("click", async (e) => {
     // server miqdorni cheklashi mumkin (maks 20) -> haqiqiy qiymatni olamiz
     const fresh = items.find((it) => it.productId === id);
     qtyEl.textContent = String(fresh ? fresh.qty : next);
-    qtyEl.classList.add("is-changed");
-    qtyEl.addEventListener("animationend", () => qtyEl.classList.remove("is-changed"), {
-      once: true,
-    });
+    playOnce(qtyEl, "is-changed");
     updateSummary(total);
   } catch (err) {
     toast(friendlyError(err), "error");

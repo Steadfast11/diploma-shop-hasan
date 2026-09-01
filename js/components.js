@@ -11,7 +11,7 @@ import { getCount, subscribe } from "./cart-store.js";
 import { initReveal } from "./reveal.js";
 import { initMotion } from "./motion.js";
 import { toggleFavorite } from "./favorites.js";
-import { toast } from "./ui.js";
+import { toast, playOnce } from "./ui.js";
 
 // Bitta komponentni yuklab, kerakli div ichiga qo'yadi.
 async function loadComponent(name, mountId) {
@@ -101,12 +101,19 @@ function wireImageFallback() {
 // "load" ham "error" kabi bubble bo'lmaydi -> yuqoridagi bilan bir xil
 // uslub: document darajasida capture=true.
 function wireImageFade() {
+  // "is-loaded" — rasmni KO'RSATADI (majburiy).
+  // "img-fade" — faqat bezak; playOnce uni sahifa fonda bo'lsa qo'ymaydi.
+  const show = (img) => {
+    img.classList.add("is-loaded");
+    playOnce(img, "img-fade");
+  };
+
   document.addEventListener(
     "load",
     (e) => {
       const img = e.target;
       if (img.tagName !== "IMG" || !img.classList.contains("img-fallback")) return;
-      img.classList.add("is-loaded");
+      show(img);
     },
     true
   );
@@ -115,7 +122,7 @@ function wireImageFade() {
   // Faqat ALLAQACHON yuklangan (complete) rasmlarni ochamiz.
   const sweep = () =>
     document.querySelectorAll("img.img-fallback:not(.is-loaded)").forEach((img) => {
-      if (img.complete) img.classList.add("is-loaded");
+      if (img.complete) show(img);
     });
   window.addEventListener("load", sweep);
   setTimeout(sweep, 3000); // xavfsizlik to'ri
@@ -162,12 +169,7 @@ function wireFavorites() {
     btn.setAttribute("aria-pressed", String(nowFav));
     btn.setAttribute("aria-label", nowFav ? "Remove from favorites" : "Add to favorites");
     // Faqat QO'SHILGANDA yurakcha bir marta sakraydi (sahifa ochilganda emas).
-    if (nowFav) {
-      btn.classList.add("fav-pop");
-      btn.addEventListener("animationend", () => btn.classList.remove("fav-pop"), {
-        once: true,
-      });
-    }
+    if (nowFav) playOnce(btn, "fav-pop");
   });
 }
 

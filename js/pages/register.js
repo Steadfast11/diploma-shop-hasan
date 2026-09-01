@@ -23,6 +23,7 @@ import {
   validatePasswordConfirmation,
 } from "../validation.js";
 import { createPhoneInput } from "../phone-input.js";
+import { playOnce } from "../ui.js";
 
 initLayout();
 
@@ -57,15 +58,6 @@ function showFieldError(name, message) {
   input.setAttribute("aria-invalid", "true"); // skrinrider "noto'g'ri" deб o'qiydi
   errEl.textContent = message;
   errEl.hidden = false;
-}
-
-// Maydonni bir marta yengil silkitadi (animatsiya tugagach klass o'chadi,
-// shunda keyingi safar qaytadan ishlaydi).
-function shake(input) {
-  input.classList.add("is-shake");
-  input.addEventListener("animationend", () => input.classList.remove("is-shake"), {
-    once: true,
-  });
 }
 
 function clearFieldError(name) {
@@ -135,7 +127,7 @@ form.addEventListener("submit", async (e) => {
   if (firstInvalid) {
     const input = form[firstInvalid];
     input.focus(); // birinchi noto'g'ri maydonga fokus
-    shake(input); // va yengil silkinadi -> ko'zga darrov tashlanadi
+    playOnce(input, "is-shake"); // va yengil silkinadi -> ko'zga tashlanadi
     return; // valid bo'lmaguncha API'ga so'rov YO'Q
   }
 

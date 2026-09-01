@@ -119,6 +119,22 @@ export function toast(message, type = "") {
 const reducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* Bir martalik animatsiya klassini qo'yadi va tugagach olib tashlaydi
+   (shunda keyingi safar qaytadan ishlaydi).
+
+   MUHIM: sahifa fonda (boshqa tabda) bo'lsa brauzer animatsiyani
+   to'xtatib turadi va element o'zining 0% holatida qotib qoladi —
+   bizning animatsiyalarimiz esa `opacity: 0` dan boshlanadi, ya'ni
+   element KO'RINMAY qolardi. Shuning uchun fonda umuman qo'ymaymiz:
+   foydalanuvchi baribir qaramayapti, kontent esa ko'rinib turadi. */
+export function playOnce(el, className) {
+  if (!el || document.hidden) return;
+  el.classList.add(className);
+  el.addEventListener("animationend", () => el.classList.remove(className), {
+    once: true,
+  });
+}
+
 /* Yangi chizilgan kartochkalarni birin-ketin (stagger) chiqaradi.
    from — nechanchi boladan boshlash ("Load more" da faqat YANGILARI).
    GSAP yo'q yoki kam-harakat rejimi bo'lsa — hech narsa qilmaydi,

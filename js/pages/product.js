@@ -23,6 +23,7 @@ import {
   friendlyError,
   revealCards,
   flyToBag,
+  playOnce,
 } from "../ui.js";
 import { isFavorite } from "../favorites.js";
 
@@ -160,9 +161,10 @@ galleryEl.addEventListener("click", (e) => {
   if (!thumb) return;
   const main = galleryEl.querySelector("[data-main]");
   if (main.src === thumb.src) return;
-  // Crossfade: "is-loaded" ni olib tashlaymiz -> rasm so'nadi; yangi src
-  // yuklangach components.js dagi "load" ushlagichi uni qayta ochadi.
-  main.classList.remove("is-loaded");
+  // Crossfade: klasslarni olib tashlaymiz -> rasm ko'rinmay qoladi; yangi
+  // src yuklangach components.js dagi "load" ushlagichi ularni qayta
+  // qo'yadi va fade animatsiyasi boshidan ishlaydi.
+  main.classList.remove("is-loaded", "img-fade");
   main.src = thumb.src;
   galleryEl
     .querySelectorAll("[data-thumb]")
@@ -177,10 +179,7 @@ infoEl.addEventListener("click", async (e) => {
   const showQty = (value) => {
     if (String(value) === qtyEl.textContent) return;
     qtyEl.textContent = String(value);
-    qtyEl.classList.add("is-changed");
-    qtyEl.addEventListener("animationend", () => qtyEl.classList.remove("is-changed"), {
-      once: true,
-    });
+    playOnce(qtyEl, "is-changed");
   };
 
   if (e.target.closest("[data-dec]")) showQty(Math.max(1, qty - 1));
