@@ -36,7 +36,7 @@ export function esc(value) {
    p: { _id, title, price, image } — BACKENDDAN keladi. */
 export function productCardHTML(p) {
   const image = p.image
-    ? `<img class="product-card__image" src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy" />`
+    ? `<img class="product-card__image img-fallback" src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy" />`
     : `<div class="product-card__image"></div>`; // rasm yo'q -> bo'sh kulrang
   const fav = isFavorite(p._id);
 
@@ -58,6 +58,21 @@ export function productCardHTML(p) {
         <p class="product-card__price">${money(p.price)}</p>
       </div>
     </a>`;
+}
+
+// N ta "skelet" kartochka (yuklanayotganda ko'rsatiladi — "Loading…" matni
+// o'rniga). Faqat kulrang, pulsatsiya qiladigan qutilar.
+export function skeletonCardsHTML(n = 4) {
+  return Array.from(
+    { length: n },
+    () => `
+    <div class="product-card skeleton" aria-hidden="true">
+      <div class="product-card__image"></div>
+      <div class="product-card__info">
+        <span class="skeleton__line"></span>
+      </div>
+    </div>`
+  ).join("");
 }
 
 // Konteynerga xato xabarini chizish (API yiqilganda)

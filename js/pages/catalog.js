@@ -13,7 +13,7 @@
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
 import { PAGE_SIZE } from "../config.js";
-import { productCardHTML, showError, showEmpty, esc, toast, friendlyError } from "../ui.js";
+import { productCardHTML, showError, showEmpty, esc, toast, friendlyError, skeletonCardsHTML } from "../ui.js";
 
 initLayout();
 
@@ -74,7 +74,7 @@ function updateMoreBtn(totalPages) {
 }
 
 async function loadProducts() {
-  grid.innerHTML = `<p class="state-message">Loading…</p>`;
+  grid.innerHTML = skeletonCardsHTML(PAGE_SIZE);
   moreBtn.hidden = true;
   try {
     const data = await fetchPage(1);

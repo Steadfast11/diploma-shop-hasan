@@ -23,7 +23,7 @@ function itemHTML(it) {
   // rasm va nom -> mahsulot sahifasiga havola
   const href = `/pages/product.html?id=${encodeURIComponent(it.productId)}`;
   const image = it.image
-    ? `<img class="cart-item__image" src="${esc(it.image)}" alt="${esc(it.title)}" />`
+    ? `<img class="cart-item__image img-fallback" src="${esc(it.image)}" alt="${esc(it.title)}" />`
     : `<div class="cart-item__image"></div>`;
   return `
     <div class="cart-item" data-id="${esc(it.productId)}">
@@ -97,6 +97,8 @@ summaryEl.addEventListener("click", async (e) => {
       "/pages/login.html?next=" + encodeURIComponent("/pages/cart.html");
     return;
   }
+  const checkoutBtn = e.target.closest("[data-checkout]");
+  checkoutBtn.disabled = true; // ikkita buyurtma ketmasin
   try {
     await api.createOrder(); // butun savatdan buyurtma
     await cartStore.clear(); // header "Bag (0)" bo'lsin
@@ -110,6 +112,7 @@ summaryEl.addEventListener("click", async (e) => {
     });
   } catch (err) {
     toast(friendlyError(err), "error");
+    checkoutBtn.disabled = false;
   }
 });
 

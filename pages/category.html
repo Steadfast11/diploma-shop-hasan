@@ -33,6 +33,7 @@
   <script defer src="/js/vendor/lenis.min.js"></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <noscript>
     <div style="padding:24px;font-family:sans-serif;">
       <p><strong>WEPRO</strong> needs JavaScript enabled to load the shop (products, cart and account come from a live API). Please enable JavaScript, or visit <a href="../index.html">the homepage</a>.</p>
@@ -40,7 +41,7 @@
   </noscript>
   <div id="header" data-component="header"></div>
 
-  <main class="container category">
+  <main id="main" class="container category">
     <!-- sarlavha = kategoriya nomi (API'dan) -->
     <h1 class="category__title" data-category-title>Kategoriya</h1>
     <div class="product-grid" data-products data-reveal-stagger></div>

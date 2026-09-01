@@ -9,7 +9,7 @@
 
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
-import { productCardHTML, showError, showEmpty, esc } from "../ui.js";
+import { productCardHTML, showError, showEmpty, esc, skeletonCardsHTML } from "../ui.js";
 
 initLayout();
 
@@ -17,7 +17,7 @@ initLayout();
    c: { _id, title, image } — backenddan. */
 function categoryCardHTML(c) {
   const bg = c.image
-    ? `<img src="${esc(c.image)}" alt="" loading="lazy" />`
+    ? `<img class="img-fallback" src="${esc(c.image)}" alt="" loading="lazy" />`
     : "";
   return `
     <a class="category-card" href="/pages/category.html?id=${encodeURIComponent(c._id)}">
@@ -31,10 +31,10 @@ function categoryCardHTML(c) {
 //   loader      : () => Promise  (api chaqiruvi)
 //   pick        : javobdan massiv olish (masalan d => d.products)
 //   render      : bitta element -> HTML
-async function loadSection(selector, loader, pick, render, emptyText) {
+async function loadSection(selector, loader, pick, render, emptyText, skeletonCount = 4) {
   const box = document.querySelector(selector);
   if (!box) return;
-  box.innerHTML = `<p class="state-message">Loading…</p>`;
+  box.innerHTML = skeletonCardsHTML(skeletonCount);
   try {
     const list = pick(await loader());
     if (!list.length) return showEmpty(box, emptyText);
@@ -65,5 +65,6 @@ loadSection(
   () => api.getNewest(12),
   (d) => d.products,
   productCardHTML,
-  "No products yet"
+  "No products yet",
+  8
 );

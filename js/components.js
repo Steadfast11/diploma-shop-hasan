@@ -53,6 +53,23 @@ function wireHeaderMenu() {
   });
 }
 
+// Buzilgan rasm (404/xato) -> broken-image ikonka o'rniga toza kulrang
+// quti qoladi. "error" hodisasi bubble bo'lmaydi -> capture=true bilan
+// document darajasida ushlaymiz (har rasmga alohida listener kerak emas).
+function wireImageFallback() {
+  document.addEventListener(
+    "error",
+    (e) => {
+      const img = e.target;
+      if (img.tagName !== "IMG" || !img.classList.contains("img-fallback")) return;
+      const div = document.createElement("div");
+      div.className = img.className;
+      img.replaceWith(div);
+    },
+    true
+  );
+}
+
 // Har qanaqa mahsulot kartochkasidagi "sevimlilar" (heart) tugmasi.
 // Delegatsiya: kartochkalar API'dan keyin qo'shilsa ham ishlaydi.
 // preventDefault/stopPropagation — kartochka <a> ichida, sahifaga o'tib
@@ -83,6 +100,7 @@ export async function initLayout() {
   wireHeaderAuth();
   wireHeaderMenu();
   wireFavorites();
+  wireImageFallback();
   refreshCartCount();
   subscribe(refreshCartCount); // savat o'zgarsa "Bag (N)" yangilanadi
 

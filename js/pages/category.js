@@ -6,7 +6,7 @@
 
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
-import { productCardHTML, showError, showEmpty, esc } from "../ui.js";
+import { productCardHTML, showError, showEmpty, esc, skeletonCardsHTML } from "../ui.js";
 
 initLayout();
 
@@ -19,7 +19,7 @@ async function load() {
     showError(grid, "No category selected");
     return;
   }
-  grid.innerHTML = `<p class="state-message">Loading…</p>`;
+  grid.innerHTML = skeletonCardsHTML(8);
   try {
     const { category, products } = await api.getCategoryProducts(id);
     titleEl.textContent = category?.title || "Category";

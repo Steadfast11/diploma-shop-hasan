@@ -30,7 +30,7 @@ let product = null;
 function galleryHTML(p) {
   const images = p.images?.length ? p.images : p.image ? [p.image] : [];
   const main = images[0]
-    ? `<img class="product__main-image" src="${esc(images[0])}" alt="${esc(p.title)}" data-main />`
+    ? `<img class="product__main-image img-fallback" src="${esc(images[0])}" alt="${esc(p.title)}" data-main />`
     : `<div class="product__main-image"></div>`;
   const thumbs =
     images.length > 1
@@ -153,11 +153,15 @@ infoEl.addEventListener("click", async (e) => {
   if (e.target.closest("[data-dec]")) qtyEl.textContent = String(Math.max(1, qty - 1));
   else if (e.target.closest("[data-inc]")) qtyEl.textContent = String(Math.min(20, qty + 1));
   else if (e.target.closest("[data-add]")) {
+    const btn = infoEl.querySelector("[data-add]");
+    btn.disabled = true; // ketma-ket ikki marta bosilganda ikkita qo'shilmasin
     try {
       await cartStore.addItem(product, Number(qtyEl.textContent));
       toast(`${product.title} added to cart`);
     } catch (err) {
       toast(friendlyError(err), "error");
+    } finally {
+      btn.disabled = false;
     }
   }
 });
@@ -178,6 +182,8 @@ document.querySelector("[data-write-review]").addEventListener("click", () => {
         toast("Comment must be 2–300 characters", "error");
         return;
       }
+      const sendBtn = modalEl.querySelector("[data-confirm]");
+      sendBtn.disabled = true; // ikki marta yuborilmasin
       try {
         await api.addComment(id, text);
         closeModal();
@@ -185,6 +191,7 @@ document.querySelector("[data-write-review]").addEventListener("click", () => {
         refreshReviews();
       } catch (err) {
         toast(friendlyError(err), "error"); // masalan 409: bitta mahsulotga 3 tadan ko'p
+        sendBtn.disabled = false;
       }
     },
   });

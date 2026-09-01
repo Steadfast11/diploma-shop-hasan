@@ -63,7 +63,7 @@ if (requireAuth()) {
           <div class="product-card__media">
             ${
               it.image
-                ? `<img class="product-card__image" src="${esc(it.image)}" alt="${esc(it.title)}" loading="lazy" />`
+                ? `<img class="product-card__image img-fallback" src="${esc(it.image)}" alt="${esc(it.title)}" loading="lazy" />`
                 : `<div class="product-card__image"></div>`
             }
           </div>
