@@ -1,50 +1,69 @@
 /* ============================================================
-   pages/home.js — "home" sahifasining BOSH skripti
-   Har sahifa skripti bir xil 4 bosqichda ishlaydi:
-     1) DOM tayyor bo'lishini kutish
-     2) components.js -> header/footer
-     3) api.js -> kerakli ma'lumot   (hozircha: namuna)
-     4) ma'lumotni DOM'ga chizish + hodisalarni ulash
+   pages/home.js — "home" sahifasi
+     1) header/footer
+     2) API'dan: bestsellers (4) + categories + newest (12)
+     3) har bo'limni o'z gridiga chizish
 
-   BU SAHIFA: hero + Best sellers + Shop by category + Featured products.
+   Har bo'lim mustaqil yuklanadi: biri yiqilsa qolgani ishlayveradi.
    ============================================================ */
 
 import { initLayout } from "../components.js";
+import * as api from "../api.js";
+import { productCardHTML, showError, showEmpty, esc } from "../ui.js";
 
-// 1) header + footer
 initLayout();
 
-/* --- VAQTINCHA: grid oralig'ini ko'z bilan tekshirish uchun namuna kartochkalar.
-   2-haftada bular api.js orqali real mahsulotlar bilan almashtiriladi. --- */
-
-// Bitta bo'sh mahsulot kartochkasi (rasm/nom/narx BACKENDDAN keladi)
-function skeletonProductCard() {
+/* Kategoriya kartochkasi — FAQAT bosh sahifada ("Shop by category").
+   c: { _id, title, image } — backenddan. */
+function categoryCardHTML(c) {
+  const bg = c.image
+    ? `<img src="${esc(c.image)}" alt="" loading="lazy" />`
+    : "";
   return `
-    <article class="product-card">
-      <div class="product-card__image"></div>
-      <div class="product-card__info">
-        <p class="product-card__title">Face Toner</p>
-        <p class="product-card__price">$47.99</p>
-      </div>
-    </article>`;
-}
-
-// Bitta kategoriya kartochkasi
-function skeletonCategoryCard(name) {
-  return `
-    <a class="category-card" href="/pages/category.html">
-      <span class="btn-glass category-card__btn">${name}</span>
+    <a class="category-card" href="/pages/category.html?id=${encodeURIComponent(c._id)}">
+      ${bg}
+      <span class="btn-glass category-card__btn">${esc(c.title)}</span>
     </a>`;
 }
 
-function fill(selector, html) {
+// Bir bo'limni yuklab, gridga chizadigan umumiy yordamchi.
+//   selector    : grid elementi
+//   loader      : () => Promise  (api chaqiruvi)
+//   pick        : javobdan massiv olish (masalan d => d.products)
+//   render      : bitta element -> HTML
+async function loadSection(selector, loader, pick, render, emptyText) {
   const box = document.querySelector(selector);
-  if (box) box.innerHTML = html;
+  if (!box) return;
+  box.innerHTML = `<p class="state-message">Yuklanmoqda…</p>`;
+  try {
+    const list = pick(await loader());
+    if (!list.length) return showEmpty(box, emptyText);
+    box.innerHTML = list.map(render).join("");
+  } catch (e) {
+    showError(box, e.message);
+  }
 }
 
-fill("[data-bestsellers]", Array.from({ length: 4 }, skeletonProductCard).join(""));
-fill("[data-featured]", Array.from({ length: 12 }, skeletonProductCard).join(""));
-fill(
+loadSection(
+  "[data-bestsellers]",
+  () => api.getBestsellers(4),
+  (d) => d.products,
+  productCardHTML,
+  "Hozircha xit mahsulot yo'q"
+);
+
+loadSection(
   "[data-categories]",
-  ["Creams", "Serums", "Lotion"].map(skeletonCategoryCard).join("")
+  () => api.getCategories(),
+  (d) => d.categories,
+  categoryCardHTML,
+  "Hozircha kategoriya yo'q"
+);
+
+loadSection(
+  "[data-featured]",
+  () => api.getNewest(12),
+  (d) => d.products,
+  productCardHTML,
+  "Hozircha mahsulot yo'q"
 );
