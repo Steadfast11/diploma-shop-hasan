@@ -69,13 +69,14 @@
 
       <div class="filters__divider"></div>
 
-      <!-- Narx oralig'i -->
+      <!-- Narx oralig'i — sarlavhani bosib ochib/yopiladi -->
       <div class="filters__group">
-        <div class="filters__row filters__row--static">
+        <button class="filters__row filters__row--static" type="button"
+                data-price-toggle aria-expanded="true" aria-controls="price-panel">
           <span class="filters__subtitle">Price</span>
-          <img class="filters__chevron filters__chevron--up" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
-        </div>
-        <div class="price-range">
+          <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+        </button>
+        <div class="price-range" id="price-panel" data-price-panel>
           <input class="price-range__input price-range__input--min" type="range" min="0" max="500" value="50" aria-label="Minimum price" />
           <input class="price-range__input price-range__input--max" type="range" min="0" max="500" value="200" aria-label="Maximum price" />
           <div class="price-range__track"><div class="price-range__fill"></div></div>

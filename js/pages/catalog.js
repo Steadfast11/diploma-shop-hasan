@@ -5,9 +5,11 @@
      3) API'dan kategoriyalar + mahsulotlar
      4) kategoriya bosish / slider / Apply Filter hodisalari
 
-   MUHIM QAROR: filtr o'zgarganda URL query yangilanadi va sahifa
-   QAYTA YUKLANADI. Nega: holat bitta joyda (URL), qayta chizish
-   mantig'i shart emas, "orqaga" tugmasi va havola ulashish ishlaydi.
+   MUHIM QAROR: kategoriya bosish / slider surish SAHIFANI QAYTA
+   YUKLAMAYDI. Ular faqat "kutilayotgan" tanlovni belgilaydi. Filtr
+   faqat "Apply Filter" bosilganda ishga tushadi: mahsulotlar qayta
+   olinadi (grid almashadi), URL query esa reload'siz yangilanadi
+   (history.replaceState) — havola ulashish/orqaga tugmasi ishlaydi.
    ============================================================ */
 
 import { initLayout } from "../components.js";
@@ -102,19 +104,35 @@ moreBtn.addEventListener("click", async () => {
   }
 });
 
-/* --- 4. Hodisalar --- */
+/* --- 4. Hodisalar ---
+   MUHIM: kategoriya bosish yoki slider surish SAHIFANI QAYTA YUKLAMAYDI va
+   darrov filtrlamaydi. Ular faqat "kutilayotgan" tanlovni belgilaydi.
+   Filtr faqat "Apply Filter" bosilganda ishlaydi (mahsulotlar qayta
+   olinadi, sahifa yangilanmaydi). URL ham shu payt yangilanadi
+   (history.replaceState) — havola ulashsa bo'ladi, lekin reload yo'q. */
 
-// kategoriya bosilganda -> URL yangilanadi -> reload (yuqoridagi qaror)
+// kutilayotgan (hali qo'llanmagan) kategoriya tanlovi
+let pendingCategory = filter.category;
+
 categoryList.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-category]");
   if (!btn) return;
   const id = btn.dataset.category;
-  const next = new URLSearchParams(location.search);
-  // shu kategoriya allaqachon tanlangan bo'lsa -> olib tashlaymiz (toggle)
-  if (next.get("category") === id) next.delete("category");
-  else next.set("category", id);
-  next.delete("page");
-  location.search = next.toString();
+  // toggle: shu kategoriya tanlangan bo'lsa -> bekor
+  pendingCategory = pendingCategory === id ? "" : id;
+  // bitta kategoriya rejimida — boshqalarning belgisini olib tashlaymiz
+  categoryList.querySelectorAll("[data-category]").forEach((row) => {
+    row.setAttribute("aria-pressed", String(row.dataset.category === pendingCategory));
+  });
+});
+
+// Price sarlavhasini bosish -> slider panelini och/yop
+const priceToggle = document.querySelector("[data-price-toggle]");
+const pricePanel = document.querySelector("[data-price-panel]");
+priceToggle.addEventListener("click", () => {
+  const open = priceToggle.getAttribute("aria-expanded") === "true";
+  priceToggle.setAttribute("aria-expanded", String(!open));
+  pricePanel.hidden = open;
 });
 
 // slider
@@ -136,21 +154,50 @@ function syncSlider() {
 minInput.addEventListener("input", syncSlider);
 maxInput.addEventListener("input", syncSlider);
 
-// Apply Filter -> slider + kategoriya -> URL -> reload
+const clearBtn = document.querySelector("[data-clear-filter]");
+
+// Filtr faol bo'lsa "Clear filters" ko'rinadi
+function refreshClearBtn() {
+  clearBtn.hidden = !(filter.category || filter.minPrice || filter.maxPrice);
+}
+
+// filter holatini URL query'ga yozadi (reload YO'Q — faqat manzil satri)
+function syncUrl() {
+  const q = new URLSearchParams();
+  if (filter.category) q.set("category", filter.category);
+  if (filter.minPrice) q.set("minPrice", filter.minPrice);
+  if (filter.maxPrice) q.set("maxPrice", filter.maxPrice);
+  const s = q.toString();
+  history.replaceState(null, "", s ? "?" + s : location.pathname);
+}
+
+// Apply Filter -> kutilayotgan tanlovlarni qo'llaymiz va mahsulotlarni qayta olamiz
 document.querySelector("[data-apply-filter]").addEventListener("click", () => {
-  const next = new URLSearchParams(location.search);
-  next.set("minPrice", Math.min(Number(minInput.value), Number(maxInput.value)));
-  next.set("maxPrice", Math.max(Number(minInput.value), Number(maxInput.value)));
-  next.delete("page");
-  location.search = next.toString();
+  filter.category = pendingCategory;
+  filter.minPrice = String(Math.min(Number(minInput.value), Number(maxInput.value)));
+  filter.maxPrice = String(Math.max(Number(minInput.value), Number(maxInput.value)));
+  syncUrl();
+  refreshClearBtn();
+  loadProducts();
 });
 
-// "Clear filters" — biror filtr faol bo'lsagina ko'rinadi
-const clearBtn = document.querySelector("[data-clear-filter]");
-clearBtn.hidden = !(filter.category || filter.minPrice || filter.maxPrice);
+// "Clear filters" -> hamma filtrni bekor qilamiz (reload YO'Q)
 clearBtn.addEventListener("click", () => {
-  location.href = location.pathname; // query'siz -> hammasi
+  filter.category = "";
+  filter.minPrice = "";
+  filter.maxPrice = "";
+  pendingCategory = "";
+  categoryList.querySelectorAll("[data-category]").forEach((row) => {
+    row.setAttribute("aria-pressed", "false");
+  });
+  minInput.value = 50;
+  maxInput.value = 200;
+  syncSlider();
+  syncUrl();
+  refreshClearBtn();
+  loadProducts();
 });
+refreshClearBtn();
 
 /* --- Qidiruv: API'da server-tomon qidiruv yo'q (tekshirildi — ?search=
    e'tiborsiz qoldiriladi). Shuning uchun HOZIR YUKLANGAN kartochkalarni

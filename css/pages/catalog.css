@@ -142,9 +142,6 @@
   color: rgba(0, 0, 0, 0.6);
   cursor: pointer;
 }
-.filters__row--static {
-  cursor: default;
-}
 /* tanlangan kategoriya */
 .filters__row[aria-pressed="true"] {
   color: #000;
@@ -152,10 +149,23 @@
 }
 
 .filters__chevron {
-  transform: rotate(-90deg);  /* o'ngga ishora (yopiq) */
+  transform: rotate(-90deg);  /* o'ngga ishora (yopiq/tanlanmagan) */
+  transition: transform 0.2s var(--ease-soft, ease);
 }
-.filters__chevron--up {
-  transform: rotate(180deg);  /* tepaga ishora (ochiq) */
+/* tanlangan kategoriya -> pastga ishora ("ochiq") */
+.filters__row[aria-pressed="true"] .filters__chevron {
+  transform: rotate(0deg);
+}
+/* Price sarlavhasi: ochiq -> tepaga, yopiq -> pastga */
+[data-price-toggle] .filters__chevron {
+  transform: rotate(0deg);
+}
+[data-price-toggle][aria-expanded="true"] .filters__chevron {
+  transform: rotate(180deg);
+}
+/* yopilgan narx paneli */
+[data-price-panel][hidden] {
+  display: none;
 }
 
 /* --- narx oralig'i (ikki tutqichli slider) --- */

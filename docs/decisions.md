@@ -56,10 +56,17 @@ Doskada "nega bunday?" degan savolga tayyor javob.
   (ikki chetda 24px). `min()` "ko'pi bilan" ma'nosini beradi -> gorizontal skroll yo'q.
 - **Muqobil:** `max-width + padding` — desktop'da 1200px o'rniga 1160px chiqadi (padding ichkarida).
 
-### Filtr holati URL query'da; o'zgarganda sahifa QAYTA yuklanadi
-- **Sabab:** holat bitta manba (URL) — qayta chizish mantig'i shart emas,
-  "orqaga" tugmasi va havola ulashish (`?category=...&minPrice=...`) ishlaydi.
-- **Muqobil:** JS bilan holat saqlab, DOM'ni qayta chizish — ko'proq kod, holat bug'lari.
+### Katalog filtri — reload YO'Q, faqat "Apply Filter" da ishlaydi
+- **Sabab:** kategoriya bosilganda yoki slider surilganда sahifa qayta
+  yuklanishi foydalanuvchiga yoqmadi (sakrash, skroll yo'qoladi).
+- **Qanday:** kategoriya bosish / slider — faqat "kutilayotgan" tanlovni
+  belgilaydi (vizual: `aria-pressed`, chevron pastga buriladi). "Apply Filter"
+  bosilganda: `filter` holati yangilanadi -> `loadProducts()` mahsulotlarni
+  qayta oladi (grid almashadi) -> `history.replaceState` bilan URL ham
+  yangilanadi (reload'siz) -> `?category=...&minPrice=...` havolani ulashса bo'ladi.
+- **Price sarlavhasi** — bosilganda slider paneli ochilib/yopiladi (`aria-expanded`).
+- **Muqobil (eski):** har o'zgarishda `location.search = ...` -> reload. Sodda edi,
+  lekin UX yomon. Yangi variant biroz ko'proq kod, lekin bitta sahifada qoladi.
 
 ### `api.js` — yagona `fetch` nuqtasi, `request()` yordamchisi
 - base URL, `Authorization: Bearer`, xato -> `throw` bir joyda.

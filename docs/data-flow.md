@@ -18,20 +18,24 @@ Umumiy: **har sahifa skripti bir xil 4 bosqich** —
    - `cart-store.subscribe(refreshCartCount)` — savat o'zgarsa "Bag (N)" yangilanadi
    - `initReveal()` — `[data-reveal]` bloklarni IntersectionObserver bilan kuzatadi
 
-## 1. Katalog: "Apply Filter" bosilganda
+## 1. Katalog: "Apply Filter" bosilganda (RELOAD YO'Q)
 1. `catalog.js` tugma hodisasini eshitadi
-2. slider `min`/`max` qiymatlari + tanlangan kategoriya olinadi
-3. `new URLSearchParams(location.search)` ga `minPrice`, `maxPrice` yoziladi, `page` o'chiriladi
-4. `location.search = next.toString()` → **sahifa qayta yuklanadi**
-5. Yangi yuklanishda `catalog.js` URL'dan `filter` ni o'qiydi
-6. `api.getProducts({category, minPrice, maxPrice, page, limit})` → `request("/products?...")`
-7. `{ total, page, pages, products }` → `products.length` bo'lsa `productCardHTML` bilan grid,
-   bo'lmasa "Bunday mahsulot topilmadi"
+2. `filter.category = pendingCategory`, `filter.minPrice/maxPrice` = slider qiymatlari
+3. `syncUrl()` → `history.replaceState` bilan `?category=...&minPrice=...` (sahifa yangilanmaydi)
+4. `loadProducts()` → `api.getProducts({category, minPrice, maxPrice, page:1, limit})`
+   → `request("/products?...")`
+5. `{ total, page, pages, products }` → `products.length` bo'lsa `productCardHTML` bilan grid,
+   bo'lmasa "No products found"
+6. `refreshClearBtn()` → biror filtr faol bo'lsa "Clear filters" ko'rinadi
 
-## 2. Kategoriya bosilganda (katalog)
+## 2. Kategoriya bosilganda (katalog) — faqat tanlov, filtr EMAS
 1. `catalog.js` `[data-category-list]` click → `data-category` li tugma topiladi
-2. URL query `category` o'rnatiladi (yoki toggle bilan o'chiriladi), `page` o'chiriladi
-3. `location.search = ...` → qayta yuklanadi → 1-oqimning 5–7 qadamlari
+2. `pendingCategory` yangilanadi (toggle: qayta bossa bekor). Bitta kategoriya rejimi —
+   qolganlarining `aria-pressed` i `false` ga o'tadi, chevron pastga buriladi
+3. **Hech narsa yuklanmaydi** — mahsulotlar faqat "Apply Filter" da yangilanadi (1-oqim)
+
+## 2b. "Price" sarlavhasi bosilganda
+- `aria-expanded` toggle → `[data-price-panel].hidden` toggle (slider ko'rinadi/yashirinadi)
 
 ## 3. "Add to cart" (mahsulot sahifasi)
 1. `product.js` `[data-add]` click; `[data-qty]` dan miqdor olinadi
