@@ -54,7 +54,8 @@ function wireHeaderMenu() {
   });
 }
 
-// Logo intro bir browser session'da faqat bir marta ishlaydi.
+// Logo intro birinchi kirishda va RELOAD qilinganda ishlaydi.
+// Shu tab ichida boshqa sahifaga oddiy o'tilganda qayta ishlamaydi.
 function initLogoIntro() {
   const logo = document.querySelector(".site-header__logo");
   const header = logo?.closest(".site-header");
@@ -66,7 +67,9 @@ function initLogoIntro() {
   } catch {
     /* sessionStorage bloklangan bo'lsa har sahifada ko'rinishi mumkin */
   }
-  if (alreadyPlayed) return;
+  const navigation = performance.getEntriesByType("navigation")[0];
+  const isReload = navigation?.type === "reload";
+  if (alreadyPlayed && !isReload) return;
 
   header.classList.add("site-header--intro");
   logo.classList.add("is-intro");
