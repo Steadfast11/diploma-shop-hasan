@@ -5,18 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Diploma Shop — Kirish</title>
 
-  <!-- pages/ papkasidan chiqish uchun ../ ishlatiladi -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+
   <link rel="stylesheet" href="../css/reset.css" />
   <link rel="stylesheet" href="../css/variables.css" />
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/ui.css" />
+  <link rel="stylesheet" href="/components/header.css" />
+  <link rel="stylesheet" href="/components/footer.css" />
   <link rel="stylesheet" href="../css/pages/auth.css" />
 </head>
 <body>
   <div id="header" data-component="header"></div>
 
-  <main class="container">
-    <!-- TODO: email + parol formasi, validatsiya, xato xabari, 'ro'yxatdan o'tish' havolasi -->
+  <main class="auth">
+    <h1 class="auth__title">Log In</h1>
+
+    <!-- O'qituvchi: kirish EMAIL bilan (API talab qiladi), maketdagi "Phone" emas -->
+    <form class="auth__form" data-login-form novalidate>
+      <div class="field">
+        <label class="field__label" for="email">Email</label>
+        <input class="field__input" id="email" name="email" type="email"
+               placeholder="email@example.com" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label class="field__label" for="password">Password</label>
+        <input class="field__input" id="password" name="password" type="password"
+               placeholder="Your password" autocomplete="current-password" required />
+      </div>
+
+      <p class="auth__error" data-error hidden></p>
+      <button class="auth__submit" type="submit">Log In</button>
+    </form>
+
+    <p class="auth__alt">
+      Akkauntingiz yo'qmi? <a href="/pages/register.html">Ro'yxatdan o'tish</a>
+    </p>
   </main>
 
   <div id="footer" data-component="footer"></div>

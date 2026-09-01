@@ -1,6 +1,87 @@
 /* ============================================================
-   pages/auth.css — FAQAT "auth" sahifasi(lari)ning stili
-   Bu yerga faqat shu sahifaga tegishli qoidalar yoziladi.
-   Umumiy narsa base.css / ui.css da bo'ladi.
-   TODO
+   pages/auth.css — Kirish (Log In) va Ro'yxatdan o'tish (Register)
+   Figma: 425px kenglikdagi forma, markazda. Sarlavha Inter Medium 40px.
+   Maydon: label (SF Pro 18px) + input (1px qora ramka, radius 4, h49).
+   Tugma: qora, radius 4 (bu yerda yumaloq EMAS), SF Pro Semibold 18px.
    ============================================================ */
+
+.auth {
+  width: min(100% - 2 * var(--gutter), 425px);
+  margin-inline: auto;
+  padding-block: 41px 76px;   /* Figma: sarlavha header'dan 41px past */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.auth__title {
+  font-size: var(--fs-h2);    /* Inter Medium 40px */
+}
+
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;                   /* Figma: maydon guruhlari orasi */
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;                   /* label -> input */
+}
+.field__label {
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  font-size: 18px;
+  color: var(--black);
+}
+.field__input {
+  height: 49px;
+  border: 1px solid var(--black);
+  border-radius: 4px;
+  padding-inline: 15px;
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  font-size: 18px;
+  color: var(--black);
+  background: var(--white);
+}
+.field__input::placeholder {
+  color: #6d6d6d;              /* Figma */
+}
+.field__input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+.auth__error {
+  color: var(--color-danger);
+  font-size: 14px;
+}
+
+.auth__submit {
+  height: 48px;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 4px;         /* Figma: login tugmasi yumaloq emas */
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+}
+.auth__submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.auth__alt {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+.auth__alt a {
+  color: var(--black);
+  text-decoration: underline;
+}

@@ -67,15 +67,18 @@ export const getProduct = (id) => request(`/products/${id}`);
 export const getCategories = () => request("/categories");
 export const getCategoryProducts = (id) => request(`/categories/${id}/products`);
 
-/* ---------- Savat (token, docs 5.3) ---------- */
-export const getCart = () => request("/cart", { auth: true });
+/* ---------- Savat (token, docs 5.3) ----------
+   API javobi { message, cart: { items, total } } shaklida keladi —
+   ichidagi { items, total } ni qaytaramiz (chaqiruvchi joy sodda bo'lsin). */
+const unwrapCart = (r) => r.cart ?? r;
+export const getCart = () => request("/cart", { auth: true }).then(unwrapCart);
 export const addToCart = (productId, qty = 1) =>
-  request("/cart", { method: "POST", auth: true, body: { productId, qty } });
+  request("/cart", { method: "POST", auth: true, body: { productId, qty } }).then(unwrapCart);
 export const updateCartItem = (productId, qty) =>
-  request(`/cart/${productId}`, { method: "PATCH", auth: true, body: { qty } });
+  request(`/cart/${productId}`, { method: "PATCH", auth: true, body: { qty } }).then(unwrapCart);
 export const removeCartItem = (productId) =>
-  request(`/cart/${productId}`, { method: "DELETE", auth: true });
-export const clearCart = () => request("/cart", { method: "DELETE", auth: true });
+  request(`/cart/${productId}`, { method: "DELETE", auth: true }).then(unwrapCart);
+export const clearCart = () => request("/cart", { method: "DELETE", auth: true }).then(unwrapCart);
 
 /* ---------- Buyurtma (token, docs 5.4) ---------- */
 export const createOrder = () => request("/orders", { method: "POST", auth: true });
