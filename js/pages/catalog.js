@@ -15,7 +15,7 @@
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
 import { PAGE_SIZE } from "../config.js";
-import { productCardHTML, showError, showEmpty, esc, toast, friendlyError, skeletonCardsHTML } from "../ui.js";
+import { productCardHTML, showError, showEmpty, esc, toast, friendlyError, skeletonCardsHTML, revealCards } from "../ui.js";
 
 initLayout();
 
@@ -77,15 +77,19 @@ function updateMoreBtn(totalPages) {
 
 async function loadProducts() {
   grid.innerHTML = skeletonCardsHTML(PAGE_SIZE);
+  grid.setAttribute("aria-busy", "true"); // skrinrider: "yuklanmoqda"
   moreBtn.hidden = true;
   try {
     const data = await fetchPage(1);
     shownPage = 1;
     if (!data.products.length) return showEmpty(grid, "No products found");
     grid.innerHTML = data.products.map(productCardHTML).join("");
+    revealCards(grid); // kartochkalar birin-ketin chiqadi
     updateMoreBtn(data.pages);
   } catch (e) {
     showError(grid, e.message);
+  } finally {
+    grid.setAttribute("aria-busy", "false");
   }
 }
 
@@ -95,7 +99,11 @@ moreBtn.addEventListener("click", async () => {
   try {
     const data = await fetchPage(shownPage + 1);
     shownPage += 1;
+    // yangi kartochkalar qayerdan boshlanishini eslab qolamiz ->
+    // faqat ULAR animatsiya bilan chiqadi, eskilariga tegilmaydi
+    const firstNew = grid.children.length;
     grid.insertAdjacentHTML("beforeend", data.products.map(productCardHTML).join(""));
+    revealCards(grid, firstNew);
     updateMoreBtn(data.pages);
   } catch (e) {
     toast(friendlyError(e), "error");

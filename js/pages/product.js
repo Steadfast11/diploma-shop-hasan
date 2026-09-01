@@ -13,7 +13,17 @@ import { initLayout } from "../components.js";
 import * as api from "../api.js";
 import * as cartStore from "../cart-store.js";
 import { isLoggedIn, currentUser } from "../auth.js";
-import { money, esc, openModal, closeModal, showError, toast, friendlyError } from "../ui.js";
+import {
+  money,
+  esc,
+  openModal,
+  closeModal,
+  showError,
+  toast,
+  friendlyError,
+  revealCards,
+  flyToBag,
+} from "../ui.js";
 import { isFavorite } from "../favorites.js";
 
 initLayout();
@@ -29,9 +39,11 @@ let product = null;
 /* --- HTML qismlari --- */
 function galleryHTML(p) {
   const images = p.images?.length ? p.images : p.image ? [p.image] : [];
+  // O'rovchi div: kulrang joy-tutgich shunda turadi -> rasm yuklangach
+  // yumshoq ochiladi, thumbnail bosilganda esa crossfade bo'ladi.
   const main = images[0]
-    ? `<img class="product__main-image img-fallback" src="${esc(images[0])}" alt="${esc(p.title)}" data-main />`
-    : `<div class="product__main-image"></div>`;
+    ? `<div class="product__main"><img class="product__main-image img-fallback" src="${esc(images[0])}" alt="${esc(p.title)}" data-main /></div>`
+    : `<div class="product__main"><div class="product__main-image"></div></div>`;
   const thumbs =
     images.length > 1
       ? `<div class="product__thumbs">${images
@@ -91,6 +103,7 @@ function renderReviews(comments) {
   reviewsEl.innerHTML = comments.length
     ? comments.map(reviewCardHTML).join("")
     : `<p class="state-message">No reviews yet</p>`;
+  revealCards(reviewsEl); // izohlar birin-ketin chiqadi
 }
 
 // SEO: mahsulot ma'lumoti API'dan kelgach, Product structured data qo'shamiz.
@@ -145,7 +158,12 @@ async function refreshReviews() {
 galleryEl.addEventListener("click", (e) => {
   const thumb = e.target.closest("[data-thumb]");
   if (!thumb) return;
-  galleryEl.querySelector("[data-main]").src = thumb.src;
+  const main = galleryEl.querySelector("[data-main]");
+  if (main.src === thumb.src) return;
+  // Crossfade: "is-loaded" ni olib tashlaymiz -> rasm so'nadi; yangi src
+  // yuklangach components.js dagi "load" ushlagichi uni qayta ochadi.
+  main.classList.remove("is-loaded");
+  main.src = thumb.src;
   galleryEl
     .querySelectorAll("[data-thumb]")
     .forEach((t) => t.classList.toggle("product__thumb--active", t === thumb));
@@ -154,13 +172,26 @@ galleryEl.addEventListener("click", (e) => {
 infoEl.addEventListener("click", async (e) => {
   const qtyEl = infoEl.querySelector("[data-qty]");
   const qty = Number(qtyEl.textContent);
-  if (e.target.closest("[data-dec]")) qtyEl.textContent = String(Math.max(1, qty - 1));
-  else if (e.target.closest("[data-inc]")) qtyEl.textContent = String(Math.min(20, qty + 1));
+
+  // Raqam almashganda yuqoridan siljib kelsin (animatsiya tugagach klass o'chadi)
+  const showQty = (value) => {
+    if (String(value) === qtyEl.textContent) return;
+    qtyEl.textContent = String(value);
+    qtyEl.classList.add("is-changed");
+    qtyEl.addEventListener("animationend", () => qtyEl.classList.remove("is-changed"), {
+      once: true,
+    });
+  };
+
+  if (e.target.closest("[data-dec]")) showQty(Math.max(1, qty - 1));
+  else if (e.target.closest("[data-inc]")) showQty(Math.min(20, qty + 1));
   else if (e.target.closest("[data-add]")) {
     const btn = infoEl.querySelector("[data-add]");
     btn.disabled = true; // ketma-ket ikki marta bosilganda ikkita qo'shilmasin
     try {
       await cartStore.addItem(product, Number(qtyEl.textContent));
+      // rasm nusxasi header'dagi "Bag (N)" tomon uchadi
+      flyToBag(galleryEl.querySelector("[data-main]"));
       toast(`${product.title} added to cart`);
     } catch (err) {
       toast(friendlyError(err), "error");

@@ -379,6 +379,11 @@ a,
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
+  /* overflow: hidden pastga tushuvchi harflarni (g, y, p) kesib qo'ymasin:
+     ichkariga joy beramiz, tashqi o'lchamni manfiy margin bilan qaytaramiz
+     -> layout (piksel) o'zgarmaydi. */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
 }
 .m-word__in {
   display: inline-block;
@@ -393,6 +398,72 @@ a,
   opacity: 1;
   transform: none;
   transition: none;
+}
+
+/* ---------- Rasm yumshoq ochilishi ----------
+   API'dan kelgan rasm "birdan" paydo bo'lmasin. Kulrang joy-tutgich
+   endi O'ROVCHI elementda, rasmning o'zi esa yuklangach ochiladi ->
+   yuklanish paytidagi ko'rinish AVVALGIDEK (kulrang quti).
+   img-fallback klassini faqat JS qo'yadi -> JS ishlamasa bunday rasm
+   umuman chizilmaydi (ko'rinmay qolib ketish xavfi yo'q). */
+.product-card__media,
+.cart-item__media {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+}
+/* Hali yuklanmagan rasm ko'rinmaydi — ortida kulrang joy-tutgich turadi. */
+img.img-fallback:not(.is-loaded) {
+  opacity: 0;
+}
+/* Yuklangach yumshoq ochiladi. Ataylab TRANSITION emas, ANIMATSIYA:
+   animatsiya ishlamay qolsa ham opacity o'zining oddiy 1 qiymatida
+   qoladi -> rasm hech qachon ko'rinmay qolib ketmaydi. */
+img.img-fallback.is-loaded {
+  animation: img-fade-in 0.6s var(--ease-soft);
+}
+@keyframes img-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- Sevimlilar: qo'shilganda bir marta "sakraydi" ---------- */
+.product-card__fav.fav-pop,
+.product__fav.fav-pop {
+  animation: fav-pop 0.45s var(--ease-soft);
+}
+@keyframes fav-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Miqdor raqami almashganda yuqoridan siljib keladi ---------- */
+.qty__value.is-changed {
+  animation: qty-roll 0.28s var(--ease-soft);
+}
+@keyframes qty-roll {
+  from { transform: translateY(-0.45em); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ---------- Kategoriya kartochkasi: mahsulot kartochkasi kabi hover-zoom ----------
+   (.category-card da `overflow: clip` bor -> rasm chetidan chiqmaydi) */
+.category-card img {
+  transition: transform 0.9s var(--ease-soft);
+}
+.category-card:hover img {
+  transform: scale(1.05);
+}
+
+/* ---------- "Bag"ga uchuvchi arvoh ("Add to cart") ----------
+   Vaqtinchalik element: 0.7s uchadi va JS uni o'chiradi. */
+.fly-ghost {
+  position: fixed;
+  z-index: 300;
+  object-fit: cover;
+  border-radius: var(--radius);
+  pointer-events: none;
+  transition: transform 0.7s var(--ease-soft), opacity 0.7s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {

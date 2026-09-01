@@ -26,11 +26,18 @@
   flex-direction: column;
   gap: 15px;
 }
+/* Asosiy rasm o'rovchisi — kulrang joy-tutgich shu yerda turadi, shunda
+   rasmning o'zi yuklangach yumshoq ochila oladi.
+   O'lchamni ATAYLAB bermaymiz: balandlik ichidagi rasmdan keladi
+   (aspect-ratio) -> joylashuv avvalgidek, piksel o'zgarmaydi. */
+.product__main {
+  width: 100%;
+  background: #f0eeed;        /* Figma: rasm foni (radius YO'Q) */
+}
 .product__main-image {
   width: 100%;
   aspect-ratio: 610 / 530;
   object-fit: cover;
-  background: #f0eeed;        /* Figma: rasm foni (radius YO'Q) */
 }
 .product__thumbs {
   display: flex;

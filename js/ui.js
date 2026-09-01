@@ -112,6 +112,99 @@ export function toast(message, type = "") {
   toastTimer = setTimeout(() => box.classList.remove("is-shown"), 3200);
 }
 
+/* ---------- Animatsiya yordamchilari ----------
+   Uchalasi ham "bezak": ishlamay qolsa sayt baribir to'g'ri ko'rinadi. */
+
+// Foydalanuvchi tizimda "kam harakat" rejimini yoqqanmi?
+const reducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Yangi chizilgan kartochkalarni birin-ketin (stagger) chiqaradi.
+   from — nechanchi boladan boshlash ("Load more" da faqat YANGILARI).
+   GSAP yo'q yoki kam-harakat rejimi bo'lsa — hech narsa qilmaydi,
+   kartochkalar shundoq ham ko'rinib turadi. */
+export function revealCards(container, from = 0) {
+  if (!container) return;
+  const { gsap, ScrollTrigger } = window;
+  // Kontent qo'shilgach sahifa balandligi o'zgardi -> skroll o'lchovlari
+  // eskirmasin (aks holda pastdagi bloklar kech/erta ochiladi).
+  ScrollTrigger?.refresh();
+  if (!gsap || reducedMotion()) return;
+
+  const cards = [...container.children].slice(from);
+  if (!cards.length) return;
+  // Ekrandan tashqaridagi to'liq grid uchun kerak emas — uni
+  // [data-reveal-stagger] skroll bilan o'zi chiqaradi.
+  const box = container.getBoundingClientRect();
+  if (from === 0 && (box.top > window.innerHeight || box.bottom < 0)) return;
+
+  gsap.fromTo(
+    cards,
+    { y: 12, autoAlpha: 0 },
+    {
+      y: 0,
+      autoAlpha: 1,
+      duration: 0.8,
+      ease: "power2.out",
+      stagger: 0.06,
+      clearProps: "all", // tugagach inline stillar qolmasin
+    }
+  );
+}
+
+/* Raqamni eski qiymatdan yangisiga "sanab" o'tkazadi ($120 -> $145).
+   format — sonni matnga aylantiruvchi funksiya (masalan money). */
+export function countUp(el, to, format = String, duration = 600) {
+  if (!el) return;
+  const from = Number(String(el.textContent).replace(/[^\d.-]/g, "")) || 0;
+  if (reducedMotion() || from === to) {
+    el.textContent = format(to);
+    return;
+  }
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3); // yumshoq to'xtash
+    el.textContent = format(from + (to - from) * eased);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* "Add to cart" bosilganda mahsulot rasmining nusxasi header'dagi
+   "Bag (N)" tomon uchadi. Vaqtinchalik element — tugagach o'zi o'chadi. */
+export function flyToBag(sourceImg) {
+  const target = document.querySelector("[data-cart-count]");
+  if (!sourceImg || !target || reducedMotion()) return;
+
+  const from = sourceImg.getBoundingClientRect();
+  const to = target.getBoundingClientRect();
+  if (!from.width) return; // rasm hali yuklanmagan
+
+  const ghost = document.createElement("img");
+  ghost.src = sourceImg.currentSrc || sourceImg.src;
+  ghost.alt = "";
+  ghost.className = "fly-ghost";
+  ghost.style.left = from.left + "px";
+  ghost.style.top = from.top + "px";
+  ghost.style.width = from.width + "px";
+  ghost.style.height = from.height + "px";
+  document.body.appendChild(ghost);
+
+  // markazdan markazga siljish
+  const dx = to.left + to.width / 2 - (from.left + from.width / 2);
+  const dy = to.top + to.height / 2 - (from.top + from.height / 2);
+  // Ikki marta rAF: brauzer avval boshlang'ich holatni chizsin,
+  // keyin o'zgarish transition bo'lib ko'rinadi.
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => {
+      ghost.style.transform = `translate(${dx}px, ${dy}px) scale(0.08)`;
+      ghost.style.opacity = "0";
+    })
+  );
+  setTimeout(() => ghost.remove(), 800);
+}
+
 /* API xatosini foydalanuvchiga tushunarli qilib beradi (API matni ruscha). */
 export function friendlyError(err) {
   const byStatus = {

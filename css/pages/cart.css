@@ -44,6 +44,18 @@
   display: block;
   width: 176px;
 }
+/* O'chirilayotgan qator birdan yo'qolmasin — yumshoq so'nib chetga siljiydi.
+   MUHIM: `transition` ASOSIY qoidada turishi kerak. Agar u `is-removing`
+   ichida bo'lsa, klass qo'shilganda transition va yangi qiymat bir vaqtda
+   paydo bo'ladi va brauzer animatsiya qilmaydi (birdan o'chib qoladi). */
+.cart-item {
+  transition: opacity 0.28s ease, transform 0.28s var(--ease-soft);
+}
+.cart-item.is-removing {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+}
 .cart-item__image {
   width: 176px;
   height: 176px;

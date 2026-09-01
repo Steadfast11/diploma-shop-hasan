@@ -12,7 +12,7 @@ import { initLayout } from "../components.js";
 import * as cartStore from "../cart-store.js";
 import * as api from "../api.js";
 import { isLoggedIn } from "../auth.js";
-import { money, esc, showError, toast, friendlyError, openModal } from "../ui.js";
+import { money, esc, showError, toast, friendlyError, openModal, countUp } from "../ui.js";
 
 initLayout();
 
@@ -71,20 +71,80 @@ async function render() {
   }
 }
 
+// Kichik kutish — animatsiya tugashini kutish uchun (setTimeout va'da shaklida).
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/* "Order Summary" dagi Subtotal va Total ni yangi jamiga SANAB o'tkazadi
+   (butun kartani qayta chizmaymiz -> raqam sakramaydi). */
+function updateSummary(total) {
+  // Subtotal ham, Total ham API'ning `total` iga teng (docs/decisions.md:
+  // API savatida chegirma yo'q). "Discount" qatori doim 0 -> tegmaymiz.
+  summaryEl
+    .querySelectorAll(".order-summary__row:not(.order-summary__row--discount) span:last-child")
+    .forEach((cell) => countUp(cell, total, money));
+}
+
 /* --- hodisalar (delegatsiya) --- */
 mainEl.addEventListener("click", async (e) => {
   const row = e.target.closest(".cart-item");
   if (!row) return;
   const id = row.dataset.id;
-  const qty = Number(row.querySelector(".qty__value").textContent);
+  const qtyEl = row.querySelector(".qty__value");
+  const qty = Number(qtyEl.textContent);
+
+  /* O'CHIRISH: qator avval yumshoq so'nadi, keyin ro'yxat qayta chiziladi. */
+  if (e.target.closest("[data-remove]")) {
+    row.classList.add("is-removing");
+    try {
+      await cartStore.removeItem(id);
+      await wait(280); // so'nish animatsiyasi tugasin
+      await render();
+    } catch (err) {
+      row.classList.remove("is-removing"); // xato -> qator joyida qoladi
+      toast(friendlyError(err), "error");
+    }
+    return;
+  }
+
+  /* MIQDOR: butun ro'yxatni qayta chizmaymiz — faqat shu qatordagi son
+     va "Order Summary" yangilanadi (ro'yxat "yaltirab" ketmaydi). */
+  const dec = e.target.closest("[data-dec]");
+  const inc = e.target.closest("[data-inc]");
+  if (!dec && !inc) return;
+  const next = inc ? qty + 1 : qty - 1;
+
+  // 1 dan pastga tushsa — bu aslida o'chirish, demak to'liq qayta chizamiz
+  if (next < 1) {
+    row.classList.add("is-removing");
+    try {
+      await cartStore.removeItem(id);
+      await wait(280);
+      await render();
+    } catch (err) {
+      row.classList.remove("is-removing");
+      toast(friendlyError(err), "error");
+    }
+    return;
+  }
+
+  const buttons = row.querySelectorAll(".qty__btn");
+  buttons.forEach((b) => (b.disabled = true)); // tez-tez bosilib ketmasin
   try {
-    if (e.target.closest("[data-remove]")) await cartStore.removeItem(id);
-    else if (e.target.closest("[data-dec]")) await cartStore.setQty(id, qty - 1);
-    else if (e.target.closest("[data-inc]")) await cartStore.setQty(id, qty + 1);
-    else return;
-    await render();
+    await cartStore.setQty(id, next);
+    const { items, total } = await cartStore.getCart();
+    // server miqdorni cheklashi mumkin (maks 20) -> haqiqiy qiymatni olamiz
+    const fresh = items.find((it) => it.productId === id);
+    qtyEl.textContent = String(fresh ? fresh.qty : next);
+    qtyEl.classList.add("is-changed");
+    qtyEl.addEventListener("animationend", () => qtyEl.classList.remove("is-changed"), {
+      once: true,
+    });
+    updateSummary(total);
   } catch (err) {
     toast(friendlyError(err), "error");
+    await render(); // holat chalkashmasin — haqiqiy savatni qayta chizamiz
+  } finally {
+    buttons.forEach((b) => (b.disabled = false));
   }
 });
 

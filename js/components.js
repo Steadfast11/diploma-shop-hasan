@@ -97,6 +97,51 @@ function wireImageFallback() {
   );
 }
 
+// Rasm yuklangach yumshoq ochilsin (birdan "sakrab" chiqmasin).
+// "load" ham "error" kabi bubble bo'lmaydi -> yuqoridagi bilan bir xil
+// uslub: document darajasida capture=true.
+function wireImageFade() {
+  document.addEventListener(
+    "load",
+    (e) => {
+      const img = e.target;
+      if (img.tagName !== "IMG" || !img.classList.contains("img-fallback")) return;
+      img.classList.add("is-loaded");
+    },
+    true
+  );
+
+  // Listener ulanguncha keshdan yuklanib bo'lgan rasmlar uchun "supurgi".
+  // Faqat ALLAQACHON yuklangan (complete) rasmlarni ochamiz.
+  const sweep = () =>
+    document.querySelectorAll("img.img-fallback:not(.is-loaded)").forEach((img) => {
+      if (img.complete) img.classList.add("is-loaded");
+    });
+  window.addEventListener("load", sweep);
+  setTimeout(sweep, 3000); // xavfsizlik to'ri
+}
+
+// Sichqoncha havola ustiga kelganda brauzer o'sha sahifani oldindan
+// yuklab qo'yadi -> bosilganda deyarli darrov ochiladi.
+// Har manzil bir marta; "?id=..." farq qilmaydi, HTML fayl bitta.
+function wirePrefetch() {
+  const done = new Set();
+  document.addEventListener("pointerover", (e) => {
+    const link = e.target.closest?.("a");
+    if (!link) return;
+    const href = link.getAttribute("href") || "";
+    // faqat shu saytdagi oddiy sahifalar (tashqi/yangi oyna emas)
+    if (!href.startsWith("/") || href.startsWith("//") || link.target) return;
+    const path = href.split("?")[0].split("#")[0];
+    if (path === location.pathname || done.has(path)) return;
+    done.add(path);
+    const tag = document.createElement("link");
+    tag.rel = "prefetch";
+    tag.href = path;
+    document.head.appendChild(tag);
+  });
+}
+
 // Har qanaqa mahsulot kartochkasidagi "sevimlilar" (heart) tugmasi.
 // Delegatsiya: kartochkalar API'dan keyin qo'shilsa ham ishlaydi.
 // preventDefault/stopPropagation — kartochka <a> ichida, sahifaga o'tib
@@ -116,6 +161,13 @@ function wireFavorites() {
     btn.classList.toggle("is-fav", nowFav);
     btn.setAttribute("aria-pressed", String(nowFav));
     btn.setAttribute("aria-label", nowFav ? "Remove from favorites" : "Add to favorites");
+    // Faqat QO'SHILGANDA yurakcha bir marta sakraydi (sahifa ochilganda emas).
+    if (nowFav) {
+      btn.classList.add("fav-pop");
+      btn.addEventListener("animationend", () => btn.classList.remove("fav-pop"), {
+        once: true,
+      });
+    }
   });
 }
 
@@ -140,6 +192,8 @@ export async function initLayout() {
   initLogoIntro();
   wireFavorites();
   wireImageFallback();
+  wireImageFade();
+  wirePrefetch();
   refreshCartCount();
   subscribe(refreshCartCount); // savat o'zgarsa "Bag (N)" yangilanadi
   showCartMergeWarning();

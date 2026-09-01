@@ -73,6 +73,23 @@
   letter-spacing: normal;
   font-size: 13px;
   line-height: 1.35;
+  /* birdan "chiqib" qolmasin — yuqoridan yumshoq ochiladi */
+  animation: field-error-in 0.25s var(--ease-soft);
+}
+@keyframes field-error-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Submit bosilganda birinchi noto'g'ri maydon yengil silkinadi
+   (JS "is-shake" klassini qo'yadi va animatsiya tugagach olib tashlaydi). */
+.field__input.is-shake {
+  animation: field-shake 0.4s ease;
+}
+@keyframes field-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 /* Noto'g'ri maydon — qizil ramka (aria-invalid skrinrider uchun ham). */
 .field__input[aria-invalid="true"] {

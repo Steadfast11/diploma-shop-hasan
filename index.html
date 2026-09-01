@@ -38,6 +38,10 @@
   </script>
 
   <!-- Inter shrifti — yagona tashqi manba (Google Fonts) -->
+  <!-- Hero rasmi — sahifadagi eng katta element (Google "LCP" deb o'lchaydi).
+       Oldindan (CSS'dan ham avval) yuklashni boshlaymiz -> sayt tezroq ochiladi. -->
+  <link rel="preload" as="image" href="/assets/images/hero.jpg" fetchpriority="high" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
@@ -70,7 +74,7 @@
     <!-- HERO — butun kenglik (shuning uchun .container'dan tashqarida) -->
     <section class="hero">
       <div class="hero__bg" aria-hidden="true">
-        <img src="/assets/images/hero.jpg" alt="" data-parallax />
+        <img src="/assets/images/hero.jpg" alt="" fetchpriority="high" data-parallax />
       </div>
       <div class="hero__inner container">
         <div class="hero__offer">
@@ -86,18 +90,18 @@
     <!-- Seksiyalar — 1200px konteyner ichida -->
     <div class="container home-sections">
       <section class="section" data-reveal>
-        <h2 class="section__title">Best sellers</h2>
+        <h2 class="section__title" data-split>Best sellers</h2>
         <!-- kartochkalarni js/pages/home.js API'dan chizadi -->
         <div class="product-grid" data-bestsellers data-reveal-stagger></div>
       </section>
 
       <section class="section" data-reveal>
-        <h2 class="section__title">Shop by category</h2>
+        <h2 class="section__title" data-split>Shop by category</h2>
         <div class="category-grid" data-categories data-reveal-stagger></div>
       </section>
 
       <section class="section" data-reveal>
-        <h2 class="section__title">Featured products</h2>
+        <h2 class="section__title" data-split>Featured products</h2>
         <div class="product-grid" data-featured data-reveal-stagger></div>
       </section>
     </div>

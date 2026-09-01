@@ -13,7 +13,7 @@
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
 import { requireAuth, currentUser, doLogout } from "../auth.js";
-import { esc, formatPhone, showError, showEmpty, productCardHTML } from "../ui.js";
+import { esc, formatPhone, showError, showEmpty, productCardHTML, revealCards } from "../ui.js";
 import { getFavorites, isFavorite } from "../favorites.js";
 
 initLayout();
@@ -71,6 +71,7 @@ if (requireAuth()) {
         </a>`
         )
         .join("");
+      revealCards(ordersEl); // kartochkalar birin-ketin chiqadi
     })
     .catch((e) => showError(ordersEl, e.message));
 
@@ -79,6 +80,7 @@ if (requireAuth()) {
     const favorites = getFavorites();
     if (!favorites.length) return showEmpty(favEl, "No favorites yet");
     favEl.innerHTML = favorites.map(productCardHTML).join("");
+    revealCards(favEl);
   }
   renderFavorites();
   // unfavorited here -> drop it from the list right away

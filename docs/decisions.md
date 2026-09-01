@@ -111,6 +111,60 @@ Doskada "nega bunday?" degan savolga tayyor javob.
 - motion.js'da ham 2s xavfsizlik: ekranda ko'rinib, hali yashirin bloklarni majburan ochadi.
 - `.has-motion` klassi: GSAP faol bo'lganda CSS reveal qoidalarini o'chiradi (ikki xil animatsiya to'qnashmasin).
 
+### Qo'shimcha animatsiyalar — dizaynga TEGMASDAN
+Qoida: har bir animatsiya faqat "bezak". Ishlamay qolsa sayt to'g'ri
+ko'rinishi SHART. Shuning uchun hamma joyda "xavfsiz yo'nalish" tanlandi.
+
+- **Rasm yumshoq ochilishi** — API rasmi birdan "sakramasin". Kulrang
+  joy-tutgich endi o'rovchi elementda (`.product-card__media`,
+  `.cart-item__media`, `.product__main`), rasmning o'zi `load` bo'lgach
+  ochiladi (`components.js` da `load` ushlagichi — mavjud `error`
+  ushlagichi bilan bir xil uslub: `capture: true`, chunki ikkalasi ham
+  bubble bo'lmaydi).
+  **Nega `transition` emas, `animation`:** `transition` bilan asosiy holat
+  `opacity: 0` bo'lardi — animatsiya ishlamay qolsa rasm KO'RINMAY qolardi.
+  `animation` da esa asosiy `opacity` — 1, fade faqat ustidan qo'shiladi.
+- **Kartochkalar birin-ketin** (`ui.js` -> `revealCards`) — API javob
+  bergach grid bolalari 0.06s farq bilan chiqadi. Ekrandan tashqaridagi
+  grid uchun ishlamaydi (uni `[data-reveal-stagger]` skroll bilan chiqaradi).
+  Shu funksiya `ScrollTrigger.refresh()` ham qiladi: kontent API'dan keyin
+  qo'shilgani uchun skroll o'lchovlari eskirib qolardi.
+- **Bo'lim sarlavhalari** (`[data-split]`) — hero'dagi AYNAN o'sha so'z-maska
+  effekti, lekin skroll bilan. Matni JS bilan almashadigan sarlavhalarga
+  qo'yilmadi (`splitWords` `innerHTML` ni qayta yozadi -> ichidagi
+  `<span data-review-count>` yo'qolardi).
+- **`.m-word` da `padding-bottom`/manfiy `margin-bottom`** — `overflow: hidden`
+  pastga tushuvchi harflarni (g, y, p) kesmasin. Tashqi o'lcham o'zgarmaydi.
+- **Savat**: `+`/`−` da butun ro'yxat QAYTA CHIZILMAYDI — faqat o'sha
+  qatordagi son va "Order Summary" (raqam `countUp` bilan sanab o'tadi).
+  O'chirishda qator avval yumshoq so'nadi (0.28s), keyin ro'yxat yangilanadi.
+  **`transition` asosiy `.cart-item` qoidasida**: agar u `.is-removing` ichida
+  bo'lsa, klass qo'shilganda transition va yangi qiymat bir vaqtda paydo
+  bo'ladi va brauzer animatsiya qilmaydi.
+- **"Bag"ga uchish** (`flyToBag`) — "Add to cart" da rasm nusxasi header'ga
+  uchadi. Vaqtinchalik `position: fixed` element, 0.8s dan keyin o'chadi.
+- **Yurakcha "pop"** — faqat QO'SHILGANDA (sahifa ochilganda emas, aks holda
+  profil sahifasidagi hamma yurakcha birdan sakrardi).
+- **Register**: noto'g'ri maydon yengil silkinadi, xato matni yuqoridan ochiladi.
+- Hammasi `prefers-reduced-motion: reduce` da o'chadi; GSAP bo'lmasa
+  `revealCards`/`flyToBag` shunchaki hech narsa qilmaydi.
+
+### Ko'rinmaydigan tezlik (animatsiya emas, lekin "silliq his")
+- **Havolani oldindan yuklash** (`wirePrefetch`) — sichqoncha havola ustiga
+  kelganda `<link rel="prefetch">` qo'shiladi. Har manzil bir marta;
+  `?id=...` tashlab yuboriladi (HTML fayl bitta). Tashqi havolalar va
+  `target` li havolalar tegilmaydi.
+- **Hero rasmiga `preload` + `fetchpriority="high"`** — Google "LCP" deb
+  o'lchaydigan eng katta element shu; oldindan yuklash SEO ballini oshiradi.
+- **`aria-busy`** — grid yuklanayotganda skrinrider "yuklanmoqda" deb biladi.
+
+### Rad etilgan: sahifalar orasida cross-fade (View Transitions)
+Chiroyli bo'lardi, lekin bizdagi scroll-reveal bilan to'qnashadi: yangi
+sahifa "surat"i olinayotganda bloklar hali `opacity: 0` da bo'lib, oq
+yaltirash beradi. JS bilan havolani ushlab qolish esa `Ctrl+click`,
+"orqaga" tugmasi va bfcache'ni buzish xavfini tug'diradi. Foydasidan
+zarari ko'p -> qilinmadi.
+
 ### Dev server: `serve` + `serve.json` (`cleanUrls: false`)
 - `cleanUrls: false` — URL'dan `.html` va `?query` olib tashlanmasin
   (Netlify ham `.html` ni saqlaydi, statik sayt).

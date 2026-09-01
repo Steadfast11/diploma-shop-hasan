@@ -82,6 +82,25 @@ export function initMotion() {
     );
   }
 
+  /* --- Bo'lim sarlavhalari: hero bilan AYNAN bir xil so'z-maska effekti,
+     lekin skroll bilan ko'rinishga kirganda. [data-split] qo'yilgan
+     sarlavhalarda ishlaydi (matni JS bilan almashadiganlarida EMAS —
+     splitWords innerHTML'ni qayta yozadi). --- */
+  document.querySelectorAll("[data-split]").forEach((el) => {
+    splitWords(el);
+    gsap.fromTo(
+      el.querySelectorAll(".m-word__in"),
+      { yPercent: 105 },
+      {
+        yPercent: 0,
+        duration: 1.1,
+        ease: "expo.out",
+        stagger: 0.05,
+        scrollTrigger: { trigger: el, start: "top 92%" },
+      }
+    );
+  });
+
   /* --- Hero foni: skroll bilan juda yengil parallaks (scrub 1s "kechikadi") --- */
   const heroBg = document.querySelector("[data-parallax]");
   if (heroBg) {

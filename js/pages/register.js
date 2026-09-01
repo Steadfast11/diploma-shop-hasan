@@ -59,6 +59,15 @@ function showFieldError(name, message) {
   errEl.hidden = false;
 }
 
+// Maydonni bir marta yengil silkitadi (animatsiya tugagach klass o'chadi,
+// shunda keyingi safar qaytadan ishlaydi).
+function shake(input) {
+  input.classList.add("is-shake");
+  input.addEventListener("animationend", () => input.classList.remove("is-shake"), {
+    once: true,
+  });
+}
+
 function clearFieldError(name) {
   const { input, errEl } = fieldParts(name);
   input.removeAttribute("aria-invalid");
@@ -124,7 +133,9 @@ form.addEventListener("submit", async (e) => {
 
   const firstInvalid = validateForm();
   if (firstInvalid) {
-    form[firstInvalid].focus(); // birinchi noto'g'ri maydonga fokus
+    const input = form[firstInvalid];
+    input.focus(); // birinchi noto'g'ri maydonga fokus
+    shake(input); // va yengil silkinadi -> ko'zga darrov tashlanadi
     return; // valid bo'lmaguncha API'ga so'rov YO'Q
   }
 

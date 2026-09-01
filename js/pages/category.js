@@ -6,7 +6,7 @@
 
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
-import { productCardHTML, showError, showEmpty, esc, skeletonCardsHTML } from "../ui.js";
+import { productCardHTML, showError, showEmpty, esc, skeletonCardsHTML, revealCards } from "../ui.js";
 
 initLayout();
 
@@ -26,6 +26,7 @@ async function load() {
     return;
   }
   grid.innerHTML = skeletonCardsHTML(8);
+  grid.setAttribute("aria-busy", "true"); // skrinrider: "yuklanmoqda"
   try {
     const { category, products } = await api.getCategoryProducts(id);
     titleEl.textContent = category?.title || "Category";
@@ -35,9 +36,12 @@ async function load() {
       return;
     }
     grid.innerHTML = products.map(productCardHTML).join("");
+    revealCards(grid); // kartochkalar birin-ketin chiqadi
   } catch (e) {
     if (e.status === 404) showError(grid, "Category not found");
     else showError(grid, e.message);
+  } finally {
+    grid.setAttribute("aria-busy", "false");
   }
 }
 

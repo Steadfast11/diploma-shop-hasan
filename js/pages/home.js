@@ -9,7 +9,14 @@
 
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
-import { productCardHTML, showError, showEmpty, esc, skeletonCardsHTML } from "../ui.js";
+import {
+  productCardHTML,
+  showError,
+  showEmpty,
+  esc,
+  skeletonCardsHTML,
+  revealCards,
+} from "../ui.js";
 
 initLayout();
 
@@ -35,12 +42,16 @@ async function loadSection(selector, loader, pick, render, emptyText, skeletonCo
   const box = document.querySelector(selector);
   if (!box) return;
   box.innerHTML = skeletonCardsHTML(skeletonCount);
+  box.setAttribute("aria-busy", "true"); // skrinrider: "yuklanmoqda"
   try {
     const list = pick(await loader());
     if (!list.length) return showEmpty(box, emptyText);
     box.innerHTML = list.map(render).join("");
+    revealCards(box); // kartochkalar birin-ketin chiqadi
   } catch (e) {
     showError(box, e.message);
+  } finally {
+    box.setAttribute("aria-busy", "false");
   }
 }
 

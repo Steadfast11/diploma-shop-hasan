@@ -125,6 +125,43 @@ havola ulashish (`?category=...`) ishlaydi. Kod sodda.
 **`Promise.all` (components.js) — nega?**
 Header va footer'ni PARALLEL yuklaydi (biri ikkinchisini kutmaydi) → tezroq.
 
+**Rasm nega `opacity: 0` dan boshlanadi, ko'rinmay qolib ketmaydimi?**
+Yo'q. `img.img-fallback:not(.is-loaded)` — ya'ni FAQAT hali yuklanmagan
+rasm ko'rinmaydi (ortida kulrang joy-tutgich turadi). Yuklangach
+`components.js` `is-loaded` qo'yadi va `opacity` o'zining oddiy 1
+qiymatiga qaytadi; fade esa `animation` bilan ustidan qo'shiladi.
+Ataylab `transition` ishlatmadik: unda asosiy holat `opacity: 0` bo'lardi
+va animatsiya ishlamay qolsa rasm butunlay ko'rinmay ketardi.
+
+**`revealCards()` nima qiladi?**
+Uchta ish: (1) `ScrollTrigger.refresh()` — kontent API'dan keyin qo'shilgani
+uchun skroll o'lchovlari eskirgan bo'ladi; (2) ekranda ko'rinib turgan
+grid bolalarini birin-ketin chiqaradi; (3) "Load more" da `from` argumenti
+bilan faqat YANGI kartochkalarni. GSAP yo'q yoki `prefers-reduced-motion`
+bo'lsa hech narsa qilmaydi — kartochkalar shundoq ham ko'rinadi.
+
+**Savatda `+` bosilganda nega butun ro'yxat qayta chizilmaydi?**
+Chizilsa ro'yxat ko'z oldida "yaltirab" ketardi. Endi faqat o'sha qatordagi
+son va "Order Summary" yangilanadi (`countUp` bilan raqam sanab o'tadi).
+O'chirishda esa qator avval so'nadi (0.28s), keyin ro'yxat yangilanadi.
+
+**`.cart-item` da `transition` nega alohida qoidada?**
+Agar `transition` `.is-removing` ichida bo'lsa, klass qo'shilgan payt
+transition ham, yangi qiymat ham bir vaqtda paydo bo'ladi — brauzer bunda
+animatsiya qilmaydi, element birdan yo'qoladi. Shuning uchun `transition`
+asosiy `.cart-item` da turadi, `.is-removing` faqat yakuniy holatni beradi.
+
+**`[data-split]` nima?**
+Bo'lim sarlavhasini hero kabi so'zlarga bo'lib, maska ortidan chiqaradi
+(`motion.js` -> `splitWords`). Matni JS bilan almashadigan sarlavhalarga
+qo'yilmagan, chunki `splitWords` `innerHTML` ni qayta yozadi va ichidagi
+elementlarni (masalan `<span data-review-count>`) yo'qotadi.
+
+**Prefetch nima uchun kerak?**
+Sichqoncha havola ustiga kelganda brauzer sahifani fon rejimida yuklab
+qo'yadi -> bosilganda deyarli darrov ochiladi. Har manzil bir marta,
+`?id=...` hisobga olinmaydi (HTML fayl bitta), tashqi havolalar tegilmaydi.
+
 **Register formasi qanday tekshiriladi?**
 Har maydon ostida alohida `.field__error`. `blur` da tekshiramiz; xato chiqса
 `input` da qayta baholaymiz; `submit` da hammasini. Noto'g'ri maydon —
