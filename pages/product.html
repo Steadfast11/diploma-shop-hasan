@@ -5,18 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Diploma Shop — Mahsulot</title>
 
-  <!-- pages/ papkasidan chiqish uchun ../ ishlatiladi -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+
   <link rel="stylesheet" href="../css/reset.css" />
   <link rel="stylesheet" href="../css/variables.css" />
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/ui.css" />
+  <link rel="stylesheet" href="/components/header.css" />
+  <link rel="stylesheet" href="/components/footer.css" />
+  <link rel="stylesheet" href="/components/modal.css" />
   <link rel="stylesheet" href="../css/pages/product.css" />
 </head>
 <body>
   <div id="header" data-component="header"></div>
 
-  <main class="container">
-    <!-- TODO: product.html?id=... : rasm(lar), narx, tavsif, -/+ miqdor, add to cart, pastda izohlar -->
+  <main class="container product">
+    <div class="product__top">
+      <div class="product__gallery" data-gallery></div>
+      <div class="product__info" data-info></div>
+    </div>
+
+    <section class="reviews">
+      <div class="reviews__head">
+        <h2 class="reviews__title">All Reviews <span class="reviews__count" data-review-count></span></h2>
+        <button class="reviews__write" type="button" data-write-review>Write a Review</button>
+      </div>
+      <div class="reviews__grid" data-reviews></div>
+    </section>
   </main>
 
   <div id="footer" data-component="footer"></div>

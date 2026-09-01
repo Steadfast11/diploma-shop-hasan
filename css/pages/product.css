@@ -1,6 +1,195 @@
 /* ============================================================
-   pages/product.css — FAQAT "product" sahifasi(lari)ning stili
-   Bu yerga faqat shu sahifaga tegishli qoidalar yoziladi.
-   Umumiy narsa base.css / ui.css da bo'ladi.
-   TODO
+   pages/product.css — Mahsulot sahifasi
+   Figma (1920): chapda rasm galereyasi (610x530 + 152px thumbnaillar),
+   o'ngda ma'lumot (nom / narx / tavsif / qty + Add to cart).
+   Pastda "All Reviews" + izoh kartalari (2 ustun).
+   Bu sahifa mazmuni SF Pro Display shriftida (Figma).
    ============================================================ */
+
+.product {
+  padding-block: 42px 76px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Yuqori: galereya + ma'lumot ---------- */
+.product__top {
+  display: grid;
+  grid-template-columns: 610px 1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+/* galereya */
+.product__gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.product__main-image {
+  width: 100%;
+  aspect-ratio: 610 / 530;
+  object-fit: cover;
+  background: #f0eeed;        /* Figma: rasm foni (radius YO'Q) */
+}
+.product__thumbs {
+  display: flex;
+  gap: 14px;
+}
+.product__thumb {
+  width: 152px;
+  height: 152px;
+  object-fit: cover;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.product__thumb--active {
+  border-color: var(--black);
+}
+
+/* ma'lumot */
+.product__info {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  color: var(--black);
+}
+.product__title {
+  font-weight: 600;
+  font-size: 40px;
+}
+.product__price {
+  font-weight: 600;
+  font-size: 32px;
+  margin-top: 12px;
+}
+.product__desc {
+  margin-top: 16px;
+  max-width: 556px;
+  font-size: 16px;
+  line-height: 22px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.product__actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 24px;
+}
+.product__add {
+  height: 48px;
+  border: 0;
+  border-radius: 62px;
+  background: var(--black);
+  color: var(--white);
+  font: inherit;
+  font-size: 14px;
+  padding-inline: 54px;
+  cursor: pointer;
+}
+
+/* ---------- Izohlar ---------- */
+.reviews {
+  margin-top: 76px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.reviews__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.reviews__title {
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  font-weight: 600;
+  font-size: 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.reviews__count {
+  font-weight: 400;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.reviews__write {
+  height: 48px;
+  border: 0;
+  border-radius: 62px;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  font-size: 16px;
+  padding-inline: 24px;
+  cursor: pointer;
+}
+.reviews__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.review-card {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: var(--font-system);
+  letter-spacing: normal;
+}
+.review-card__author {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  font-size: 20px;
+}
+.review-card__author img {
+  width: 24px;
+  height: 24px;
+}
+.review-card__text,
+.review-card__date {
+  font-size: 16px;
+  line-height: 22px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.review-card__delete {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-danger);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  .product__top {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .product__main-image {
+    aspect-ratio: 1 / 1;
+  }
+  .reviews__grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .reviews__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .product__title {
+    font-size: 32px;
+  }
+}

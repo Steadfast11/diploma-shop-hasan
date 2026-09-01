@@ -1,1 +1,76 @@
-/* modal.css — umumiy modal oynasi stili (overlay + markazdagi quti). */
+/* ============================================================
+   modal.css — umumiy modal oynasi (izoh yozish / "Thank you")
+   Figma: markazda oq karta, radius 20, ichida sarlavha + mazmun +
+   qora yumaloq tugma. Orqa fon qorayadi.
+   ============================================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+.modal__box {
+  position: relative;
+  width: 380px;
+  max-width: 100%;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  animation: modal-in 0.18s ease-out;
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.modal__title {
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--black);
+}
+.modal__body {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+}
+.modal__label {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+}
+.modal__textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 14px;
+}
+.modal__textarea:focus {
+  outline: none;
+  border-color: var(--black);
+}
+.modal__btn {
+  height: 48px;
+  border: 0;
+  border-radius: 62px;
+  background: var(--black);
+  color: var(--white);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}

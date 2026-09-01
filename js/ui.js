@@ -50,3 +50,35 @@ export function showEmpty(container, message) {
     container.innerHTML = `<p class="state-message">${esc(message)}</p>`;
   }
 }
+
+/* ---------- Modal oyna (izoh yozish / "Thank you") ----------
+   openModal o'z DOM'ini yaratadi (komponent fayl kerak emas).
+   opts: { title, bodyHTML, buttonText, onConfirm(modalEl) } */
+function onEsc(e) {
+  if (e.key === "Escape") closeModal();
+}
+export function closeModal() {
+  document.querySelector(".modal")?.remove();
+  document.removeEventListener("keydown", onEsc);
+  document.body.style.overflow = "";
+}
+export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }) {
+  closeModal();
+  const el = document.createElement("div");
+  el.className = "modal";
+  el.innerHTML = `
+    <div class="modal__overlay" data-close></div>
+    <div class="modal__box" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+      <p class="modal__title">${esc(title)}</p>
+      <div class="modal__body">${bodyHTML}</div>
+      <button class="modal__btn" type="button" data-confirm>${esc(buttonText)}</button>
+    </div>`;
+  el.addEventListener("click", (e) => {
+    if (e.target.closest("[data-close]")) return closeModal();
+    if (e.target.closest("[data-confirm]")) onConfirm ? onConfirm(el) : closeModal();
+  });
+  document.addEventListener("keydown", onEsc);
+  document.body.style.overflow = "hidden"; // orqa fon skroll qilinmasin
+  document.body.appendChild(el);
+  return el;
+}
