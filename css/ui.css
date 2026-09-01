@@ -120,45 +120,50 @@
    - prefers-reduced-motion: foydalanuvchi xohlamasa hammasi o'chadi
    ============================================================ */
 
+/* Yumshoq egri chiziq — hamma joyda bir xil "his". */
+:root {
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1); /* expo.out ko'rinishi */
+}
+
 [data-reveal] {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(14px);
+  transition: opacity 1s var(--ease-soft), transform 1s var(--ease-soft);
 }
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
-/* ketma-ket (stagger) — grid bolalari birin-ketin paydo bo'ladi.
+/* ketma-ket (stagger) — grid bolalari birin-ketin, yumshoq.
    Kechikish CSS'da (:nth-child) — bolalar JS bilan keyin qo'shilsa ham ishlaydi. */
 [data-reveal-stagger] > * {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(14px);
+  transition: opacity 0.9s var(--ease-soft), transform 0.9s var(--ease-soft);
 }
 [data-reveal-stagger].is-visible > * {
   opacity: 1;
   transform: none;
 }
 [data-reveal-stagger].is-visible > *:nth-child(1) { transition-delay: 0ms; }
-[data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 55ms; }
-[data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 110ms; }
-[data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 165ms; }
-[data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 220ms; }
-[data-reveal-stagger].is-visible > *:nth-child(6) { transition-delay: 275ms; }
-[data-reveal-stagger].is-visible > *:nth-child(7) { transition-delay: 330ms; }
-[data-reveal-stagger].is-visible > *:nth-child(8) { transition-delay: 385ms; }
-[data-reveal-stagger].is-visible > *:nth-child(n + 9) { transition-delay: 440ms; }
+[data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 80ms; }
+[data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 160ms; }
+[data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 240ms; }
+[data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 320ms; }
+[data-reveal-stagger].is-visible > *:nth-child(6) { transition-delay: 400ms; }
+[data-reveal-stagger].is-visible > *:nth-child(7) { transition-delay: 480ms; }
+[data-reveal-stagger].is-visible > *:nth-child(8) { transition-delay: 560ms; }
+[data-reveal-stagger].is-visible > *:nth-child(n + 9) { transition-delay: 620ms; }
 
-/* mahsulot kartochkasi — rasm ustiga borilganda sekin kattalashadi */
+/* mahsulot kartochkasi — rasm ustiga borilganda sekin, ozgina kattalashadi */
 .product-card__image {
-  transition: transform 0.45s ease;
+  transition: transform 0.9s var(--ease-soft);
 }
 .product-card:hover .product-card__image {
-  transform: scale(1.04);
+  transform: scale(1.025);
 }
 
-/* tugmalar — bosilganda mayda cho'kish */
+/* tugmalar — bosilganda juda oz cho'kish, yumshoq qaytish */
 .btn-glass,
 .product__add,
 .reviews__write,
@@ -167,7 +172,7 @@
 .auth__submit,
 .profile__logout,
 .modal__btn {
-  transition: transform 0.12s ease, opacity 0.2s ease;
+  transition: transform 0.35s var(--ease-soft), opacity 0.3s ease;
 }
 .btn-glass:active,
 .product__add:active,
@@ -177,16 +182,30 @@
 .auth__submit:active,
 .profile__logout:active,
 .modal__btn:active {
-  transform: scale(0.97);
+  transform: scale(0.99);
 }
 
-/* header "Bag (N)" o'zgarganda mayda sakrash */
+/* havolalar rangi/hover — yumshoq */
+a,
+.site-header__nav a,
+.site-header__account a,
+.site-footer__col a,
+.cart-item__title {
+  transition: opacity 0.3s ease;
+}
+.site-header__nav a:hover,
+.site-header__account a:hover,
+.site-footer__col a:hover {
+  opacity: 0.55;
+}
+
+/* header "Bag (N)" o'zgarganda juda mayda urg'u */
 [data-cart-count] {
   display: inline-block;
-  transition: transform 0.2s ease;
+  transition: transform 0.4s var(--ease-soft);
 }
 [data-cart-count].bump {
-  transform: scale(1.35);
+  transform: scale(1.18);
 }
 
 /* ---------- GSAP ("wow") ----------

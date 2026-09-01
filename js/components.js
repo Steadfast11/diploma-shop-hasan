@@ -30,7 +30,7 @@ async function refreshCartCount() {
   if (el.textContent !== next) {
     el.textContent = next;
     el.classList.add("bump");
-    setTimeout(() => el.classList.remove("bump"), 200);
+    setTimeout(() => el.classList.remove("bump"), 450);
   }
 }
 

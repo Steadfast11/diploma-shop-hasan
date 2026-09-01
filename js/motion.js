@@ -3,6 +3,9 @@
    Kutubxonalar js/vendor/ da, HTML <head> da <script defer> bilan
    yuklanadi -> window.gsap / window.ScrollTrigger / window.Lenis.
 
+   USLUB: MAKSIMAL SILLIQ. Uzoq davomiylik, yumshoq egri chiziqlar
+   (power2.out / expo.out), kichik siljish. Keskin/tez harakat yo'q.
+
    Agar kutubxona yo'q yoki prefers-reduced-motion -> false qaytaradi,
    shunda components.js oddiy CSS reveal (reveal.js) ni ishlatadi.
    ============================================================ */
@@ -21,70 +24,78 @@ export function initMotion() {
   if (reduce || !gsap || !ScrollTrigger || !Lenis) return false;
 
   gsap.registerPlugin(ScrollTrigger);
+  gsap.defaults({ ease: "power2.out" }); // yumshoq to'xtash
   document.documentElement.classList.add("has-motion");
 
-  /* --- Lenis: yumshoq ("smooth") skroll --- */
+  /* --- Lenis: yumshoq, sekin inersiyali skroll --- */
   const lenis = new Lenis({
-    duration: 1.1,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    duration: 1.5,        // uzoqroq -> silliqroq to'xtash
+    smoothWheel: true,
+    wheelMultiplier: 0.9, // g'ildirak biroz "yengil"
+    easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)), // expo.out
   });
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  /* --- Blok reveal: [data-reveal] va [data-reveal-stagger] ko'rinishga
-     kirganda pastdan chiqadi. Grid bolalarini alohida animatsiya qilmaymiz —
-     ular API'dan keyin qo'shiladi, poyga (race) bo'lib qolardi. --- */
+  /* --- Blok reveal: [data-reveal] / [data-reveal-stagger] ko'rinishga kirganda
+     yumshoq pastdan chiqadi. Kichik siljish, uzoq davomiylik. --- */
   gsap.utils.toArray("[data-reveal], [data-reveal-stagger]").forEach((el) => {
     gsap.fromTo(
       el,
-      { y: 26, autoAlpha: 0 },
+      { y: 14, autoAlpha: 0 },
       {
         y: 0,
         autoAlpha: 1,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 88%" },
+        duration: 1.2,
+        ease: "power2.out",
+        scrollTrigger: { trigger: el, start: "top 90%" },
       }
     );
   });
 
-  /* --- Hero: sarlavha so'zlari maska ortidan ko'tariladi --- */
+  /* --- Hero: sarlavha so'zlari maska ortidan SEKIN ko'tariladi --- */
   const heroLines = document.querySelectorAll("[data-hero-line]");
   if (heroLines.length) {
     heroLines.forEach(splitWords);
     gsap.fromTo(
       "[data-hero-line] .m-word__in",
-      { yPercent: 115 },
-      { yPercent: 0, duration: 1, ease: "power4.out", stagger: 0.035, delay: 0.12 }
+      { yPercent: 105 },
+      {
+        yPercent: 0,
+        duration: 1.4,
+        ease: "expo.out",
+        stagger: 0.055,
+        delay: 0.25,
+      }
     );
   }
   const heroBtn = document.querySelector(".hero__btn");
   if (heroBtn) {
     gsap.fromTo(
       heroBtn,
-      { autoAlpha: 0, y: 14 },
-      { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.9 }
+      { autoAlpha: 0, y: 10 },
+      { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out", delay: 1.4 }
     );
   }
 
-  /* --- Hero foni: skroll bilan parallaks --- */
+  /* --- Hero foni: skroll bilan juda yengil parallaks (scrub 1s "kechikadi") --- */
   const heroBg = document.querySelector("[data-parallax]");
   if (heroBg) {
     gsap.to(heroBg, {
-      yPercent: 16,
+      yPercent: 10,
       ease: "none",
       scrollTrigger: {
         trigger: heroBg.closest(".hero"),
         start: "top top",
         end: "bottom top",
-        scrub: true,
+        scrub: 1, // 1s "quvib yetish" -> silliqroq
       },
     });
   }
 
-  /* --- Sahifa ochilishi: main biroz pastdan paydo bo'ladi --- */
-  gsap.from("main", { autoAlpha: 0, y: 14, duration: 0.5, ease: "power2.out" });
+  /* --- Sahifa ochilishi: main juda oz pastdan yumshoq paydo bo'ladi --- */
+  gsap.from("main", { autoAlpha: 0, y: 8, duration: 0.9, ease: "power2.out" });
 
   ScrollTrigger.refresh();
   window.addEventListener("load", () => ScrollTrigger.refresh());
