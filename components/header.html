@@ -1,21 +1,24 @@
 <!-- HEADER — barcha sahifalar uchun BITTA nusxa.
      js/components.js buni har sahifadagi <div id="header"> ichiga joylaydi.
-     Figma: balandlik 69px, oq fon, ostida 1px qora chiziq, chetdan 60px. -->
+     Desktop: [Home Products] | logo | [Account Bag(N)].
+     Mobil: [burger] logo [Account Bag(N)] — Home/Products burger ichida. -->
 <header class="site-header">
   <div class="site-header__inner">
 
-    <!-- Chap menyu -->
+    <button class="site-header__burger" type="button"
+            aria-label="Menyu" aria-expanded="false" data-burger>
+      <img src="/assets/icons/menu.svg" alt="" width="24" height="24" />
+    </button>
+
     <nav class="site-header__nav" aria-label="Asosiy menyu">
       <a href="/index.html">Home</a>
       <a href="/pages/catalog.html">Products</a>
     </nav>
 
-    <!-- Logo (markazda). logo.png ichida 3D belgi + "WEPRO" yozuvi birga. -->
     <a href="/index.html" class="site-header__logo">
       <img src="/assets/icons/logo.png" alt="WEPRO" width="147" height="51" />
     </a>
 
-    <!-- O'ng menyu. Bag (N) — N ni JS keyin data-cart-count ichiga yozadi. -->
     <nav class="site-header__account" aria-label="Akkaunt menyusi">
       <a href="/pages/profile.html">Account</a>
       <a href="/pages/cart.html">Bag (<span data-cart-count>0</span>)</a>

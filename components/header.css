@@ -1,16 +1,16 @@
 /* ============================================================
-   header.css — FAQAT header komponentining stili.
-   Figma: oq fon, ostida 1px qattiq qora chiziq, balandlik 69px,
-   chapdan/o'ngdan 60px. Chap menyu | logo (markaz) | o'ng menyu.
+   header.css — FAQAT header komponenti.
+   Desktop: oq fon, 1px qora ostki chiziq, 69px, chetdan 60px.
+   Chap menyu | logo (markaz) | o'ng menyu.
+   Mobil (<768px): burger | logo | akkaunt; Home/Products burger ichida.
    ============================================================ */
 
 .site-header {
+  position: relative;
   background: var(--white);
-  border-bottom: 1px solid var(--color-line); /* Figma: 1px #000 */
+  border-bottom: 1px solid var(--color-line); /* 1px #000 */
 }
 
-/* grid: 1fr | auto | 1fr  -> logo har doim aniq markazda,
-   chap va o'ng ustunlar teng joy oladi. */
 .site-header__inner {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -23,15 +23,12 @@
 .site-header__account {
   display: flex;
   align-items: center;
-  gap: 40px;                 /* Figma: tekshir (havolalar orasi) */
+  gap: 40px;
 }
-
-/* o'ng menyu grid'ning 3-ustunida — o'ng chetga suriladi */
 .site-header__account {
   justify-self: end;
 }
 
-/* logo rasmi — Figma o'lchami 147x51 */
 .site-header__logo {
   display: block;
 }
@@ -40,4 +37,57 @@
   width: 147px;
   height: 51px;
   object-fit: contain;
+}
+
+/* burger — desktopda yashirin */
+.site-header__burger {
+  display: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.site-header__burger img {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+/* ---------- MOBIL ---------- */
+@media (max-width: 768px) {
+  .site-header__inner {
+    grid-template-columns: auto 1fr auto;
+    height: 66px;                     /* Figma mobil */
+    padding-inline: 24px;
+    column-gap: 16px;
+  }
+  .site-header__burger {
+    display: block;
+  }
+  .site-header__logo img {
+    width: 116px;                     /* biroz kichik */
+    height: auto;
+  }
+  .site-header__account {
+    gap: 16px;
+  }
+
+  /* Home/Products — header ostidan ochiladigan panel */
+  .site-header__nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--white);
+    border-bottom: 1px solid var(--color-line);
+    display: none;
+    z-index: 20;
+  }
+  .site-header--menu-open .site-header__nav {
+    display: flex;
+  }
 }

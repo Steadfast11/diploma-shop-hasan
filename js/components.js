@@ -33,6 +33,17 @@ function wireHeaderAuth() {
   if (acc) acc.href = "/pages/login.html";
 }
 
+// Mobil burger: Home/Products panelini ochib/yopadi.
+function wireHeaderMenu() {
+  const burger = document.querySelector("[data-burger]");
+  if (!burger) return;
+  burger.addEventListener("click", () => {
+    const header = burger.closest(".site-header");
+    const open = header.classList.toggle("site-header--menu-open");
+    burger.setAttribute("aria-expanded", String(open));
+  });
+}
+
 // Har sahifa shuni chaqiradi.
 export async function initLayout() {
   await Promise.all([
@@ -40,6 +51,7 @@ export async function initLayout() {
     loadComponent("footer", "footer"),
   ]);
   wireHeaderAuth();
+  wireHeaderMenu();
   refreshCartCount();
   subscribe(refreshCartCount); // savat o'zgarsa "Bag (N)" yangilanadi
 }

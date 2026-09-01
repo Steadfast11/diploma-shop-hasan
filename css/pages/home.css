@@ -98,3 +98,29 @@
   background: rgba(255, 255, 255, 0.16); /* Figma: kategoriya tugmasi */
   color: var(--white);
 }
+
+/* ---------- RESPONSIVE (Figma mobil: 1 ustun, py-56) ---------- */
+@media (max-width: 900px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .hero {
+    height: 600px;
+    padding-bottom: 56px;
+  }
+  .hero__eyebrow,
+  .hero__title {
+    /* Figma mobil hero tugmasi: oq matn, ochroq fon */
+  }
+  .hero__btn {
+    background: rgba(255, 255, 255, 0.16);
+    color: var(--white);
+  }
+  .home-sections {
+    gap: 56px;
+    padding-block: 56px;
+  }
+}
+/* Figma mobil hero sarlavhasi ham 56px — o'zgartirmaymiz (pixel-perfect). */

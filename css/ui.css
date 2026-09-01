@@ -56,6 +56,17 @@
   column-gap: 24px;
   row-gap: 32px;
 }
+/* Umumiy responsive tayanch (sahifalar o'z ustidan yozishi mumkin).
+   Figma mobil: 1 ustun. */
+@media (max-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .product-grid { grid-template-columns: 1fr; }
+}
 
 /* ---------- Miqdor tanlagich (−  N  +) ----------
    Figma: #f0f0f0 fon, h48, to'liq yumaloq, SF Pro shrift.

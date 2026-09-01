@@ -50,7 +50,7 @@
 
   /* ---------- LAYOUT ---------- */
   --container: 1200px;         /* ТЗ + Figma: ichki kontent 1200px */
-  --gutter: 20px;              /* kichik ekranda chekka bo'shliq */
+  --gutter: 24px;             /* Figma: mobil px-24 */
   --header-pad-x: 60px;        /* Figma: header 1920px'da chetdan 60px (3.13%) */
   --header-h: 69px;            /* Figma: header balandligi */
 

@@ -73,3 +73,22 @@
   display: flex;
   gap: 16px;
 }
+
+/* ---------- MOBIL (Figma: ustunlar tik, px-24) ---------- */
+@media (max-width: 768px) {
+  .site-footer__inner {
+    padding: 56px 24px;
+  }
+  .site-footer__top {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .site-footer__bottom {
+    flex-direction: column;
+    gap: 32px;
+    align-items: flex-start;
+  }
+  .site-footer__legal {
+    flex-wrap: wrap;
+  }
+}
