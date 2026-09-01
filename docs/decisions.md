@@ -111,6 +111,32 @@ Doskada "nega bunday?" degan savolga tayyor javob.
 - Mahsulot nomi / izoh backenddan keladi. `< > & " '` belgilari MATN bo'lib
   chizilsin, HTML bo'lib emas (XSS himoya).
 
+### Sayt tili — default INGLIZCHA, jahon tillariga Google Translate orqali
+- Barcha foydalanuvchiga ko'rinadigan matn (label, xato, toast, sarlavha) —
+  inglizcha. `<html lang="en">`. Kod izohlari o'zbekcha qoladi — ular Hasan
+  uchun, sayt kontenti emas.
+- **Jahon tiллariga tarjima:** loyihada backend/tarjima API yo'q, va 190+
+  tilni qo'lda yozib bo'lmaydi. Yagona amaliy yechim — Google'ning bepul
+  "Website Translator" widgeti (`js/translate.js`): butun sahifани JONLI
+  tarjima qiladi, hech qanaqa matn qo'lda yozilmaydi.
+- Widget faqat `profile.html`да ko'rinади ("Language" bo'limi); boshqa
+  sahifаларда yashirin holда yuklanади, chunki tanlangan til `googtrans`
+  cookie'да saqlanади va shu skript ishga tushган har qanaqa sahифада
+  o'sha tilni o'qiб qo'llайди — shu sabab BUTUN sayt tarjима qilinади.
+- **Cheklov:** bu tashqi (CDN emas — jonli) xizmat, vendor qila olmaymiz.
+  Internet yo'q joyda yoki Google xizmatни o'zgartirsa ishlамaslиги mumkin.
+
+### Buzilgan rasm -> toza kulrang quti (broken-icon emas)
+- API'дан kelgan `image` URL 404 bo'lsa (yoki bo'sh), brauzer "buzilgan
+  rasm" ikonkасини ko'rsatади. `.img-fallback` klassi + `error` hodisаси
+  (document darajasида, `capture: true` — bu hodisa bubble bo'lмайди) —
+  `<img>` ni bir xil klasslи `<div>` ga almаштиради (fon rangi qoladi).
+
+### Ikki marta bosilса — ikkита amal bo'lмасин
+- "Add to cart", "Go to checkout", izoh "Send" — so'rov ketaётганда
+  tugma `disabled` bo'lади. Sabab: sekin internetда foydalanuvchi ikki
+  marta bossа, ikkита buyurtма/izoh yaratilib qolиши mumkin edi.
+
 ### API javob shakllari (kutilmagan)
 - `/products/:id` -> `{ product: {...} }` (ichida `comments` ham)
 - `/cart` va o'zgartirishlar -> `{ message, cart: {...} }` (api.js ichini ochib beradi)
