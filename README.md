@@ -9,13 +9,14 @@ Dizayn: Figma maketi (pixel-perfect). Backend: `https://api.wepro.uz/sandbox-sho
 
 ```bash
 npm run dev
-# yoki to'g'ridan-to'g'ri:
+# yoki:
+npx serve -l 5173 .
+# yoki:
 python3 -m http.server 5173
 ```
 
-> `serve` kabi "clean URL" qiladigan serverlardan foydalanmang — ular
-> `product.html?id=123` dagi `?id=123` ni yo'qotadi. `http.server` fayllarni
-> o'zgartirmasdan beradi (Netlify ham shunday).
+> `serve.json` da `cleanUrls: false` — URL'lardan `.html` olib tashlanmasin
+> va `?id=123` query yo'qolmasin (Netlify ham `.html` ni saqlaydi).
 
 Keyin brauzerda: `http://localhost:5173`
 

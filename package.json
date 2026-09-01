@@ -4,6 +4,6 @@
   "private": true,
   "description": "Diplom loyihasi — Sandbox Shop uchun frontend (toza HTML/CSS/JS)",
   "scripts": {
-    "dev": "python3 -m http.server 5173"
+    "dev": "npx --yes serve -l 5173 ."
   }
 }

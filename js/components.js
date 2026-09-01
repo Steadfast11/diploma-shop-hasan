@@ -14,7 +14,8 @@ async function loadComponent(name, mountId) {
   const mount = document.getElementById(mountId);
   if (!mount) return; // bu sahifada bunday div yo'q -> jimgina to'xtaymiz
 
-  const res = await fetch(`/components/${name}.html`);
+  // ?v=1 — kesh-buzish (va ba'zi dev-serverlar ".html" ni olib tashlamasin)
+  const res = await fetch(`/components/${name}.html?v=1`);
   const html = await res.text();
   mount.innerHTML = html;
 }
