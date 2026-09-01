@@ -233,13 +233,21 @@
 }
 
 /* ============================================================
-   RESPONSIVE — Figma faqat 1920px beradi; kichik ekranlarda
-   filtr panelini yuqoriga olamiz (chapda joy qolmaydi).
+   RESPONSIVE
+
+   Figma faqat 1920px frame beradi. O'sha kenglikda kontent 1200px
+   markazda (bosh sahifa bilan bir xil), filtr paneli esa chap
+   bo'sh joyda (chetdan 45px). Bu joylashuv FAQAT chap margin filtr
+   sig'adigan darajada keng bo'lganda ishlaydi:
+     margin = (100vw - 1200) / 2  >=  filtr eni + oraliq
+     -> 100vw >= 1920px
+
+   Shuning uchun 1920px'da absolyut filtr (Figma), undan kichik
+   ekranda esa ikkita haqiqiy ustun: [filtr] [kontent].
    ============================================================ */
-/* Absolute filtr faqat 1920px Figma frame'da o'ng kontentga tegmaydi.
-   Undan kichik ekranda ikki haqiqiy ustun ishlatamiz. */
 @media (max-width: 1919px) {
   .catalog {
+    /* endi butun blok markazda; filtr absolyut emas, grid ustuni */
     width: min(100% - 2 * var(--gutter), var(--container));
     margin-inline: auto;
     display: grid;
@@ -252,23 +260,26 @@
     width: auto;
   }
   .catalog__content {
-    width: auto;
+    width: auto;         /* grid ustuni kengligini oladi */
     margin-inline: 0;
-    min-width: 0;
+    min-width: 0;         /* grid bolasi cho'zilib ketmasin */
   }
   .product-grid {
-    grid-template-columns: repeat(3, 1fr); /* joy kamaydi */
+    grid-template-columns: repeat(3, 1fr); /* joy kamaydi -> 3 ustun */
   }
 }
 
+/* Planshet — filtr tepaga, mahsulotlar 2 ustun */
 @media (max-width: 900px) {
   .catalog {
-    grid-template-columns: 1fr;   /* filtr tepada */
+    grid-template-columns: 1fr;
   }
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Telefon — 1 ustun */
 @media (max-width: 560px) {
   .product-grid {
     grid-template-columns: 1fr;
