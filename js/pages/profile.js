@@ -10,7 +10,7 @@
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
 import { requireAuth, currentUser, doLogout } from "../auth.js";
-import { esc, money, showError, showEmpty, productCardHTML } from "../ui.js";
+import { esc, money, formatPhone, showError, showEmpty, productCardHTML } from "../ui.js";
 import { getFavorites, isFavorite } from "../favorites.js";
 
 initLayout();
@@ -23,7 +23,7 @@ if (requireAuth()) {
     headEl.innerHTML = `
       <p class="profile__eyebrow">My Profile</p>
       <p class="profile__name">${esc(u.name)} ${esc(u.surname)}</p>
-      <p class="profile__phone">${esc(u.phone || "")}</p>
+      <p class="profile__phone">${esc(formatPhone(u.phone))}</p>
       <p class="profile__email">${esc(u.email || "")}</p>
       <button class="profile__logout" type="button" data-logout>Log out</button>`;
   }

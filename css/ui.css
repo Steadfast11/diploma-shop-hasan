@@ -135,6 +135,32 @@
   text-align: center;
 }
 
+/* ---------- 404 sahifasi ---------- */
+.not-found {
+  padding-block: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  text-align: left;
+}
+.not-found__code {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  letter-spacing: normal;
+}
+.not-found__title {
+  font-size: var(--fs-h2);
+}
+.not-found__text {
+  color: var(--color-text-muted);
+}
+.not-found__link {
+  margin-top: 8px;
+  background: var(--black);
+  color: var(--white);
+}
+
 /* Holat xabari (yuklanmoqda / bo'sh / xato) — grid ichida butun qatorni egallaydi */
 .state-message {
   grid-column: 1 / -1;

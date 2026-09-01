@@ -8,6 +8,16 @@ import { isFavorite } from "./favorites.js";
 // Narx: 19.99 -> "$19.99"
 export const money = (n) => "$" + Number(n).toFixed(2);
 
+// Telefon: "998901234500" -> "+998 90 123 45 00" (API faqat raqam saqlaydi).
+export function formatPhone(digits) {
+  const d = String(digits ?? "").replace(/\D/g, "");
+  if (d.length < 9) return digits || "";
+  const cc = d.slice(0, d.length - 9); // masalan "998"
+  const rest = d.slice(-9); // "901234500"
+  const parts = [rest.slice(0, 2), rest.slice(2, 5), rest.slice(5, 7), rest.slice(7, 9)];
+  return `+${cc} ${parts.join(" ")}`.trim();
+}
+
 // HTML'ga xavfsiz qo'yish uchun matnni "tozalash".
 // Nega: mahsulot nomi/izoh backenddan keladi. Ichida <script> yoki
 // < > belgilari bo'lsa, ular MATN bo'lib chizilsin, HTML bo'lib emas.

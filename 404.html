@@ -4,26 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="/assets/favicon.svg" />
-  <title>Diploma Shop — Savatcha</title>
-  <meta name="description" content="Savatchangizdagi mahsulotlar va buyurtma berish." />
+  <title>Diploma Shop — Sahifa topilmadi</title>
+  <meta name="description" content="Bunday sahifa topilmadi." />
   <meta property="og:title" content="WEPRO — onlayn do'kon" />
-  <meta property="og:description" content="Savatchangizdagi mahsulotlar va buyurtma berish." />
+  <meta property="og:description" content="Bunday sahifa topilmadi." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://wepro-diploma.netlify.app/assets/images/hero.jpg" />
-  <link rel="canonical" href="https://wepro-diploma.netlify.app/pages/cart.html" />
+  <link rel="canonical" href="https://wepro-diploma.netlify.app/404.html" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
 
-  <link rel="stylesheet" href="../css/reset.css" />
-  <link rel="stylesheet" href="../css/variables.css" />
-  <link rel="stylesheet" href="../css/base.css" />
-  <link rel="stylesheet" href="../css/ui.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/ui.css" />
   <link rel="stylesheet" href="/components/header.css" />
   <link rel="stylesheet" href="/components/footer.css" />
-  <link rel="stylesheet" href="../css/pages/cart.css" />
   <script defer src="/js/vendor/gsap.min.js"></script>
   <script defer src="/js/vendor/ScrollTrigger.min.js"></script>
   <script defer src="/js/vendor/lenis.min.js"></script>
@@ -31,16 +30,15 @@
 <body>
   <div id="header" data-component="header"></div>
 
-  <main class="cart">
-    <div class="cart__main" data-reveal>
-      <h1 class="cart__title">Your bag</h1>
-      <div data-cart-main></div>
-    </div>
-    <aside class="order-summary" data-cart-summary data-reveal></aside>
+  <main class="container not-found" data-reveal>
+    <p class="not-found__code">404</p>
+    <h1 class="not-found__title">Sahifa topilmadi</h1>
+    <p class="not-found__text">Qidirilayotgan sahifa mavjud emas yoki ko'chirilgan.</p>
+    <a class="btn-glass not-found__link" href="/index.html">Bosh sahifaga qaytish</a>
   </main>
 
   <div id="footer" data-component="footer"></div>
 
-  <script type="module" src="../js/pages/cart.js"></script>
+  <script type="module" src="js/pages/not-found.js"></script>
 </body>
 </html>
