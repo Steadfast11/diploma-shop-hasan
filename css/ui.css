@@ -211,6 +211,32 @@
   background: var(--color-danger);
 }
 
+/* ---------- Google Translate widget ----------
+   Google umumiy banner-frame'ni <body> tepasiga qo'shib, kontentni pastga
+   suradi va so'zlarni sariq belgilaydi — buni o'chiramiz, faqat dropdown
+   qoladi. Yashirin nusxalar (profile.html'dan boshqa hamma sahifada)
+   hech qachon ko'rinmasin. */
+.goog-te-banner-frame,
+.skiptranslate > iframe {
+  display: none !important;
+}
+body {
+  top: 0 !important;
+  position: static !important;
+}
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+#google_translate_element[hidden] {
+  display: none !important;
+}
+#google_translate_element .goog-te-gadget {
+  font-family: var(--font-system);
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
 /* ---------- Klaviatura fokusi (a11y) ---------- */
 :focus-visible {
   outline: 2px solid var(--black);
