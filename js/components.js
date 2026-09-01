@@ -9,6 +9,7 @@
 import { isLoggedIn } from "./auth.js";
 import { getCount, subscribe } from "./cart-store.js";
 import { initReveal } from "./reveal.js";
+import { initMotion } from "./motion.js";
 
 // Bitta komponentni yuklab, kerakli div ichiga qo'yadi.
 async function loadComponent(name, mountId) {
@@ -62,9 +63,9 @@ export async function initLayout() {
   refreshCartCount();
   subscribe(refreshCartCount); // savat o'zgarsa "Bag (N)" yangilanadi
 
-  // scroll-reveal — sahifadagi [data-reveal] bloklar ko'rinishga kirganda paydo bo'ladi.
-  // Ro'yxatlar keyin API'dan chizilsa, sahifa skripti initReveal() ni qayta chaqiradi.
-  initReveal();
+  // Animatsiya: GSAP bo'lsa "wow" (motion.js), bo'lmasa oddiy CSS reveal.
+  const motionOn = initMotion();
+  if (!motionOn) initReveal();
 }
 
 export { initReveal };

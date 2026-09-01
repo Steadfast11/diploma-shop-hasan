@@ -87,11 +87,20 @@ Doskada "nega bunday?" degan savolga tayyor javob.
 - `image, title, price` — nima kelsa shu. Soxta eski narx / "-20%" / "New" belgilari
   (Figma'da bor) — chizilmaydi, chunki API'da bunday maydon yo'q.
 
-### Animatsiya: IntersectionObserver + xavfsizlik to'ri
-- `[data-reveal]` element ko'rinishga kirganda paydo bo'ladi (`js/reveal.js`).
-- **Xavfsizlik to'ri:** 1.5s dan keyin hammasi ko'rsatiladi — observer ishlamasa
-  ham kontent abadiy yashirin qolmasin.
-- `prefers-reduced-motion` — foydalanuvchi xohlamasa animatsiya o'chadi.
+### Animatsiya: 2 qatlam — GSAP ("wow") + CSS reveal (zaxira)
+- **GSAP + ScrollTrigger + Lenis** (`js/vendor/` da, CDN'siz — Netlify'da ham,
+  offline ham ishlaydi, ~128KB). `js/motion.js`:
+  - Lenis yumshoq skroll
+  - hero sarlavhasi so'zlarga bo'linib maska ortidan ko'tariladi (`gsap.fromTo`,
+    `gsap.from` EMAS — `from` element'ni "from" holatida qoldirib ketardi)
+  - hero foni skroll bilan parallaks (scrub)
+  - `[data-reveal]` / `[data-reveal-stagger]` bloklari ScrollTrigger bilan pastdan chiqadi
+    (grid BOLALARINI alohida emas — ular API'dan keyin keladi, poyga bo'lardi)
+  - `main` sahifa ochilishida pastdan paydo bo'ladi
+- **Zaxira (`js/reveal.js`):** GSAP yo'q yoki `prefers-reduced-motion` bo'lsa —
+  IntersectionObserver + CSS. Bu ham 1.5s xavfsizlik to'ri bilan.
+- motion.js'da ham 2s xavfsizlik: ekranda ko'rinib, hali yashirin bloklarni majburan ochadi.
+- `.has-motion` klassi: GSAP faol bo'lganda CSS reveal qoidalarini o'chiradi (ikki xil animatsiya to'qnashmasin).
 
 ### Dev server: `serve` + `serve.json` (`cleanUrls: false`)
 - `cleanUrls: false` — URL'dan `.html` va `?query` olib tashlanmasin

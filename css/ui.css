@@ -189,6 +189,28 @@
   transform: scale(1.35);
 }
 
+/* ---------- GSAP ("wow") ----------
+   motion.js hero sarlavhasini so'zlarga bo'lib, maska ortidan ko'taradi. */
+.m-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.m-word__in {
+  display: inline-block;
+  will-change: transform;
+}
+/* GSAP faol bo'lsa: [data-reveal] ni GSAP animatsiya qiladi;
+   stagger bolalarini yashirmaymiz (GSAP butun gridni chizadi). */
+.has-motion [data-reveal] {
+  transition: none;
+}
+.has-motion [data-reveal-stagger] > * {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   [data-reveal],
