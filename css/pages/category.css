@@ -1,0 +1,27 @@
+/* ============================================================
+   pages/category.css — bitta kategoriya sahifasi ("Creams")
+   Figma: filtrsiz, sarlavha (kategoriya nomi, 40px) + 4 ustunli grid,
+   bosh sahifa bilan bir joyda (1200px, markazda).
+   Grid stilini ui.css'dan oladi.
+   ============================================================ */
+
+.category {
+  padding-block: 42px 76px;   /* katalog bilan bir xil oraliq */
+  display: flex;
+  flex-direction: column;
+  gap: 32px;                   /* sarlavha -> grid */
+}
+.category__title {
+  font-size: var(--fs-h2);    /* 40px (h1 emas, h2 o'lchami) */
+}
+
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}

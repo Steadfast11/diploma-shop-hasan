@@ -5,18 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Diploma Shop — Savatcha</title>
 
-  <!-- pages/ papkasidan chiqish uchun ../ ishlatiladi -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+
   <link rel="stylesheet" href="../css/reset.css" />
   <link rel="stylesheet" href="../css/variables.css" />
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/ui.css" />
+  <link rel="stylesheet" href="/components/header.css" />
+  <link rel="stylesheet" href="/components/footer.css" />
   <link rel="stylesheet" href="../css/pages/cart.css" />
 </head>
 <body>
   <div id="header" data-component="header"></div>
 
-  <main class="container">
-    <!-- TODO: savat pozitsiyalari, miqdorni o'zgartirish, o'chirish, jami, Buyurtma berish (login majburiy) -->
+  <main class="cart">
+    <div class="cart__main">
+      <h1 class="cart__title">Your bag</h1>
+      <div data-cart-main></div>
+    </div>
+    <aside class="order-summary" data-cart-summary></aside>
   </main>
 
   <div id="footer" data-component="footer"></div>

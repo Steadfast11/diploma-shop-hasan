@@ -39,10 +39,14 @@
   --color-invert: var(--black);
   --color-on-invert: var(--white);
 
-  /* holat ranglari — savat/izoh sahifalarida tekshiramiz */
-  --color-surface: #f4f4f4;    /* Figma: tekshir (qty pill foni) */
-  --color-danger: #e03131;     /* Figma: tekshir (trash) */
-  --color-success: #37b24d;    /* Figma: tekshir (verified) */
+  /* holat ranglari */
+  --color-surface: #f0f0f0;    /* Figma: qty pill / bo'sh quti foni */
+  --color-danger: #ff3333;     /* Figma: #f33 — trash, chegirma matni */
+  --color-success: #37b24d;    /* Figma: tekshir (izoh ✓) */
+
+  /* qora karta (Order Summary) ustidagi ranglar */
+  --on-dark-muted: rgba(255, 255, 255, 0.6);
+  --on-dark-line: rgba(255, 255, 255, 0.1);
 
   /* ---------- LAYOUT ---------- */
   --container: 1200px;         /* ТЗ + Figma: ichki kontent 1200px */

@@ -57,6 +57,40 @@
   row-gap: 32px;
 }
 
+/* ---------- Miqdor tanlagich (−  N  +) ----------
+   Figma: #f0f0f0 fon, h48, to'liq yumaloq, SF Pro shrift.
+   Savat va mahsulot sahifasida ishlatiladi. */
+.qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  height: 48px;
+  padding: 12px 20px;
+  border-radius: 62px;
+  background: var(--color-surface);
+  font-family: var(--font-system);
+  letter-spacing: normal;
+}
+.qty__btn {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.qty__btn img {
+  width: 20px;
+  height: 20px;
+}
+.qty__value {
+  font-size: 14px;
+  min-width: 1ch;
+  text-align: center;
+}
+
 /* Holat xabari (yuklanmoqda / bo'sh / xato) — grid ichida butun qatorni egallaydi */
 .state-message {
   grid-column: 1 / -1;

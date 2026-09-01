@@ -1,10 +1,107 @@
 /* ============================================================
-   pages/cart.js — "cart.js" sahifasining BOSH skripti
-   Har sahifa skripti bir xil 4 bosqichda ishlaydi:
-     1) DOM tayyor bo'lishini kutish
-     2) components.js -> header/footer
-     3) api.js -> kerakli ma'lumot
-     4) ma'lumotni DOM'ga chizish + hodisalarni ulash
-   ------------------------------------------------------------
-   BU SAHIFA: cart-store.getItems(); miqdor o'zgartirish; o'chirish; jami; 'Buyurtma berish' -> requireAuth -> createOrder
+   pages/cart.js — Savatcha ("Your bag")
+     1) header/footer
+     2) cart-store'dan savat (mehmon = localStorage, kirgan = server)
+     3) miqdor +/- , o'chirish, "Go to checkout"
+
+   Chegirma qarori (docs/decisions.md): API savatida chegirma yo'q ->
+   Subtotal = Total = server total, Discount = 0.
    ============================================================ */
+
+import { initLayout } from "../components.js";
+import * as cartStore from "../cart-store.js";
+import * as api from "../api.js";
+import { isLoggedIn } from "../auth.js";
+import { money, esc, showError } from "../ui.js";
+
+initLayout();
+
+const mainEl = document.querySelector("[data-cart-main]");
+const summaryEl = document.querySelector("[data-cart-summary]");
+
+function itemHTML(it) {
+  const image = it.image
+    ? `<img class="cart-item__image" src="${esc(it.image)}" alt="${esc(it.title)}" />`
+    : `<div class="cart-item__image"></div>`;
+  return `
+    <div class="cart-item" data-id="${esc(it.productId)}">
+      ${image}
+      <div class="cart-item__info">
+        <p class="cart-item__title">${esc(it.title)}</p>
+        <p class="cart-item__price">${money(it.price)}</p>
+        <button class="cart-item__remove" type="button" data-remove aria-label="O'chirish">
+          <img src="/assets/icons/trash.svg" alt="" width="24" height="24" />
+        </button>
+      </div>
+      <div class="qty">
+        <button class="qty__btn" type="button" data-dec aria-label="Kamaytirish">
+          <img src="/assets/icons/minus.svg" alt="" width="20" height="20" />
+        </button>
+        <span class="qty__value">${it.qty}</span>
+        <button class="qty__btn" type="button" data-inc aria-label="Ko'paytirish">
+          <img src="/assets/icons/plus.svg" alt="" width="20" height="20" />
+        </button>
+      </div>
+    </div>`;
+}
+
+function summaryHTML(total, isEmpty) {
+  return `
+    <p class="order-summary__title">Order Summary</p>
+    <div class="order-summary__rows">
+      <div class="order-summary__row"><span>Subtotal</span><span>${money(total)}</span></div>
+      <div class="order-summary__row order-summary__row--discount"><span>Discount (~0%)</span><span>${money(0)}</span></div>
+      <div class="order-summary__divider"></div>
+      <div class="order-summary__row order-summary__row--total"><span>Total</span><span>${money(total)}</span></div>
+    </div>
+    <button class="order-summary__checkout" type="button" data-checkout ${isEmpty ? "disabled" : ""}>Go to checkout</button>`;
+}
+
+async function render() {
+  try {
+    const { items, total } = await cartStore.getCart();
+    mainEl.innerHTML = items.length
+      ? items.map(itemHTML).join("")
+      : `<div class="cart__empty">No products in your bag</div>`;
+    summaryEl.innerHTML = summaryHTML(total, items.length === 0);
+  } catch (e) {
+    showError(mainEl, e.message);
+  }
+}
+
+/* --- hodisalar (delegatsiya) --- */
+mainEl.addEventListener("click", async (e) => {
+  const row = e.target.closest(".cart-item");
+  if (!row) return;
+  const id = row.dataset.id;
+  const qty = Number(row.querySelector(".qty__value").textContent);
+  try {
+    if (e.target.closest("[data-remove]")) await cartStore.removeItem(id);
+    else if (e.target.closest("[data-dec]")) await cartStore.setQty(id, qty - 1);
+    else if (e.target.closest("[data-inc]")) await cartStore.setQty(id, qty + 1);
+    else return;
+    await render();
+  } catch (err) {
+    alert(err.message);
+  }
+});
+
+summaryEl.addEventListener("click", async (e) => {
+  if (!e.target.closest("[data-checkout]")) return;
+
+  // mehmon -> avval kirish (savat login'dan keyin serverga ko'chiriladi)
+  if (!isLoggedIn()) {
+    location.href =
+      "/pages/login.html?next=" + encodeURIComponent("/pages/cart.html");
+    return;
+  }
+  try {
+    await api.createOrder(); // butun savatdan buyurtma
+    await cartStore.clear(); // header "Bag (0)" bo'lsin
+    location.href = "/pages/profile.html"; // "My orders"ni ko'rsatamiz
+  } catch (err) {
+    alert(err.message);
+  }
+});
+
+render();

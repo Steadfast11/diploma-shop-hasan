@@ -9,7 +9,7 @@
    ============================================================ */
 
 import { API_BASE } from "./config.js";
-import { getToken } from "./storage.js";
+import { getToken, clearToken } from "./storage.js";
 
 /* Ichki yordamchi — HAR so'rov shu orqali o'tadi.
    path  : "/products" kabi (API_BASE oldiga qo'shiladi)
@@ -34,6 +34,8 @@ async function request(path, { method = "GET", body, auth = false } = {}) {
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
+    // 401: token muddati tugagan yoki logout qilingan -> mahalliy tozalaymiz
+    if (res.status === 401 && auth) clearToken();
     // xatoni "otamiz" -> chaqiruvchi joyda try/catch bilan ushlanadi
     const err = new Error(data.message || `Xatolik (${res.status})`);
     err.status = res.status;
