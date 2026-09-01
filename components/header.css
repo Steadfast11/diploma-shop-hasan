@@ -30,13 +30,41 @@
 }
 
 .site-header__logo {
+  --logo-full-width: 147px;
+  --logo-icon-width: 47px;
+
   display: block;
+  width: var(--logo-full-width);
+  height: 51px;
+  overflow: hidden;
+  animation: logo-intro 1.25s var(--ease-soft, ease) both;
 }
 .site-header__logo img {
   display: block;
-  width: 147px;
+  width: var(--logo-full-width);
+  min-width: var(--logo-full-width);
   height: 51px;
   object-fit: contain;
+}
+
+/* Avval faqat ko'k belgi ko'rinadi. Link markazdan kengaygani uchun
+   belgi chapga siljiydi va uning o'ngidan WEPRO yozuvi ochiladi. */
+@keyframes logo-intro {
+  0% {
+    width: var(--logo-icon-width);
+    opacity: 0;
+    transform: scale(0.86);
+  }
+  24% {
+    width: var(--logo-icon-width);
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    width: var(--logo-full-width);
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* burger — desktopda yashirin */
@@ -64,8 +92,12 @@
   .site-header__burger {
     display: block;
   }
+  .site-header__logo {
+    --logo-full-width: 116px;
+    --logo-icon-width: 37px;
+    height: 40px;
+  }
   .site-header__logo img {
-    width: 116px;                     /* biroz kichik */
     height: auto;
   }
   .site-header__account {
@@ -89,5 +121,11 @@
   }
   .site-header--menu-open .site-header__nav {
     display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header__logo {
+    animation: none;
   }
 }
