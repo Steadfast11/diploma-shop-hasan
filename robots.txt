@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /pages/cart.html
+Disallow: /pages/profile.html
+Disallow: /404.html
 
 Sitemap: https://wepro-diploma.netlify.app/sitemap.xml

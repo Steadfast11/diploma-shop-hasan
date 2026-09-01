@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- pages/product.html?id=... and pages/category.html?id=... are generated
+     from live backend data (Sandbox Shop API) and can't be enumerated
+     ahead of time on a static site — only the fixed pages are listed. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://wepro-diploma.netlify.app/</loc></url>
-  <url><loc>https://wepro-diploma.netlify.app/pages/catalog.html</loc></url>
-  <url><loc>https://wepro-diploma.netlify.app/pages/cart.html</loc></url>
-  <url><loc>https://wepro-diploma.netlify.app/pages/login.html</loc></url>
-  <url><loc>https://wepro-diploma.netlify.app/pages/register.html</loc></url>
+  <url>
+    <loc>https://wepro-diploma.netlify.app/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://wepro-diploma.netlify.app/pages/catalog.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>

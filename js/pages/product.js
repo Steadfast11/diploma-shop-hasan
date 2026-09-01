@@ -92,6 +92,26 @@ function renderReviews(comments) {
     : `<p class="state-message">No reviews yet</p>`;
 }
 
+// SEO: mahsulot ma'lumoti API'dan kelgach, Product structured data qo'shamiz.
+function injectProductSchema(p) {
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: p.title,
+    image: p.image || undefined,
+    description: p.description || undefined,
+    offers: {
+      "@type": "Offer",
+      price: p.price,
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+    },
+  });
+  document.head.appendChild(script);
+}
+
 /* --- yuklash --- */
 async function load() {
   if (!id) return showError(infoEl, "No product selected");
@@ -102,6 +122,7 @@ async function load() {
     galleryEl.innerHTML = galleryHTML(product);
     infoEl.innerHTML = infoHTML(product);
     renderReviews(data.comments || product.comments || []);
+    injectProductSchema(product); // SEO: JSON-LD (JS orqali — ma'lumot API'dan keladi)
   } catch (e) {
     showError(infoEl, e.status === 404 ? "Product not found" : e.message);
   }
