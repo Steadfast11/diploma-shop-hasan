@@ -60,6 +60,11 @@ export function createPhoneInput(input, onInteract) {
     document.body.style.overflow = "hidden";
     if (barWidth > 0) document.body.style.paddingRight = barWidth + "px";
     window.__lenis?.stop(); // yumshoq skroll (Lenis) ham to'xtasin
+    // Lenis g'ildirak hodisasini "yeб qo'yadi" — davlat ro'yxati ichida
+    // skroll ishlashi uchun uni bu elementда e'tiborsiz qoldiramiz.
+    document
+      .querySelector(".iti__country-list")
+      ?.setAttribute("data-lenis-prevent", "");
   };
   const unlockScroll = () => {
     document.documentElement.style.overflow = "";

@@ -117,7 +117,18 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
   background: var(--white);
   padding: 6px;
-  max-height: 320px;
+  overflow-y: auto;
+}
+/* kutubxonaning o'z qoidasi (.iti--inline-country-selector .iti__country-list)
+   max-height'ни 185px qilib qo'yadi -> bir xil kuchli selektor bilan qayta yozamiz */
+.iti--inline-country-selector .iti__country-list {
+  max-height: 300px;
+}
+/* Desktop: menyu uzunroq ochilsin */
+@media (min-width: 700px) {
+  .iti--inline-country-selector .iti__country-list {
+    max-height: 460px;
+  }
 }
 .iti__search-input-wrapper {
   padding: 4px 4px 8px;
@@ -144,13 +155,10 @@
 .iti__country .iti__dial-code {
   color: #6d6d6d;
 }
-/* klaviatura/sichqoncha bilan tanlangan qator */
+/* sichqoncha/klaviatura bilan turgan qator — yumshoq kulrang (qora "quti" emas) */
 .iti__country.iti__highlight {
-  background: var(--black);
-  color: var(--white);
-}
-.iti__country.iti__highlight .iti__dial-code {
-  color: rgba(255, 255, 255, 0.7);
+  background: #f2f2f2;
+  color: var(--black);
 }
 .iti__no-results {
   padding: 12px 10px;
