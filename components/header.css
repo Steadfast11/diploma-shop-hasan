@@ -31,13 +31,13 @@
 
 .site-header__logo {
   --logo-full-width: 147px;
-  --logo-icon-width: 47px;
+  --logo-icon-width: 56px;
 
   display: block;
   width: var(--logo-full-width);
   height: 51px;
   overflow: hidden;
-  animation: logo-intro 1.25s var(--ease-soft, ease) both;
+  animation: logo-intro 1.8s var(--ease-soft, ease) both;
 }
 .site-header__logo img {
   display: block;
@@ -53,17 +53,26 @@
   0% {
     width: var(--logo-icon-width);
     opacity: 0;
-    transform: scale(0.86);
+    transform: scale(0.78) rotate(-3deg);
+    filter: blur(5px) drop-shadow(0 0 0 rgba(0, 142, 204, 0));
   }
-  24% {
+  20% {
+    width: var(--logo-icon-width);
+    opacity: 1;
+    transform: scale(1.04) rotate(0deg);
+    filter: blur(0) drop-shadow(0 0 10px rgba(0, 142, 204, 0.42));
+  }
+  34% {
     width: var(--logo-icon-width);
     opacity: 1;
     transform: scale(1);
+    filter: blur(0) drop-shadow(0 0 7px rgba(0, 142, 204, 0.3));
   }
   100% {
     width: var(--logo-full-width);
     opacity: 1;
     transform: scale(1);
+    filter: blur(0) drop-shadow(0 0 0 rgba(0, 142, 204, 0));
   }
 }
 
@@ -94,7 +103,7 @@
   }
   .site-header__logo {
     --logo-full-width: 116px;
-    --logo-icon-width: 37px;
+    --logo-icon-width: 45px;
     height: 40px;
   }
   .site-header__logo img {
