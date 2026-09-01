@@ -34,9 +34,12 @@
   --logo-icon-width: 56px;
 
   display: block;
+  position: relative;
   width: var(--logo-full-width);
   height: 51px;
   overflow: hidden;
+}
+.site-header__logo.is-intro {
   animation: logo-intro 1.8s var(--ease-soft, ease) both;
 }
 .site-header__logo img {
@@ -68,12 +71,50 @@
     transform: scale(1);
     filter: blur(0) drop-shadow(0 0 7px rgba(0, 142, 204, 0.3));
   }
+  86% {
+    width: var(--logo-full-width);
+    opacity: 1;
+    transform: translateX(-3px) scale(1);
+    filter: blur(0) drop-shadow(0 0 3px rgba(0, 142, 204, 0.12));
+  }
   100% {
     width: var(--logo-full-width);
     opacity: 1;
     transform: scale(1);
     filter: blur(0) drop-shadow(0 0 0 rgba(0, 142, 204, 0));
   }
+}
+
+/* Logo ochilgach bir marta nozik yorug'lik o'tadi. */
+.site-header__logo::after {
+  content: "";
+  position: absolute;
+  inset: -12px auto -12px -40%;
+  width: 28%;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.82), transparent);
+  pointer-events: none;
+  opacity: 0;
+}
+.site-header__logo.is-intro::after {
+  animation: logo-shine 0.48s ease-out 1.38s both;
+}
+@keyframes logo-shine {
+  0% { left: -40%; opacity: 0; }
+  20% { opacity: 0.75; }
+  100% { left: 115%; opacity: 0; }
+}
+
+/* Intro paytida header menyulari logo ortidan ketma-ket chiqadi. */
+.site-header--intro .site-header__nav {
+  animation: header-item-in 0.5s var(--ease-soft, ease) 1.36s both;
+}
+.site-header--intro .site-header__account {
+  animation: header-item-in 0.5s var(--ease-soft, ease) 1.48s both;
+}
+@keyframes header-item-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* burger — desktopda yashirin */
@@ -100,6 +141,9 @@
   }
   .site-header__burger {
     display: block;
+  }
+  .site-header--intro .site-header__burger {
+    animation: header-item-in 0.5s var(--ease-soft, ease) 1.36s both;
   }
   .site-header__logo {
     --logo-full-width: 116px;
@@ -134,7 +178,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-header__logo {
+  .site-header__logo.is-intro,
+  .site-header__logo.is-intro::after,
+  .site-header--intro .site-header__nav,
+  .site-header--intro .site-header__account,
+  .site-header--intro .site-header__burger {
     animation: none;
   }
 }

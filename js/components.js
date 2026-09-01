@@ -54,6 +54,29 @@ function wireHeaderMenu() {
   });
 }
 
+// Logo intro bir browser session'da faqat bir marta ishlaydi.
+function initLogoIntro() {
+  const logo = document.querySelector(".site-header__logo");
+  const header = logo?.closest(".site-header");
+  if (!logo || !header) return;
+
+  let alreadyPlayed = false;
+  try {
+    alreadyPlayed = sessionStorage.getItem("diploma_shop_logo_intro") === "1";
+  } catch {
+    /* sessionStorage bloklangan bo'lsa har sahifada ko'rinishi mumkin */
+  }
+  if (alreadyPlayed) return;
+
+  header.classList.add("site-header--intro");
+  logo.classList.add("is-intro");
+  try {
+    sessionStorage.setItem("diploma_shop_logo_intro", "1");
+  } catch {
+    /* yozib bo'lmasa animatsiyaning o'zi baribir ishlaydi */
+  }
+}
+
 // Buzilgan rasm (404/xato) -> broken-image ikonka o'rniga toza kulrang
 // quti qoladi. "error" hodisasi bubble bo'lmaydi -> capture=true bilan
 // document darajasida ushlaymiz (har rasmga alohida listener kerak emas).
@@ -111,6 +134,7 @@ export async function initLayout() {
   ]);
   wireHeaderAuth();
   wireHeaderMenu();
+  initLogoIntro();
   wireFavorites();
   wireImageFallback();
   refreshCartCount();
