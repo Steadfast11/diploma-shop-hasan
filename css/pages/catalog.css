@@ -22,6 +22,29 @@
   font-size: var(--fs-h2);     /* Figma: "All products" 40px (h1 emas, h2 o'lchami) */
 }
 
+/* "Ko'proq yuklash" — Figma'da yo'q, faqat pages > 1 bo'lsa ko'rinadi.
+   Uslub mos: qora pill tugma, markazda. */
+.catalog__more {
+  align-self: center;
+  margin-top: 8px;
+  height: 48px;
+  padding-inline: 40px;
+  border: 0;
+  border-radius: 62px;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  font-size: 14px;
+  cursor: pointer;
+}
+.catalog__more[hidden] {
+  display: none;
+}
+.catalog__more:disabled {
+  opacity: 0.6;
+}
+
 /* --- chap qism: filtr paneli (Figma: chap bo'sh joyda, left 45px) --- */
 .filters {
   position: absolute;

@@ -55,25 +55,52 @@ async function loadCategories() {
 }
 
 /* --- 3. Mahsulotlar --- */
+const moreBtn = document.querySelector("[data-load-more]");
+let shownPage = 1;
+
+function fetchPage(page) {
+  return api.getProducts({
+    category: filter.category || undefined,
+    minPrice: filter.minPrice || undefined,
+    maxPrice: filter.maxPrice || undefined,
+    page,
+    limit: PAGE_SIZE,
+  });
+}
+
+// "pages" > 1 bo'lsagina "Ko'proq yuklash" tugmasi ko'rinadi.
+function updateMoreBtn(totalPages) {
+  moreBtn.hidden = shownPage >= totalPages;
+}
+
 async function loadProducts() {
   grid.innerHTML = `<p class="state-message">Yuklanmoqda…</p>`;
+  moreBtn.hidden = true;
   try {
-    const data = await api.getProducts({
-      category: filter.category || undefined,
-      minPrice: filter.minPrice || undefined,
-      maxPrice: filter.maxPrice || undefined,
-      page: filter.page,
-      limit: PAGE_SIZE,
-    });
-    if (!data.products.length) {
-      showEmpty(grid, "Bunday mahsulot topilmadi");
-      return;
-    }
+    const data = await fetchPage(1);
+    shownPage = 1;
+    if (!data.products.length) return showEmpty(grid, "Bunday mahsulot topilmadi");
     grid.innerHTML = data.products.map(productCardHTML).join("");
+    updateMoreBtn(data.pages);
   } catch (e) {
     showError(grid, e.message);
   }
 }
+
+// keyingi sahifani grid oxiriga QO'SHADI (almashtirmaydi)
+moreBtn.addEventListener("click", async () => {
+  moreBtn.disabled = true;
+  try {
+    const data = await fetchPage(shownPage + 1);
+    shownPage += 1;
+    grid.insertAdjacentHTML("beforeend", data.products.map(productCardHTML).join(""));
+    updateMoreBtn(data.pages);
+  } catch (e) {
+    alert(e.message);
+  } finally {
+    moreBtn.disabled = false;
+  }
+});
 
 /* --- 4. Hodisalar --- */
 
