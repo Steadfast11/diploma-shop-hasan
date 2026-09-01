@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="../css/ui.css" />
   <link rel="stylesheet" href="/components/header.css" />
   <link rel="stylesheet" href="/components/footer.css" />
+  <link rel="stylesheet" href="/js/vendor/intl-tel-input/css/intlTelInput.css" />
   <link rel="stylesheet" href="../css/pages/auth.css" />
   <script defer src="/js/vendor/gsap.min.js"></script>
   <script defer src="/js/vendor/ScrollTrigger.min.js"></script>
@@ -49,27 +50,44 @@
     <form class="auth__form" data-register-form novalidate>
       <div class="field">
         <label class="field__label" for="name">Name</label>
-        <input class="field__input" id="name" name="name" type="text" placeholder="Alex" required />
+        <input class="field__input" id="name" name="name" type="text" placeholder="Alex"
+               autocomplete="given-name" minlength="3" maxlength="10"
+               aria-describedby="name-error" required />
+        <p class="field__error" id="name-error" data-error-for="name" role="alert" hidden></p>
       </div>
       <div class="field">
         <label class="field__label" for="surname">Surname</label>
-        <input class="field__input" id="surname" name="surname" type="text" placeholder="Adams" required />
+        <input class="field__input" id="surname" name="surname" type="text" placeholder="Adams"
+               autocomplete="family-name" minlength="3" maxlength="15"
+               aria-describedby="surname-error" required />
+        <p class="field__error" id="surname-error" data-error-for="surname" role="alert" hidden></p>
       </div>
       <div class="field">
         <label class="field__label" for="email">Email</label>
-        <input class="field__input" id="email" name="email" type="email" placeholder="email@example.com" required />
+        <input class="field__input" id="email" name="email" type="email" placeholder="email@example.com"
+               autocomplete="email" inputmode="email" maxlength="254"
+               aria-describedby="email-error" required />
+        <p class="field__error" id="email-error" data-error-for="email" role="alert" hidden></p>
       </div>
       <div class="field">
         <label class="field__label" for="phone">Phone</label>
-        <input class="field__input" id="phone" name="phone" type="tel" placeholder="+998" required />
+        <input class="field__input" id="phone" name="phone" type="tel" placeholder="90-123-45-67"
+               autocomplete="tel" aria-describedby="phone-error" required />
+        <p class="field__error" id="phone-error" data-error-for="phone" role="alert" hidden></p>
       </div>
       <div class="field">
         <label class="field__label" for="password">Password</label>
-        <input class="field__input" id="password" name="password" type="password" placeholder="Your password" required />
+        <input class="field__input" id="password" name="password" type="password" placeholder="Your password"
+               autocomplete="new-password" minlength="8" maxlength="64"
+               aria-describedby="password-error" required />
+        <p class="field__error" id="password-error" data-error-for="password" role="alert" hidden></p>
       </div>
       <div class="field">
         <label class="field__label" for="password2">Repeat your password</label>
-        <input class="field__input" id="password2" name="password2" type="password" placeholder="Your password" required />
+        <input class="field__input" id="password2" name="password2" type="password" placeholder="Your password"
+               autocomplete="new-password" minlength="8" maxlength="64"
+               aria-describedby="password2-error" required />
+        <p class="field__error" id="password2-error" data-error-for="password2" role="alert" hidden></p>
       </div>
 
       <p class="auth__error" data-error role="alert" hidden></p>

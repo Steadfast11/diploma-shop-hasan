@@ -125,6 +125,25 @@ havola ulashish (`?category=...`) ishlaydi. Kod sodda.
 **`Promise.all` (components.js) — nega?**
 Header va footer'ni PARALLEL yuklaydi (biri ikkinchisini kutmaydi) → tezroq.
 
+**Register formasi qanday tekshiriladi?**
+Har maydon ostida alohida `.field__error`. `blur` da tekshiramiz; xato chiqса
+`input` da qayta baholaymiz; `submit` da hammasini. Noto'g'ri maydon —
+`aria-invalid="true"` + `aria-describedby`. Birinchi noto'g'riga `focus`.
+Valid bo'lmaguncha API'ga so'rov yubormaymiz. Mantiq `js/validation.js` daги
+sodda funksiyalarда (`validateName` va h.k.), `register.js` faqat ulaydi.
+
+**Nega telefon uchun kutubxona (intl-tel-input), qo'lда regex emas?**
+190+ davlat, har birининг telefon uzunligи/formати har xil. Qo'лда regex —
+xato va tez eskиради. Kutubxona (libphonenumber ma'lумотлари) `isValidNumber()`
+bilan har davlатни tekshiради. Loyиха ичида (`js/vendor/`), CDN yo'q → CSP toza.
+`initialCountry:"uz"`, `separateDialCode` (`+998`), `strictMode`. API'ga E.164.
+`isValidNumberPrecise()` ni ishlатмадик — docs uni beqарор deydi.
+
+**Email haqiqий эканини tekshirасанми?**
+Yo'q — frontend pochta қутиси borлигини BILA OLMAYDI. Faqat qat'iy format
+tekshiруви. Haqiqийлигини faqat backend tasдиқлаш havolаси aniqлаyди. Server
+409 (email band) qайтарса — xatoни Email maydonига bog'лаймиз.
+
 ---
 
 ## API

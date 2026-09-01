@@ -5,5 +5,8 @@
   "description": "Diplom loyihasi — Sandbox Shop uchun frontend (toza HTML/CSS/JS)",
   "scripts": {
     "dev": "npx --yes serve -l 5173 ."
+  },
+  "dependencies": {
+    "intl-tel-input": "^29.2.3"
   }
 }

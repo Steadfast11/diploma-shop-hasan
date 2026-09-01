@@ -139,6 +139,31 @@ Doskada "nega bunday?" degan savolga tayyor javob.
   tugma `disabled` bo'lади. Sabab: sekin internetда foydalanuvchi ikki
   marta bossа, ikkита buyurtма/izoh yaratilib qolиши mumkin edi.
 
+### Register — inline validatsiya + telefon uchun kutubxona
+- **Har maydon ostida alohida xato** (`.field__error`), bitta umumiy xato emas.
+  `blur` da tekshiriladi, tuzatil boshlansa qayta baholanadi, `submit` da hammasi.
+  `aria-invalid` + `aria-describedby` — skrinrider ham biladi. Valid bo'lmaguncha
+  API'ga so'rov yo'q.
+- **Tekshiruv mantig'i alohida sodda funksiyalarда** (`js/validation.js`) — chalkash
+  katta `submit` callback emas. Doskада bitta funksiyани ko'rsatib tushuntirса bo'ladi.
+- **Nega barcha davlat regexlari qo'lda yozilmagan:** har davlatning telefon
+  uzunligi/formati har xil (190+ davlat). Ularni qo'lда regex bilan yozish — xato
+  va tez eskirish manbai. `intl-tel-input@29` (libphonenumber ma'lumotlari ustида)
+  buni biz uchun qiladi: `isValidNumber()` har davlat uzunligини tekshiradi.
+  `isValidNumberPrecise()` ISHLATILMADI — rasmiy docs uni tez eskirishi mumkin deydi.
+- **Kutubxona loyiha ичида** (`js/vendor/intl-tel-input/`: `intlTelInput.mjs`,
+  `utils.js`, `css/`, `img/flags*.webp`). CDN yo'q → mavjud CSP (`script-src 'self'`)
+  o'zgармаyди, offline ham ishlaydi. `node_modules` deployга tayanmaydi
+  (`package.json` + `package-lock.json` saqlanган, faqat kelib chiqish uchun).
+- **Sozlama:** `initialCountry:"uz"` (default O'zbekiston), `separateDialCode:true`
+  (`+998` flag yonида), `strictMode:true` (xato belgi kiритишга yo'l qo'ymaydi),
+  `countrySearch:true` (dropdown'да barcha davlat). O'zbekiston milliy qismi —
+  maks 9 raqam, `XX-XXX-XX-XX` (o'z formatimiz); boshqa davlатда kutubxona formati.
+  API'ga E.164 (`+998901234567`).
+- **Email:** faqat kuchli FORMAT tekshiruvи. Pochta qутиси haqiqатан bor-yo'qлигини
+  frontend bilmaydi — buni faqat backend verification link aniqлаyди. DNS/«email
+  checker» API qo'shилмади. Server 409 (email band) → xato Email maydonига bog'lанади.
+
 ### API javob shakllari (kutilmagan)
 - `/products/:id` -> `{ product: {...} }` (ichida `comments` ham)
 - `/cart` va o'zgartirishlar -> `{ message, cart: {...} }` (api.js ichini ochib beradi)

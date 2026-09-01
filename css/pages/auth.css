@@ -66,6 +66,46 @@
   font-size: 14px;
 }
 
+/* Har maydon ostidagi alohida xato matni (inline validatsiya). */
+.field__error {
+  color: var(--color-danger);
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  font-size: 13px;
+  line-height: 1.35;
+}
+/* Noto'g'ri maydon — qizil ramka (aria-invalid skrinrider uchun ham). */
+.field__input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+.field__input[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 2px rgba(255, 51, 51, 0.25);
+}
+
+/* --- intl-tel-input: mavjud .field__input uslubiga moslash --- */
+.field .iti {
+  display: block;
+  width: 100%;
+}
+/* kutubxona inputga o'z klassini qo'shadi; balandlik/shrift bir xil bo'lsin */
+.field .iti .field__input {
+  width: 100%;
+}
+.iti__selected-dial-code {
+  font-family: var(--font-system);
+  font-size: 16px;
+}
+.iti--separate-dial-code .iti__selected-country {
+  background: var(--white);
+}
+/* Mobil: davlat ro'yxati va input ekrandan chiqmasin.
+   (Kutubxona kichik ekranда o'zi to'liq ekran popup ochadi, bu — zaxira.) */
+@media (max-width: 480px) {
+  .iti__dropdown-content {
+    max-width: calc(100vw - 24px);
+  }
+}
+
 .auth__submit {
   height: 48px;
   margin-top: 16px;

@@ -66,11 +66,30 @@ Umumiy: **har sahifa skripti bir xil 4 bosqich** —
 5. `location.href = ?next || "/index.html"`
 6. Xato 401 → "Email yoki parol noto'g'ri"
 
-## 7. Ro'yxatdan o'tish
-1. `register.js` `validate()` — API qoidalari (name/surname 1–50, phone 9–15 raqam, email, parol 4–64, takror)
-2. `auth.doRegister(...)` → `POST /register` → darrov `{token, user}` → saqlanadi
-3. `mergeGuestCartIntoAccount()` → `?next` yoki bosh sahifa
-4. 409 → "email band" (server xabari)
+## 7. Ro'yxatdan o'tish (inline validatsiya)
+1. `register.js` faqat "ulaydi". Tekshiruv sodda funksiyalarda:
+   - `js/validation.js` — `validateName` (3–10 harf, `\p{L}`), `validateSurname` (3–15 harf),
+     `validateEmail` (qat'iy format, bo'shliq/ketma-ket nuqta rad), `validatePassword`
+     (8–64, kamida 1 harf + 1 raqam), `validatePasswordConfirmation`
+   - `js/phone-input.js` — telefon: `intl-tel-input` kutubxonasi (loyiha ichida,
+     `js/vendor/intl-tel-input/`). `initialCountry:"uz"`, `separateDialCode`,
+     `strictMode`. `utils.js` lokal fayldan `import()` bilan yuklanadi.
+     `isValidNumber()` + `getValidationError()` → inglizcha sabab
+     (too short / too long / invalid country code ...).
+2. Qachon: har maydon `blur` da tekshiriladi; xato bo'lsa `input` da qayta baholanadi;
+   `submit` da hammasi. Noto'g'ri maydon → `aria-invalid="true"` + `aria-describedby`
+   qilingan `.field__error`. Birinchi noto'g'ri maydonga `focus`.
+3. Valid bo'lmasa API'ga so'rov YUBORILMAYDI. `submit` tugmasi so'rov paytida `disabled`.
+4. Telefon E.164 ko'rinishda yuboriladi (`iti.getNumber()` → `+998901234567`).
+   Server `+ ( ) -` va bo'shliqni o'zi tashlaydi (docs/api-reference.md).
+5. `auth.doRegister(...)` → `POST /register` → `{token, user}` → saqlanadi →
+   `mergeGuestCartIntoAccount()` → `?next` yoki bosh sahifa.
+6. Server 409 → "This email is already registered" xatosi Email maydoniga bog'lanadi;
+   boshqa server xatosi → umumiy forma xatosi.
+
+> Email haqiqatan mavjudligini frontend ISBOTLAY OLMAYDI — buni faqat backend
+> tasdiqlash havolasi (verification link) qiladi. Shu sabab DNS/uchinchi tomon
+> "email checker" qo'shilmagan.
 
 ## 8. Izoh yozish (mahsulot sahifasi)
 1. "Write a Review" click → kirilmagan bo'lsa `login.html?next=...`
