@@ -8,6 +8,7 @@
 
 import { isLoggedIn } from "./auth.js";
 import { getCount, subscribe } from "./cart-store.js";
+import { initReveal } from "./reveal.js";
 
 // Bitta komponentni yuklab, kerakli div ichiga qo'yadi.
 async function loadComponent(name, mountId) {
@@ -20,10 +21,16 @@ async function loadComponent(name, mountId) {
   mount.innerHTML = html;
 }
 
-// Header'dagi "Bag (N)" ni joriy savat soniga tenglaydi.
+// Header'dagi "Bag (N)" ni joriy savat soniga tenglaydi (+ mayda sakrash).
 async function refreshCartCount() {
   const el = document.querySelector("[data-cart-count]");
-  if (el) el.textContent = String(await getCount());
+  if (!el) return;
+  const next = String(await getCount());
+  if (el.textContent !== next) {
+    el.textContent = next;
+    el.classList.add("bump");
+    setTimeout(() => el.classList.remove("bump"), 200);
+  }
 }
 
 // Kirilmagan bo'lsa "Account" havolasi login sahifasiga ketsin.
@@ -54,4 +61,10 @@ export async function initLayout() {
   wireHeaderMenu();
   refreshCartCount();
   subscribe(refreshCartCount); // savat o'zgarsa "Bag (N)" yangilanadi
+
+  // scroll-reveal — sahifadagi [data-reveal] bloklar ko'rinishga kirganda paydo bo'ladi.
+  // Ro'yxatlar keyin API'dan chizilsa, sahifa skripti initReveal() ni qayta chaqiradi.
+  initReveal();
 }
+
+export { initReveal };

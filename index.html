@@ -32,7 +32,7 @@
         <img src="/assets/images/hero.jpg" alt="" />
       </div>
       <div class="hero__inner container">
-        <div class="hero__offer">
+        <div class="hero__offer" data-reveal>
           <div class="hero__text">
             <p class="hero__eyebrow">Discover Nature’s Finest Ingredients</p>
             <h1 class="hero__title">Glow with nature’s finest, every single day</h1>
@@ -44,20 +44,20 @@
 
     <!-- Seksiyalar — 1200px konteyner ichida -->
     <div class="container home-sections">
-      <section class="section">
+      <section class="section" data-reveal>
         <h2 class="section__title">Best sellers</h2>
         <!-- kartochkalarni js/pages/home.js API'dan chizadi -->
-        <div class="product-grid" data-bestsellers></div>
+        <div class="product-grid" data-bestsellers data-reveal-stagger></div>
       </section>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2 class="section__title">Shop by category</h2>
-        <div class="category-grid" data-categories></div>
+        <div class="category-grid" data-categories data-reveal-stagger></div>
       </section>
 
-      <section class="section">
+      <section class="section" data-reveal>
         <h2 class="section__title">Featured products</h2>
-        <div class="product-grid" data-featured></div>
+        <div class="product-grid" data-featured data-reveal-stagger></div>
       </section>
     </div>
   </main>
