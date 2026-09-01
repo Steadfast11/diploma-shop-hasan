@@ -10,6 +10,20 @@ import { getToken, setToken, clearToken, getUser, setUser, clearUser } from "./s
 export const isLoggedIn = () => Boolean(getToken());
 export const currentUser = () => getUser();
 
+// `next` faqat shu sayt ichidagi yo'l bo'lsin. `//example.com` ham tashqi
+// manzil hisoblanadi, shuning uchun ikkita slash bilan boshlanishi mumkin emas.
+export function safeNext(value, fallback = "/index.html") {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) {
+    return fallback;
+  }
+  try {
+    const url = new URL(value, location.origin);
+    return url.origin === location.origin ? url.pathname + url.search + url.hash : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 // Kirish: token + profilni saqlaymiz
 export async function doLogin(credentials) {
   const { token, user } = await api.login(credentials);

@@ -41,23 +41,25 @@ export function productCardHTML(p) {
   const fav = isFavorite(p._id);
 
   return `
-    <a class="product-card" href="/pages/product.html?id=${encodeURIComponent(p._id)}">
-      <div class="product-card__media">
-        ${image}
-        <button class="product-card__fav${fav ? " is-fav" : ""}" type="button" data-fav
-                data-id="${esc(p._id)}" data-title="${esc(p.title)}"
-                data-price="${p.price}" data-image="${esc(p.image || "")}"
-                aria-pressed="${fav}" aria-label="Add to favorites">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <path d="M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.5 5.7 4.5c2 0 3.6 1.2 4.3 2.8.7-1.6 2.3-2.8 4.3-2.8 3.7 0 5.2 3.9 3.7 7.2C19.5 16.4 12 21 12 21z"/>
-          </svg>
-        </button>
-      </div>
-      <div class="product-card__info">
-        <p class="product-card__title">${esc(p.title)}</p>
-        <p class="product-card__price">${money(p.price)}</p>
-      </div>
-    </a>`;
+    <article class="product-card">
+      <a class="product-card__link" href="/pages/product.html?id=${encodeURIComponent(p._id)}">
+        <div class="product-card__media">
+          ${image}
+        </div>
+        <div class="product-card__info">
+          <p class="product-card__title">${esc(p.title)}</p>
+          <p class="product-card__price">${money(p.price)}</p>
+        </div>
+      </a>
+      <button class="product-card__fav${fav ? " is-fav" : ""}" type="button" data-fav
+              data-id="${esc(p._id)}" data-title="${esc(p.title)}"
+              data-price="${p.price}" data-image="${esc(p.image || "")}"
+              aria-pressed="${fav}" aria-label="${fav ? "Remove from" : "Add to"} favorites">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.5 5.7 4.5c2 0 3.6 1.2 4.3 2.8.7-1.6 2.3-2.8 4.3-2.8 3.7 0 5.2 3.9 3.7 7.2C19.5 16.4 12 21 12 21z"/>
+        </svg>
+      </button>
+    </article>`;
 }
 
 // N ta "skelet" kartochka (yuklanayotganda ko'rsatiladi — "Loading…" matni
@@ -98,8 +100,11 @@ export function toast(message, type = "") {
   if (!box) {
     box = document.createElement("div");
     box.className = "toast";
+    box.setAttribute("aria-live", "polite");
+    box.setAttribute("aria-atomic", "true");
     document.body.appendChild(box);
   }
+  box.setAttribute("role", type === "error" ? "alert" : "status");
   box.className = "toast" + (type ? " toast--" + type : "");
   box.textContent = message;
   box.classList.add("is-shown");
@@ -122,22 +127,40 @@ export function friendlyError(err) {
 /* ---------- Modal oyna (izoh yozish / "Thank you") ----------
    openModal o'z DOM'ini yaratadi (komponent fayl kerak emas).
    opts: { title, bodyHTML, buttonText, onConfirm(modalEl) } */
-function onEsc(e) {
-  if (e.key === "Escape") closeModal();
+let returnFocus = null;
+function onModalKeydown(e) {
+  if (e.key === "Escape") return closeModal();
+  if (e.key !== "Tab") return;
+  const modal = document.querySelector(".modal");
+  const focusable = [...modal.querySelectorAll("button, textarea, input, select, a[href]")]
+    .filter((node) => !node.disabled && node.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
 }
 export function closeModal() {
   document.querySelector(".modal")?.remove();
-  document.removeEventListener("keydown", onEsc);
+  document.removeEventListener("keydown", onModalKeydown);
   document.body.style.overflow = "";
+  returnFocus?.focus();
+  returnFocus = null;
 }
 export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }) {
   closeModal();
+  returnFocus = document.activeElement;
   const el = document.createElement("div");
   el.className = "modal";
   el.innerHTML = `
     <div class="modal__overlay" data-close></div>
-    <div class="modal__box" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-      <p class="modal__title">${esc(title)}</p>
+    <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <p class="modal__title" id="modal-title">${esc(title)}</p>
       <div class="modal__body">${bodyHTML}</div>
       <button class="modal__btn" type="button" data-confirm>${esc(buttonText)}</button>
     </div>`;
@@ -145,8 +168,9 @@ export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }
     if (e.target.closest("[data-close]")) return closeModal();
     if (e.target.closest("[data-confirm]")) onConfirm ? onConfirm(el) : closeModal();
   });
-  document.addEventListener("keydown", onEsc);
+  document.addEventListener("keydown", onModalKeydown);
   document.body.style.overflow = "hidden"; // orqa fon skroll qilinmasin
   document.body.appendChild(el);
+  (el.querySelector("textarea, input, select") || el.querySelector("[data-confirm]"))?.focus();
   return el;
 }

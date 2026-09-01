@@ -52,7 +52,8 @@ Umumiy: **har sahifa skripti bir xil 4 bosqich** —
 2. **mehmon:** `location.href = "/pages/login.html?next=/pages/cart.html"`
 3. **kirgan:** `api.createOrder()` → `POST /orders` (tana yo'q — server butun savatdan yig'adi,
    narxni "snapshot" qiladi, savatni tozalaydi, `ordersCount` oshiradi)
-4. `cartStore.clear()` (header "Bag (0)")
+4. Server buyurtma yaratganda savatni o'zi tozalaydi; `cartStore.refresh()` faqat
+   header sonini qayta o'qitadi (ikkinchi `DELETE /cart` yuborilmaydi)
 5. `location.href = "/pages/profile.html"` — "My orders" ko'rinadi
 
 ## 6. Kirish
@@ -60,7 +61,8 @@ Umumiy: **har sahifa skripti bir xil 4 bosqich** —
 2. `email`, `password` olinadi, bo'sh bo'lsa xato
 3. `auth.doLogin({email, password})` → `api.login` → `POST /login` → `{token, user}`
    → `storage.setToken(token)`, `setUser(user)`
-4. `cartStore.mergeGuestCartIntoAccount()` — mehmon savatidagi har mahsulot `api.addToCart` bilan serverga
+4. `cartStore.mergeGuestCartIntoAccount()` — mehmon savatidagi har mahsulot `api.addToCart` bilan serverga;
+   o'tmagan mahsulotlar yo'qolmaydi, mahalliy savatda qoladi va ogohlantirish chiqadi
 5. `location.href = ?next || "/index.html"`
 6. Xato 401 → "Email yoki parol noto'g'ri"
 

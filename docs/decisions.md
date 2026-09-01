@@ -72,6 +72,8 @@ Doskada "nega bunday?" degan savolga tayyor javob.
 ### Savat: mehmon (localStorage) / kirgan (server) — `cart-store.js` yashiradi
 - Sahifa "qaysi holat?" demайdi. Login paytida mehmon savati serverga ko'chiriladi
   (`mergeGuestCartIntoAccount`).
+- Ko'chirishda tarmoq/server xatosi bo'lgan mahsulotlar o'chirilmaydi: ular mahalliy
+  savatda qoladi va foydalanuvchiga ogohlantirish ko'rsatiladi.
 - **Chegirma:** API savatida chegirma yo'q -> "Order Summary" da `Subtotal = Total`,
   `Discount (~0%) = 0`.
 

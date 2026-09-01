@@ -87,6 +87,7 @@ Foydalanuvchi qayta kirishi kerak.
 **Mehmon savati va kirgan foydalanuvchi savati — farqi, qayerda?**
 Mehmon → `localStorage` (`storage.js`). Kirgan → server (`api.js`).
 `cart-store.js` ikkisini yashiradi — sahifa "qaysi holat?" demайdi.
+Login paytida serverga o'tmagan mahsulot o'chirilmaydi; mahalliy savatda qoladi.
 
 **`localStorage` va `sessionStorage`?**
 `localStorage` — brauzer yopilsa ham qoladi. `sessionStorage` — tab yopilsa o'chadi.

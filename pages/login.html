@@ -44,6 +44,8 @@
   <main id="main" class="auth" data-reveal>
     <h1 class="auth__title">Log In</h1>
 
+    <p class="auth__notice">This is an educational sandbox. Do not use a real password.</p>
+
     <!-- O'qituvchi: kirish EMAIL bilan (API talab qiladi), maketdagi "Phone" emas -->
     <form class="auth__form" data-login-form novalidate>
       <div class="field">
@@ -57,7 +59,7 @@
                placeholder="Your password" autocomplete="current-password" required />
       </div>
 
-      <p class="auth__error" data-error hidden></p>
+      <p class="auth__error" data-error role="alert" hidden></p>
       <button class="auth__submit" type="submit">Log In</button>
     </form>
 

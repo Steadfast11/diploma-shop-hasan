@@ -8,7 +8,7 @@
    ============================================================ */
 
 import { initLayout } from "../components.js";
-import { doRegister } from "../auth.js";
+import { doRegister, safeNext } from "../auth.js";
 import { mergeGuestCartIntoAccount } from "../cart-store.js";
 
 initLayout();
@@ -16,7 +16,9 @@ initLayout();
 const form = document.querySelector("[data-register-form]");
 const errEl = form.querySelector("[data-error]");
 const submitBtn = form.querySelector(".auth__submit");
-const nextUrl = new URLSearchParams(location.search).get("next") || "/index.html";
+const nextUrl = safeNext(new URLSearchParams(location.search).get("next"));
+const loginLink = document.querySelector(".auth__alt a");
+loginLink.href = "/pages/login.html?next=" + encodeURIComponent(nextUrl);
 
 function showError(message) {
   errEl.textContent = message;

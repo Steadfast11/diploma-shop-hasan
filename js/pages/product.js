@@ -69,10 +69,11 @@ function infoHTML(p) {
 
 function reviewCardHTML(c) {
   const me = currentUser();
+  const normalize = (value) => String(value || "").trim().replace(/\s+/g, " ").toLowerCase();
   const mine =
     isLoggedIn() &&
     me &&
-    String(c.author || "").toLowerCase().includes(String(me.name || "").toLowerCase());
+    normalize(c.author) === normalize(`${me.name || ""} ${me.surname || ""}`);
   const date = c.at
     ? new Date(c.at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : "";
@@ -104,9 +105,9 @@ function injectProductSchema(p) {
     description: p.description || undefined,
     offers: {
       "@type": "Offer",
+      url: location.href,
       price: p.price,
       priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
     },
   });
   document.head.appendChild(script);
@@ -115,6 +116,9 @@ function injectProductSchema(p) {
 /* --- yuklash --- */
 async function load() {
   if (!id) return showError(infoEl, "No product selected");
+  const canonicalUrl = `${location.origin}${location.pathname}?id=${encodeURIComponent(id)}`;
+  document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonicalUrl);
+  document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonicalUrl);
   try {
     const data = await api.getProduct(id);
     product = data.product || data;
@@ -131,7 +135,7 @@ async function load() {
 async function refreshReviews() {
   try {
     const fresh = await api.getProduct(id);
-    renderReviews(fresh.comments || []);
+    renderReviews(fresh.comments || fresh.product?.comments || []);
   } catch {
     /* muhim emas */
   }

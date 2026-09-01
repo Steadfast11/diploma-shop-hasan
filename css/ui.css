@@ -25,6 +25,12 @@
    Nom va narx: 16px, bir qatorda, nom cho'zilib narxni o'ngga suradi.
    Mazmun (rasm/nom/narx) BACKENDDAN keladi — bu faqat qolip. */
 .product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.product-card__link {
   display: flex;
   flex-direction: column;
   gap: 8px;

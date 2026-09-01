@@ -52,7 +52,12 @@ export async function addItem(product, qty = 1) {
     const cart = getGuestCart();
     const found = cart.find((it) => it.productId === product._id);
     if (found) found.qty = Math.min(20, found.qty + qty); // API bilan bir xil shift
-    else
+    else {
+      if (cart.length >= 20) {
+        const err = new Error("Your bag can contain at most 20 different products");
+        err.status = 409;
+        throw err;
+      }
       cart.push({
         productId: product._id,
         title: product.title,
@@ -60,6 +65,7 @@ export async function addItem(product, qty = 1) {
         image: product.image,
         qty,
       });
+    }
     setGuestCart(cart);
   }
   notify();
@@ -90,16 +96,34 @@ export async function clear() {
   notify();
 }
 
+// Server savatni o'zi o'zgartirgan holatda (masalan buyurtmadan keyin)
+// header sonini ortiqcha API so'rovisiz qayta o'qitadi.
+export function refresh() {
+  notify();
+}
+
 /* Login paytida: mehmon savatidagilarni serverga ko'chiramiz, keyin tozalaymiz. */
 export async function mergeGuestCartIntoAccount() {
   const guest = getGuestCart();
+  const failed = [];
   for (const it of guest) {
     try {
       await api.addToCart(it.productId, it.qty);
     } catch {
-      /* mahsulot yo'q yoki savat to'la — o'tkazib yuboramiz */
+      // O'tmagan mahsulotni yo'qotmaymiz — mehmon savatida qoldiramiz.
+      failed.push(it);
     }
   }
-  clearGuestCart();
+  if (failed.length) {
+    setGuestCart(failed);
+    try {
+      sessionStorage.setItem("diploma_shop_cart_merge_warning", "1");
+    } catch {
+      /* sessionStorage bloklangan bo'lsa ogohlantirishsiz davom etamiz */
+    }
+  } else {
+    clearGuestCart();
+  }
   notify();
+  return { failed: failed.length };
 }

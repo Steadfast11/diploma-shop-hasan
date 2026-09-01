@@ -11,6 +11,7 @@ import { getCount, subscribe } from "./cart-store.js";
 import { initReveal } from "./reveal.js";
 import { initMotion } from "./motion.js";
 import { toggleFavorite } from "./favorites.js";
+import { toast } from "./ui.js";
 
 // Bitta komponentni yuklab, kerakli div ichiga qo'yadi.
 async function loadComponent(name, mountId) {
@@ -88,7 +89,18 @@ function wireFavorites() {
     });
     btn.classList.toggle("is-fav", nowFav);
     btn.setAttribute("aria-pressed", String(nowFav));
+    btn.setAttribute("aria-label", nowFav ? "Remove from favorites" : "Add to favorites");
   });
+}
+
+function showCartMergeWarning() {
+  try {
+    if (sessionStorage.getItem("diploma_shop_cart_merge_warning") !== "1") return;
+    sessionStorage.removeItem("diploma_shop_cart_merge_warning");
+    toast("Some guest items could not sync and remain saved on this device", "error");
+  } catch {
+    /* sessionStorage bloklangan bo'lsa ogohlantirishsiz davom etamiz */
+  }
 }
 
 // Har sahifa shuni chaqiradi.
@@ -103,6 +115,7 @@ export async function initLayout() {
   wireImageFallback();
   refreshCartCount();
   subscribe(refreshCartCount); // savat o'zgarsa "Bag (N)" yangilanadi
+  showCartMergeWarning();
 
   // Animatsiya: GSAP bo'lsa "wow" (motion.js), bo'lmasa oddiy CSS reveal.
   const motionOn = initMotion();

@@ -16,6 +16,14 @@
 .auth__title {
   font-size: var(--fs-h2);    /* Inter Medium 40px */
 }
+.auth__notice {
+  padding: 12px 14px;
+  border: 1px solid var(--color-line-soft);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
 
 .auth__form {
   display: flex;

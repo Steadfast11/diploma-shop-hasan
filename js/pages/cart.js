@@ -101,7 +101,7 @@ summaryEl.addEventListener("click", async (e) => {
   checkoutBtn.disabled = true; // ikkita buyurtma ketmasin
   try {
     await api.createOrder(); // butun savatdan buyurtma
-    await cartStore.clear(); // header "Bag (0)" bo'lsin
+    cartStore.refresh(); // server savatni o'zi tozaladi -> header sonini yangilaymiz
     openModal({
       title: "Order placed!",
       bodyHTML: "<p>Your order was placed successfully.</p>",

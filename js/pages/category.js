@@ -14,6 +14,12 @@ const id = new URLSearchParams(location.search).get("id");
 const titleEl = document.querySelector("[data-category-title]");
 const grid = document.querySelector("[data-products]");
 
+if (id) {
+  const canonicalUrl = `${location.origin}${location.pathname}?id=${encodeURIComponent(id)}`;
+  document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonicalUrl);
+  document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonicalUrl);
+}
+
 async function load() {
   if (!id) {
     showError(grid, "No category selected");

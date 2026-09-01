@@ -44,6 +44,8 @@
   <main id="main" class="auth" data-reveal>
     <h1 class="auth__title">Register</h1>
 
+    <p class="auth__notice">This is an educational sandbox. Do not use a real password.</p>
+
     <form class="auth__form" data-register-form novalidate>
       <div class="field">
         <label class="field__label" for="name">Name</label>
@@ -70,7 +72,7 @@
         <input class="field__input" id="password2" name="password2" type="password" placeholder="Your password" required />
       </div>
 
-      <p class="auth__error" data-error hidden></p>
+      <p class="auth__error" data-error role="alert" hidden></p>
       <button class="auth__submit" type="submit">Create an account</button>
     </form>
 
