@@ -4,12 +4,12 @@
      ahead of time on a static site — only the fixed pages are listed. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://wepro-diploma.netlify.app/</loc>
+    <loc>https://diploma-shop-z84469105.netlify.app/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://wepro-diploma.netlify.app/pages/catalog.html</loc>
+    <loc>https://diploma-shop-z84469105.netlify.app/pages/catalog.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
