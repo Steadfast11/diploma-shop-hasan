@@ -56,3 +56,13 @@
   column-gap: 24px;
   row-gap: 32px;
 }
+
+/* Holat xabari (yuklanmoqda / bo'sh / xato) — grid ichida butun qatorni egallaydi */
+.state-message {
+  grid-column: 1 / -1;
+  padding: 40px 0;
+  color: var(--color-text-muted);
+}
+.state-message--error {
+  color: var(--color-danger);
+}
