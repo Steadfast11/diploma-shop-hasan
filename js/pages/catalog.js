@@ -13,7 +13,7 @@
 import { initLayout } from "../components.js";
 import * as api from "../api.js";
 import { PAGE_SIZE } from "../config.js";
-import { productCardHTML, showError, showEmpty, esc } from "../ui.js";
+import { productCardHTML, showError, showEmpty, esc, toast, friendlyError } from "../ui.js";
 
 initLayout();
 
@@ -96,7 +96,7 @@ moreBtn.addEventListener("click", async () => {
     grid.insertAdjacentHTML("beforeend", data.products.map(productCardHTML).join(""));
     updateMoreBtn(data.pages);
   } catch (e) {
-    alert(e.message);
+    toast(friendlyError(e), "error");
   } finally {
     moreBtn.disabled = false;
   }
@@ -143,6 +143,40 @@ document.querySelector("[data-apply-filter]").addEventListener("click", () => {
   next.set("maxPrice", Math.max(Number(minInput.value), Number(maxInput.value)));
   next.delete("page");
   location.search = next.toString();
+});
+
+// "Filtrni tozalash" — biror filtr faol bo'lsagina ko'rinadi
+const clearBtn = document.querySelector("[data-clear-filter]");
+clearBtn.hidden = !(filter.category || filter.minPrice || filter.maxPrice);
+clearBtn.addEventListener("click", () => {
+  location.href = location.pathname; // query'siz -> hammasi
+});
+
+/* --- Qidiruv: API'da server-tomon qidiruv yo'q (tekshirildi — ?search=
+   e'tiborsiz qoldiriladi). Shuning uchun HOZIR YUKLANGAN kartochkalarni
+   nomi bo'yicha mahalliy (client-side) filtrlaymiz. --- */
+const searchInput = document.querySelector("[data-search]");
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.trim().toLowerCase();
+  const cards = grid.querySelectorAll(".product-card");
+  let visible = 0;
+  cards.forEach((card) => {
+    const title = card.querySelector(".product-card__title")?.textContent.toLowerCase() || "";
+    const match = !q || title.includes(q);
+    card.hidden = !match;
+    if (match) visible++;
+  });
+  let empty = grid.querySelector(".state-message--search");
+  if (visible === 0 && cards.length) {
+    if (!empty) {
+      empty = document.createElement("p");
+      empty.className = "state-message state-message--search";
+      empty.textContent = "Hech narsa topilmadi";
+      grid.appendChild(empty);
+    }
+  } else {
+    empty?.remove();
+  }
 });
 
 /* --- boshlash --- */

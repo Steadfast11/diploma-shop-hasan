@@ -29,12 +29,45 @@
   flex-direction: column;
   gap: 8px;
 }
+.product-card__media {
+  position: relative; /* sevimlilar tugmasi shu ustiga joylashadi */
+}
 .product-card__image {
   width: 100%;
   aspect-ratio: 282 / 324;
   object-fit: cover;
   border-radius: var(--radius);
   background: var(--color-surface); /* rasm kelguncha och kulrang */
+}
+
+/* Sevimlilar (heart) tugmasi — Figma'da yo'q, biz qo'shdik.
+   API'da wishlist yo'q -> localStorage (favorites.js). */
+.product-card__fav {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  color: var(--black);
+  cursor: pointer;
+  transition: transform 0.35s var(--ease-soft, ease);
+}
+.product-card__fav svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+.product-card__fav.is-fav svg {
+  fill: var(--black);
+}
+.product-card__fav:active {
+  transform: scale(0.9);
 }
 .product-card__info {
   display: flex;
@@ -123,6 +156,44 @@
 /* Yumshoq egri chiziq — hamma joyda bir xil "his". */
 :root {
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1); /* expo.out ko'rinishi */
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translate(-50%, 20px);
+  z-index: 200;
+  max-width: calc(100% - 32px);
+  padding: 14px 20px;
+  border-radius: 999px;
+  background: var(--black);
+  color: var(--white);
+  font-size: 14px;
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-soft);
+}
+.toast.is-shown {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.toast--error {
+  background: var(--color-danger);
+}
+
+/* ---------- Klaviatura fokusi (a11y) ---------- */
+:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.btn-glass:focus-visible,
+.order-summary__checkout:focus-visible {
+  outline-color: var(--white);
 }
 
 [data-reveal] {

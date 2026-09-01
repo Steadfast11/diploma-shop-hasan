@@ -73,11 +73,18 @@
       <div class="filters__divider"></div>
 
       <button class="filters__apply" type="button" data-apply-filter>Apply Filter</button>
+      <button class="filters__clear" type="button" data-clear-filter hidden>Filtrni tozalash</button>
     </aside>
 
     <!-- O'NG: sarlavha + mahsulotlar to'ri -->
     <div class="catalog__content">
-      <h1 class="catalog__title" data-reveal>All products</h1>
+      <div class="catalog__head" data-reveal>
+        <h1 class="catalog__title">All products</h1>
+        <!-- Qidiruv: API'da server-tomon qidiruv yo'q -> hozir yuklangan
+             ro'yxatni nom bo'yicha mahalliy (client-side) filtrlaydi. -->
+        <input class="catalog__search" type="search" placeholder="Mahsulot qidirish…"
+               aria-label="Mahsulot qidirish" data-search />
+      </div>
       <!-- kartochkalarni js/pages/catalog.js API'dan chizadi -->
       <div class="product-grid" data-products data-reveal-stagger></div>
       <button class="catalog__more" type="button" data-load-more hidden>Ko'proq yuklash</button>

@@ -62,8 +62,63 @@
   font-size: var(--fs-h2);    /* 40px */
 }
 
-/* "My orders" kartochkalari narxsiz — product-card ni ishlatamiz,
-   narx elementini qo'shmaymiz. */
+/* ---------- Buyurtma tafsiloti (Figma'da yo'q — biz qo'shdik) ----------
+   Har buyurtma o'z kartasida: №, sana, jami + ichidagi mahsulotlar qatori. */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.order-card {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 20px 24px;
+}
+.order-card__head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  font-family: var(--font-system);
+  letter-spacing: normal;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.order-card__total {
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--black);
+}
+.order-card__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 200px;
+}
+.order-item__image {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--color-surface);
+  flex-shrink: 0;
+}
+.order-item__title {
+  font-size: 14px;
+}
+.order-item__meta {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
 
 @media (max-width: 900px) {
   .product-grid {
@@ -76,5 +131,8 @@
 @media (max-width: 520px) {
   .product-grid {
     grid-template-columns: 1fr;
+  }
+  .order-card__head {
+    flex-wrap: wrap;
   }
 }

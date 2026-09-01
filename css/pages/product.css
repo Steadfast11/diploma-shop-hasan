@@ -88,6 +88,31 @@
   cursor: pointer;
 }
 
+/* Sevimlilar (heart) — Figma'da yo'q, biz qo'shdik (API'da wishlist yo'q -> mahalliy) */
+.product__fav {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  background: var(--white);
+  display: grid;
+  place-items: center;
+  color: var(--black);
+  cursor: pointer;
+  transition: transform 0.35s var(--ease-soft, ease);
+}
+.product__fav svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+.product__fav.is-fav svg {
+  fill: var(--black);
+}
+.product__fav:active {
+  transform: scale(0.92);
+}
+
 /* ---------- Izohlar ---------- */
 .reviews {
   margin-top: 76px;

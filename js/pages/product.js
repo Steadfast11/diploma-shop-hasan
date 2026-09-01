@@ -13,7 +13,8 @@ import { initLayout } from "../components.js";
 import * as api from "../api.js";
 import * as cartStore from "../cart-store.js";
 import { isLoggedIn, currentUser } from "../auth.js";
-import { money, esc, openModal, closeModal, showError } from "../ui.js";
+import { money, esc, openModal, closeModal, showError, toast, friendlyError } from "../ui.js";
+import { isFavorite } from "../favorites.js";
 
 initLayout();
 
@@ -55,6 +56,14 @@ function infoHTML(p) {
         <button class="qty__btn" type="button" data-inc aria-label="Ko'paytirish"><img src="/assets/icons/plus.svg" alt="" width="20" height="20" /></button>
       </div>
       <button class="product__add" type="button" data-add>Add to cart</button>
+      <button class="product__fav${isFavorite(p._id) ? " is-fav" : ""}" type="button" data-fav
+              data-id="${esc(p._id)}" data-title="${esc(p.title)}"
+              data-price="${p.price}" data-image="${esc(p.image || "")}"
+              aria-pressed="${isFavorite(p._id)}" aria-label="Sevimlilarga qo'shish">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.5 5.7 4.5c2 0 3.6 1.2 4.3 2.8.7-1.6 2.3-2.8 4.3-2.8 3.7 0 5.2 3.9 3.7 7.2C19.5 16.4 12 21 12 21z"/>
+        </svg>
+      </button>
     </div>`;
 }
 
@@ -125,13 +134,9 @@ infoEl.addEventListener("click", async (e) => {
   else if (e.target.closest("[data-add]")) {
     try {
       await cartStore.addItem(product, Number(qtyEl.textContent));
-      openModal({
-        title: "Savatga qo'shildi",
-        bodyHTML: `<p>${esc(product.title)} savatga qo'shildi.</p>`,
-        buttonText: "Yaxshi",
-      });
+      toast(`${product.title} savatga qo'shildi`);
     } catch (err) {
-      alert(err.message);
+      toast(friendlyError(err), "error");
     }
   }
 });
@@ -149,7 +154,7 @@ document.querySelector("[data-write-review]").addEventListener("click", () => {
     onConfirm: async (modalEl) => {
       const text = modalEl.querySelector(".modal__textarea").value.trim();
       if (text.length < 2 || text.length > 300) {
-        alert("Izoh 2–300 belgi bo'lishi kerak");
+        toast("Izoh 2–300 belgi bo'lishi kerak", "error");
         return;
       }
       try {
@@ -158,7 +163,7 @@ document.querySelector("[data-write-review]").addEventListener("click", () => {
         openModal({ title: "Thank you!", bodyHTML: "<p>You left new comment</p>", buttonText: "Okey" });
         refreshReviews();
       } catch (err) {
-        alert(err.message); // masalan 409: bitta mahsulotga 3 tadan ko'p
+        toast(friendlyError(err), "error"); // masalan 409: bitta mahsulotga 3 tadan ko'p
       }
     },
   });
@@ -171,7 +176,7 @@ reviewsEl.addEventListener("click", async (e) => {
     await api.deleteComment(id, card.dataset.commentId);
     refreshReviews();
   } catch (err) {
-    alert(err.message);
+    toast(friendlyError(err), "error");
   }
 });
 

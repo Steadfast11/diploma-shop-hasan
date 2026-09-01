@@ -10,6 +10,7 @@ import { isLoggedIn } from "./auth.js";
 import { getCount, subscribe } from "./cart-store.js";
 import { initReveal } from "./reveal.js";
 import { initMotion } from "./motion.js";
+import { toggleFavorite } from "./favorites.js";
 
 // Bitta komponentni yuklab, kerakli div ichiga qo'yadi.
 async function loadComponent(name, mountId) {
@@ -52,6 +53,27 @@ function wireHeaderMenu() {
   });
 }
 
+// Har qanaqa mahsulot kartochkasidagi "sevimlilar" (heart) tugmasi.
+// Delegatsiya: kartochkalar API'dan keyin qo'shilsa ham ishlaydi.
+// preventDefault/stopPropagation — kartochka <a> ichida, sahifaga o'tib
+// ketmasin.
+function wireFavorites() {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-fav]");
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const nowFav = toggleFavorite({
+      _id: btn.dataset.id,
+      title: btn.dataset.title,
+      price: Number(btn.dataset.price),
+      image: btn.dataset.image,
+    });
+    btn.classList.toggle("is-fav", nowFav);
+    btn.setAttribute("aria-pressed", String(nowFav));
+  });
+}
+
 // Har sahifa shuni chaqiradi.
 export async function initLayout() {
   await Promise.all([
@@ -60,6 +82,7 @@ export async function initLayout() {
   ]);
   wireHeaderAuth();
   wireHeaderMenu();
+  wireFavorites();
   refreshCartCount();
   subscribe(refreshCartCount); // savat o'zgarsa "Bag (N)" yangilanadi
 

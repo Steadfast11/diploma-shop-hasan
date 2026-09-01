@@ -12,7 +12,7 @@ import { initLayout } from "../components.js";
 import * as cartStore from "../cart-store.js";
 import * as api from "../api.js";
 import { isLoggedIn } from "../auth.js";
-import { money, esc, showError } from "../ui.js";
+import { money, esc, showError, toast, friendlyError } from "../ui.js";
 
 initLayout();
 
@@ -84,7 +84,7 @@ mainEl.addEventListener("click", async (e) => {
     else return;
     await render();
   } catch (err) {
-    alert(err.message);
+    toast(friendlyError(err), "error");
   }
 });
 
@@ -102,7 +102,7 @@ summaryEl.addEventListener("click", async (e) => {
     await cartStore.clear(); // header "Bag (0)" bo'lsin
     location.href = "/pages/profile.html"; // "My orders"ni ko'rsatamiz
   } catch (err) {
-    alert(err.message);
+    toast(friendlyError(err), "error");
   }
 });
 
