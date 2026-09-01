@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="/assets/favicon.svg" />
-  <title>Diploma Shop — Profil</title>
-  <meta name="description" content="Profilingiz va buyurtmalar tarixi." />
-  <meta property="og:title" content="WEPRO — onlayn do'kon" />
-  <meta property="og:description" content="Profilingiz va buyurtmalar tarixi." />
+  <title>Diploma Shop — Profile</title>
+  <meta name="description" content="Your profile and order history." />
+  <meta property="og:title" content="WEPRO — Online Store" />
+  <meta property="og:description" content="Your profile and order history." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://wepro-diploma.netlify.app/assets/images/hero.jpg" />
   <link rel="canonical" href="https://wepro-diploma.netlify.app/pages/profile.html" />
@@ -36,13 +36,21 @@
 
     <section class="profile__orders" data-reveal>
       <h2 class="profile__orders-title">My orders</h2>
-      <div class="orders-list" data-orders></div>
+      <div class="product-grid" data-orders></div>
     </section>
 
-    <!-- API'da wishlist yo'q -> mahalliy (localStorage) sevimlilar -->
+    <!-- API has no wishlist endpoint -> saved locally (localStorage) -->
     <section class="profile__orders" data-reveal>
-      <h2 class="profile__orders-title">Sevimlilar</h2>
+      <h2 class="profile__orders-title">Favorites</h2>
       <div class="product-grid" data-favorites></div>
+    </section>
+
+    <!-- Google Translate: avtomatik, jahon tillariga. Faqat shu sahifada
+         ko'rinadi; googtrans cookie orqali boshqa sahifalarda ham ishlaydi
+         (har sahifada js/translate.js yuklangan). -->
+    <section class="profile__lang" data-reveal>
+      <h2 class="profile__lang-title">Language</h2>
+      <div id="google_translate_element"></div>
     </section>
   </main>
 

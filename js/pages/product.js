@@ -51,15 +51,15 @@ function infoHTML(p) {
     ${p.description ? `<p class="product__desc">${esc(p.description)}</p>` : ""}
     <div class="product__actions">
       <div class="qty">
-        <button class="qty__btn" type="button" data-dec aria-label="Kamaytirish"><img src="/assets/icons/minus.svg" alt="" width="20" height="20" /></button>
+        <button class="qty__btn" type="button" data-dec aria-label="Decrease"><img src="/assets/icons/minus.svg" alt="" width="20" height="20" /></button>
         <span class="qty__value" data-qty>1</span>
-        <button class="qty__btn" type="button" data-inc aria-label="Ko'paytirish"><img src="/assets/icons/plus.svg" alt="" width="20" height="20" /></button>
+        <button class="qty__btn" type="button" data-inc aria-label="Increase"><img src="/assets/icons/plus.svg" alt="" width="20" height="20" /></button>
       </div>
       <button class="product__add" type="button" data-add>Add to cart</button>
       <button class="product__fav${isFavorite(p._id) ? " is-fav" : ""}" type="button" data-fav
               data-id="${esc(p._id)}" data-title="${esc(p.title)}"
               data-price="${p.price}" data-image="${esc(p.image || "")}"
-              aria-pressed="${isFavorite(p._id)}" aria-label="Sevimlilarga qo'shish">
+              aria-pressed="${isFavorite(p._id)}" aria-label="Add to favorites">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
           <path d="M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.5 5.7 4.5c2 0 3.6 1.2 4.3 2.8.7-1.6 2.3-2.8 4.3-2.8 3.7 0 5.2 3.9 3.7 7.2C19.5 16.4 12 21 12 21z"/>
         </svg>
@@ -81,7 +81,7 @@ function reviewCardHTML(c) {
       <div class="review-card__author">${esc(c.author)}<img src="/assets/icons/verified.svg" alt="" width="24" height="24" /></div>
       <p class="review-card__text">${esc(c.text)}</p>
       ${date ? `<p class="review-card__date">Posted on ${esc(date)}</p>` : ""}
-      ${mine ? `<button class="review-card__delete" type="button" data-delete>O'chirish</button>` : ""}
+      ${mine ? `<button class="review-card__delete" type="button" data-delete>Remove</button>` : ""}
     </div>`;
 }
 
@@ -89,12 +89,12 @@ function renderReviews(comments) {
   countEl.textContent = `(${comments.length})`;
   reviewsEl.innerHTML = comments.length
     ? comments.map(reviewCardHTML).join("")
-    : `<p class="state-message">Hali izoh yo'q</p>`;
+    : `<p class="state-message">No reviews yet</p>`;
 }
 
 /* --- yuklash --- */
 async function load() {
-  if (!id) return showError(infoEl, "Mahsulot tanlanmagan");
+  if (!id) return showError(infoEl, "No product selected");
   try {
     const data = await api.getProduct(id);
     product = data.product || data;
@@ -103,7 +103,7 @@ async function load() {
     infoEl.innerHTML = infoHTML(product);
     renderReviews(data.comments || product.comments || []);
   } catch (e) {
-    showError(infoEl, e.status === 404 ? "Mahsulot topilmadi" : e.message);
+    showError(infoEl, e.status === 404 ? "Product not found" : e.message);
   }
 }
 
@@ -134,7 +134,7 @@ infoEl.addEventListener("click", async (e) => {
   else if (e.target.closest("[data-add]")) {
     try {
       await cartStore.addItem(product, Number(qtyEl.textContent));
-      toast(`${product.title} savatga qo'shildi`);
+      toast(`${product.title} added to cart`);
     } catch (err) {
       toast(friendlyError(err), "error");
     }
@@ -154,7 +154,7 @@ document.querySelector("[data-write-review]").addEventListener("click", () => {
     onConfirm: async (modalEl) => {
       const text = modalEl.querySelector(".modal__textarea").value.trim();
       if (text.length < 2 || text.length > 300) {
-        toast("Izoh 2–300 belgi bo'lishi kerak", "error");
+        toast("Comment must be 2–300 characters", "error");
         return;
       }
       try {

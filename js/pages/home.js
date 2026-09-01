@@ -34,7 +34,7 @@ function categoryCardHTML(c) {
 async function loadSection(selector, loader, pick, render, emptyText) {
   const box = document.querySelector(selector);
   if (!box) return;
-  box.innerHTML = `<p class="state-message">Yuklanmoqda…</p>`;
+  box.innerHTML = `<p class="state-message">Loading…</p>`;
   try {
     const list = pick(await loader());
     if (!list.length) return showEmpty(box, emptyText);
@@ -49,7 +49,7 @@ loadSection(
   () => api.getBestsellers(4),
   (d) => d.products,
   productCardHTML,
-  "Hozircha xit mahsulot yo'q"
+  "No bestsellers yet"
 );
 
 loadSection(
@@ -57,7 +57,7 @@ loadSection(
   () => api.getCategories(),
   (d) => d.categories,
   categoryCardHTML,
-  "Hozircha kategoriya yo'q"
+  "No categories yet"
 );
 
 loadSection(
@@ -65,5 +65,5 @@ loadSection(
   () => api.getNewest(12),
   (d) => d.products,
   productCardHTML,
-  "Hozircha mahsulot yo'q"
+  "No products yet"
 );

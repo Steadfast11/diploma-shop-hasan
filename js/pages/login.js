@@ -27,7 +27,7 @@ form.addEventListener("submit", async (e) => {
 
   const email = form.email.value.trim();
   const password = form.password.value;
-  if (!email || !password) return showError("Barcha maydonlarni to'ldiring");
+  if (!email || !password) return showError("Please fill in all fields");
 
   submitBtn.disabled = true;
   try {
@@ -35,7 +35,7 @@ form.addEventListener("submit", async (e) => {
     await mergeGuestCartIntoAccount(); // mehmon savatidagilar serverga ko'chadi
     location.href = nextUrl;
   } catch (err) {
-    showError(err.status === 401 ? "Email yoki parol noto'g'ri" : err.message);
+    showError(err.status === 401 ? "Incorrect email or password" : err.message);
     submitBtn.disabled = false;
   }
 });

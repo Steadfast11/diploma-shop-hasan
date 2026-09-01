@@ -47,7 +47,7 @@ export function productCardHTML(p) {
         <button class="product-card__fav${fav ? " is-fav" : ""}" type="button" data-fav
                 data-id="${esc(p._id)}" data-title="${esc(p.title)}"
                 data-price="${p.price}" data-image="${esc(p.image || "")}"
-                aria-pressed="${fav}" aria-label="Sevimlilarga qo'shish">
+                aria-pressed="${fav}" aria-label="Add to favorites">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
             <path d="M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.5 5.7 4.5c2 0 3.6 1.2 4.3 2.8.7-1.6 2.3-2.8 4.3-2.8 3.7 0 5.2 3.9 3.7 7.2C19.5 16.4 12 21 12 21z"/>
           </svg>
@@ -95,13 +95,13 @@ export function toast(message, type = "") {
 /* API xatosini foydalanuvchiga tushunarli qilib beradi (API matni ruscha). */
 export function friendlyError(err) {
   const byStatus = {
-    401: "Sessiya tugadi — qaytadan kiring",
-    403: "Bunga ruxsat yo'q",
-    404: "Topilmadi",
-    409: "Bajarib bo'lmadi (limit yoki ziddiyat)",
-    429: "Juda ko'p so'rov — biroz kuting",
+    401: "Session expired — please log in again",
+    403: "You don't have permission",
+    404: "Not found",
+    409: "Couldn't complete (limit or conflict)",
+    429: "Too many requests — please wait",
   };
-  return byStatus[err?.status] || err?.message || "Xatolik yuz berdi";
+  return byStatus[err?.status] || err?.message || "Something went wrong";
 }
 
 /* ---------- Modal oyna (izoh yozish / "Thank you") ----------

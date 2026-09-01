@@ -12,7 +12,7 @@ import { initLayout } from "../components.js";
 import * as cartStore from "../cart-store.js";
 import * as api from "../api.js";
 import { isLoggedIn } from "../auth.js";
-import { money, esc, showError, toast, friendlyError } from "../ui.js";
+import { money, esc, showError, toast, friendlyError, openModal } from "../ui.js";
 
 initLayout();
 
@@ -31,16 +31,16 @@ function itemHTML(it) {
       <div class="cart-item__info">
         <a class="cart-item__title" href="${href}">${esc(it.title)}</a>
         <p class="cart-item__price">${money(it.price)}</p>
-        <button class="cart-item__remove" type="button" data-remove aria-label="O'chirish">
+        <button class="cart-item__remove" type="button" data-remove aria-label="Remove">
           <img src="/assets/icons/trash.svg" alt="" width="24" height="24" />
         </button>
       </div>
       <div class="qty">
-        <button class="qty__btn" type="button" data-dec aria-label="Kamaytirish">
+        <button class="qty__btn" type="button" data-dec aria-label="Decrease">
           <img src="/assets/icons/minus.svg" alt="" width="20" height="20" />
         </button>
         <span class="qty__value">${it.qty}</span>
-        <button class="qty__btn" type="button" data-inc aria-label="Ko'paytirish">
+        <button class="qty__btn" type="button" data-inc aria-label="Increase">
           <img src="/assets/icons/plus.svg" alt="" width="20" height="20" />
         </button>
       </div>
@@ -100,7 +100,14 @@ summaryEl.addEventListener("click", async (e) => {
   try {
     await api.createOrder(); // butun savatdan buyurtma
     await cartStore.clear(); // header "Bag (0)" bo'lsin
-    location.href = "/pages/profile.html"; // "My orders"ni ko'rsatamiz
+    openModal({
+      title: "Order placed!",
+      bodyHTML: "<p>Your order was placed successfully.</p>",
+      buttonText: "View my orders",
+      onConfirm: () => {
+        location.href = "/pages/profile.html";
+      },
+    });
   } catch (err) {
     toast(friendlyError(err), "error");
   }

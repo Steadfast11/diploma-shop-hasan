@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="/assets/favicon.svg" />
-  <title>Diploma Shop — Katalog</title>
-  <meta name="description" content="Barcha mahsulotlar — kategoriya va narx bo'yicha filtrlang." />
-  <meta property="og:title" content="WEPRO — onlayn do'kon" />
-  <meta property="og:description" content="Barcha mahsulotlar — kategoriya va narx bo'yicha filtrlang." />
+  <title>Diploma Shop — Catalog</title>
+  <meta name="description" content="All products — filter by category and price." />
+  <meta property="og:title" content="WEPRO — Online Store" />
+  <meta property="og:description" content="All products — filter by category and price." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://wepro-diploma.netlify.app/assets/images/hero.jpg" />
   <link rel="canonical" href="https://wepro-diploma.netlify.app/pages/catalog.html" />
@@ -66,8 +66,8 @@
           <img class="filters__chevron filters__chevron--up" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
         </div>
         <div class="price-range">
-          <input class="price-range__input price-range__input--min" type="range" min="0" max="500" value="50" aria-label="Eng past narx" />
-          <input class="price-range__input price-range__input--max" type="range" min="0" max="500" value="200" aria-label="Eng yuqori narx" />
+          <input class="price-range__input price-range__input--min" type="range" min="0" max="500" value="50" aria-label="Minimum price" />
+          <input class="price-range__input price-range__input--max" type="range" min="0" max="500" value="200" aria-label="Maximum price" />
           <div class="price-range__track"><div class="price-range__fill"></div></div>
           <div class="price-range__labels">
             <span data-price-min>$50</span>
@@ -79,7 +79,7 @@
       <div class="filters__divider"></div>
 
       <button class="filters__apply" type="button" data-apply-filter>Apply Filter</button>
-      <button class="filters__clear" type="button" data-clear-filter hidden>Filtrni tozalash</button>
+      <button class="filters__clear" type="button" data-clear-filter hidden>Clear filters</button>
     </aside>
 
     <!-- O'NG: sarlavha + mahsulotlar to'ri -->
@@ -88,12 +88,12 @@
         <h1 class="catalog__title">All products</h1>
         <!-- Qidiruv: API'da server-tomon qidiruv yo'q -> hozir yuklangan
              ro'yxatni nom bo'yicha mahalliy (client-side) filtrlaydi. -->
-        <input class="catalog__search" type="search" placeholder="Mahsulot qidirish…"
-               aria-label="Mahsulot qidirish" data-search />
+        <input class="catalog__search" type="search" placeholder="Search products…"
+               aria-label="Search products" data-search />
       </div>
       <!-- kartochkalarni js/pages/catalog.js API'dan chizadi -->
       <div class="product-grid" data-products data-reveal-stagger></div>
-      <button class="catalog__more" type="button" data-load-more hidden>Ko'proq yuklash</button>
+      <button class="catalog__more" type="button" data-load-more hidden>Load more</button>
     </div>
   </main>
 

@@ -1,8 +1,9 @@
 /* ============================================================
-   pages/profile.css — Profil ("My Profile" + "My orders")
-   Figma: 1200px markazda. Yuqorida profil ma'lumoti (eyebrow 16px,
-   ism 56px, telefon/email 16px, "Log out" tugma), pastda "My orders"
-   + mahsulot to'ri (narxsiz).
+   pages/profile.css — Profile ("My Profile" + "My orders" + "Favorites")
+   Figma: 1200px centered. Top: profile info (16px eyebrow, 56px name,
+   16px phone/email, "Log out" button). Below: "My orders" grid, no price
+   (matches Figma exactly). "Favorites" and "Language" sections are ours —
+   same visual pattern so they don't stand out.
    ============================================================ */
 
 .profile {
@@ -11,7 +12,7 @@
   padding-block: 41px 76px;
   display: flex;
   flex-direction: column;
-  gap: 76px;                  /* profil bloki -> My orders */
+  gap: 76px;
 }
 
 .profile__head {
@@ -56,68 +57,25 @@
 .profile__orders {
   display: flex;
   flex-direction: column;
-  gap: 32px;                  /* sarlavha -> grid */
+  gap: 32px;
 }
 .profile__orders-title {
   font-size: var(--fs-h2);    /* 40px */
 }
 
-/* ---------- Buyurtma tafsiloti (Figma'da yo'q — biz qo'shdik) ----------
-   Har buyurtma o'z kartasida: №, sana, jami + ichidagi mahsulotlar qatori. */
-.orders-list {
+/* Language (Google Translate) — small, understated */
+.profile__lang {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-.order-card {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  padding: 20px 24px;
-}
-.order-card__head {
-  display: flex;
-  align-items: center;
   gap: 16px;
-  padding-bottom: 16px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+.profile__lang-title {
+  font-size: 20px;
   font-family: var(--font-system);
   letter-spacing: normal;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.6);
 }
-.order-card__total {
-  margin-left: auto;
-  font-weight: 600;
-  color: var(--black);
-}
-.order-card__items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-.order-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 200px;
-}
-.order-item__image {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  object-fit: cover;
-  background: var(--color-surface);
-  flex-shrink: 0;
-}
-.order-item__title {
-  font-size: 14px;
-}
-.order-item__meta {
-  margin-left: auto;
-  font-size: 13px;
-  color: var(--color-text-muted);
-  white-space: nowrap;
+#google_translate_element {
+  font-family: var(--font-system);
 }
 
 @media (max-width: 900px) {
@@ -131,8 +89,5 @@
 @media (max-width: 520px) {
   .product-grid {
     grid-template-columns: 1fr;
-  }
-  .order-card__head {
-    flex-wrap: wrap;
   }
 }

@@ -16,21 +16,21 @@ const grid = document.querySelector("[data-products]");
 
 async function load() {
   if (!id) {
-    showError(grid, "Kategoriya tanlanmagan");
+    showError(grid, "No category selected");
     return;
   }
-  grid.innerHTML = `<p class="state-message">Yuklanmoqda…</p>`;
+  grid.innerHTML = `<p class="state-message">Loading…</p>`;
   try {
     const { category, products } = await api.getCategoryProducts(id);
-    titleEl.textContent = category?.title || "Kategoriya";
+    titleEl.textContent = category?.title || "Category";
     document.title = `Diploma Shop — ${titleEl.textContent}`;
     if (!products.length) {
-      showEmpty(grid, "Bu kategoriyada mahsulot yo'q");
+      showEmpty(grid, "No products in this category");
       return;
     }
     grid.innerHTML = products.map(productCardHTML).join("");
   } catch (e) {
-    if (e.status === 404) showError(grid, "Bunday kategoriya topilmadi");
+    if (e.status === 404) showError(grid, "Category not found");
     else showError(grid, e.message);
   }
 }

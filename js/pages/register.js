@@ -25,13 +25,13 @@ function showError(message) {
 
 // Formadan qiymatlarni olib, xato bo'lsa matn qaytaradi (yoki null)
 function validate(v) {
-  if (v.name.length < 1 || v.name.length > 50) return "Ism 1–50 belgi bo'lishi kerak";
-  if (v.surname.length < 1 || v.surname.length > 50) return "Familiya 1–50 belgi bo'lishi kerak";
-  if (!/^\S+@\S+\.\S+$/.test(v.email)) return "Email noto'g'ri";
+  if (v.name.length < 1 || v.name.length > 50) return "Name must be 1–50 characters";
+  if (v.surname.length < 1 || v.surname.length > 50) return "Surname must be 1–50 characters";
+  if (!/^\S+@\S+\.\S+$/.test(v.email)) return "Invalid email";
   const digits = v.phone.replace(/\D/g, "");
-  if (digits.length < 9 || digits.length > 15) return "Telefon 9–15 ta raqam bo'lishi kerak";
-  if (v.password.length < 4 || v.password.length > 64) return "Parol 4–64 belgi bo'lishi kerak";
-  if (v.password !== v.password2) return "Parollar mos kelmadi";
+  if (digits.length < 9 || digits.length > 15) return "Phone must be 9–15 digits";
+  if (v.password.length < 4 || v.password.length > 64) return "Password must be 4–64 characters";
+  if (v.password !== v.password2) return "Passwords do not match";
   return null;
 }
 

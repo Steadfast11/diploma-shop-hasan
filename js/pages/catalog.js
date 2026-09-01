@@ -68,18 +68,18 @@ function fetchPage(page) {
   });
 }
 
-// "pages" > 1 bo'lsagina "Ko'proq yuklash" tugmasi ko'rinadi.
+// "pages" > 1 bo'lsagina "Load more" tugmasi ko'rinadi.
 function updateMoreBtn(totalPages) {
   moreBtn.hidden = shownPage >= totalPages;
 }
 
 async function loadProducts() {
-  grid.innerHTML = `<p class="state-message">Yuklanmoqda…</p>`;
+  grid.innerHTML = `<p class="state-message">Loading…</p>`;
   moreBtn.hidden = true;
   try {
     const data = await fetchPage(1);
     shownPage = 1;
-    if (!data.products.length) return showEmpty(grid, "Bunday mahsulot topilmadi");
+    if (!data.products.length) return showEmpty(grid, "No products found");
     grid.innerHTML = data.products.map(productCardHTML).join("");
     updateMoreBtn(data.pages);
   } catch (e) {
@@ -145,7 +145,7 @@ document.querySelector("[data-apply-filter]").addEventListener("click", () => {
   location.search = next.toString();
 });
 
-// "Filtrni tozalash" — biror filtr faol bo'lsagina ko'rinadi
+// "Clear filters" — biror filtr faol bo'lsagina ko'rinadi
 const clearBtn = document.querySelector("[data-clear-filter]");
 clearBtn.hidden = !(filter.category || filter.minPrice || filter.maxPrice);
 clearBtn.addEventListener("click", () => {
@@ -171,7 +171,7 @@ searchInput.addEventListener("input", () => {
     if (!empty) {
       empty = document.createElement("p");
       empty.className = "state-message state-message--search";
-      empty.textContent = "Hech narsa topilmadi";
+      empty.textContent = "Nothing found";
       grid.appendChild(empty);
     }
   } else {
