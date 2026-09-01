@@ -1,0 +1,58 @@
+/* ============================================================
+   ui.css — qayta ishlatiladigan mayda UI bo'laklari
+   (header/footer'ning O'ZI emas — ular components/ ichida)
+   Bir nechta sahifada uchraydigan narsalar shu yerda.
+   ============================================================ */
+
+/* ---------- Shisha (glass) tugma ----------
+   Figma: backdrop-blur 26px, radius 8px, padding 24px 48px.
+   Hero'da oq shaffof + qora matn; kategoriya kartasida ochroq + oq matn. */
+.btn-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 48px;
+  border-radius: var(--radius);
+  backdrop-filter: blur(26px);
+  -webkit-backdrop-filter: blur(26px);
+  background: rgba(255, 255, 255, 0.46); /* Figma: hero tugmasi foni */
+  color: var(--black);
+  cursor: pointer;
+}
+
+/* ---------- Mahsulot kartochkasi ----------
+   Figma: rasm (aspect 282/324, radius 8) + 8px gap + (nom | narx).
+   Nom va narx: 16px, bir qatorda, nom cho'zilib narxni o'ngga suradi.
+   Mazmun (rasm/nom/narx) BACKENDDAN keladi — bu faqat qolip. */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.product-card__image {
+  width: 100%;
+  aspect-ratio: 282 / 324;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--color-surface); /* rasm kelguncha och kulrang */
+}
+.product-card__info {
+  display: flex;
+  gap: 8px;
+}
+.product-card__title {
+  flex: 1;            /* bo'sh joyni egallaydi -> narxni o'ngga suradi */
+  min-width: 0;
+}
+.product-card__price {
+  white-space: nowrap;
+}
+
+/* ---------- Mahsulot to'ri (grid) ----------
+   Figma: 4 ustun, ustun oralig'i 24px, qator oralig'i 32px. */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 24px;
+  row-gap: 32px;
+}

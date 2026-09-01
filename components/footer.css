@@ -1,0 +1,75 @@
+/* ============================================================
+   footer.css — FAQAT footer komponentining stili.
+   Figma: 1280px kenglik markazda, ichki padding 40px (chap/o'ng)
+   va 56px (tepa/past), tepasida 1px #e3e3e3 chiziq.
+   Struktura: tepa qism (4 ustun) -> bo'linish chizig'i -> past qism.
+   ============================================================ */
+
+.site-footer__inner {
+  max-width: 1280px;              /* Figma: footer frame kengligi */
+  margin-inline: auto;
+  padding: 56px 40px;            /* Figma: py-56 px-40 */
+  border-top: 1px solid var(--color-line-soft); /* Figma: 1px #e3e3e3 */
+
+  display: flex;
+  flex-direction: column;
+  gap: 40px;                     /* Figma: tepa/chiziq/past oralig'i */
+}
+
+/* ---- tepa qism: 4 teng ustun ---- */
+.site-footer__top {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;                     /* Figma: ustunlar orasi */
+}
+
+.site-footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;                     /* Figma: logo va ijtimoiy tarmoq orasi */
+}
+.site-footer__logo {
+  width: 121px;
+  height: 19px;
+}
+.site-footer__social {
+  display: flex;
+  gap: 16px;                     /* Figma: ikonlar orasi */
+}
+.site-footer__social img {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---- link ustunlari ---- */
+.site-footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;                     /* Figma: sarlavha va ro'yxat orasi */
+}
+.site-footer__heading {
+  color: var(--color-text-muted); /* #999 */
+  text-transform: uppercase;
+}
+.site-footer__col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;                     /* Figma: havolalar orasi */
+}
+
+/* ---- bo'linish chizig'i ---- */
+.site-footer__divider {
+  height: 1px;
+  background: var(--color-line-soft);
+}
+
+/* ---- past qism ---- */
+.site-footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-muted); /* #999 */
+}
+.site-footer__legal {
+  display: flex;
+  gap: 16px;
+}

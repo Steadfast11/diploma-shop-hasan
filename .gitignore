@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+*.log
+
+# Claude Code — faqat launch.json kerak, qolgani mahalliy
+.claude/*
+!.claude/launch.json

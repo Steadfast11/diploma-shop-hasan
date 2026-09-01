@@ -1,0 +1,64 @@
+/* ============================================================
+   variables.css — dizayn tokenlari. BITTA MANBA.
+   Qiymatlar Figma "Diploma Project 2026" faylidan olingan.
+
+   Figma text style'lari (hammasi Inter Medium 500, line-height 1,
+   letter-spacing -6% = -0.06em):
+     Text-Base / Sub-Heading : 16px
+     Heading 2               : 40px
+     Heading 1               : 56px
+   ============================================================ */
+:root {
+  /* ---------- SHRIFT ---------- */
+  --font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Figma katalog filtri SF Pro Display'da chizilgan (UI-kit qoldig'i).
+     -apple-system Mac'da aynan SF Pro'ni beradi. */
+  --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --fw-medium: 500;             /* butun loyiha shu og'irlikda */
+  --letter-spacing: -0.06em;    /* Figma: barcha matn -6% */
+  --line-height: 1;             /* Figma: leading-none */
+
+  --fs-base: 16px;             /* oddiy matn, sarlavhacha, tugma, nav */
+  --fs-h2: 40px;               /* seksiya sarlavhasi ("Best sellers") */
+  --fs-h1: 56px;               /* hero sarlavhasi */
+
+  /* ---------- RANGLAR (Figma o'zgaruvchilari) ---------- */
+  --white: #ffffff;
+  --black: #000000;            /* matn, header ostidagi chiziq */
+  --gray-2: #e3e3e3;           /* footer tepasidagi chiziq */
+  --gray-3: #999999;           /* kulrang matn (footer sarlavhalar, © , legal) */
+
+  /* Semantik nomlar (kod o'qilishi uchun) */
+  --color-bg: var(--white);
+  --color-text: var(--black);
+  --color-text-muted: var(--gray-3);
+  --color-line: var(--black);        /* header */
+  --color-line-soft: var(--gray-2);  /* footer */
+
+  /* qora ustidagi matn (Order Summary kartasi — keyin tekshiramiz) */
+  --color-invert: var(--black);
+  --color-on-invert: var(--white);
+
+  /* holat ranglari — savat/izoh sahifalarida tekshiramiz */
+  --color-surface: #f4f4f4;    /* Figma: tekshir (qty pill foni) */
+  --color-danger: #e03131;     /* Figma: tekshir (trash) */
+  --color-success: #37b24d;    /* Figma: tekshir (verified) */
+
+  /* ---------- LAYOUT ---------- */
+  --container: 1200px;         /* ТЗ + Figma: ichki kontent 1200px */
+  --gutter: 20px;              /* kichik ekranda chekka bo'shliq */
+  --header-pad-x: 60px;        /* Figma: header 1920px'da chetdan 60px (3.13%) */
+  --header-h: 69px;            /* Figma: header balandligi */
+
+  /* ---------- RADIUS ---------- */
+  --radius: 8px;              /* Figma: rasm / tugma / karta — hammasi 8px */
+
+  /* ---------- ORALIQLAR (Figma: ~8px shkala) ---------- */
+  --space-8: 8px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-56: 56px;
+  --space-72: 72px;   /* seksiya sarlavha -> kontent oralig'i */
+}

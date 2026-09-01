@@ -1,0 +1,43 @@
+/* ============================================================
+   header.css — FAQAT header komponentining stili.
+   Figma: oq fon, ostida 1px qattiq qora chiziq, balandlik 69px,
+   chapdan/o'ngdan 60px. Chap menyu | logo (markaz) | o'ng menyu.
+   ============================================================ */
+
+.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--color-line); /* Figma: 1px #000 */
+}
+
+/* grid: 1fr | auto | 1fr  -> logo har doim aniq markazda,
+   chap va o'ng ustunlar teng joy oladi. */
+.site-header__inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: var(--header-h);            /* 69px */
+  padding-inline: var(--header-pad-x); /* 60px */
+}
+
+.site-header__nav,
+.site-header__account {
+  display: flex;
+  align-items: center;
+  gap: 40px;                 /* Figma: tekshir (havolalar orasi) */
+}
+
+/* o'ng menyu grid'ning 3-ustunida — o'ng chetga suriladi */
+.site-header__account {
+  justify-self: end;
+}
+
+/* logo rasmi — Figma o'lchami 147x51 */
+.site-header__logo {
+  display: block;
+}
+.site-header__logo img {
+  display: block;
+  width: 147px;
+  height: 51px;
+  object-fit: contain;
+}

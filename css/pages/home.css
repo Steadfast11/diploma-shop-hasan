@@ -1,0 +1,100 @@
+/* ============================================================
+   pages/home.css — FAQAT bosh sahifa stili
+   Bloklar: hero -> seksiyalar (Best sellers / Shop by category /
+   Featured products). Kartochka va grid — ui.css'da (qayta ishlatiladi).
+   ============================================================ */
+
+/* ---------- HERO ----------
+   Figma: balandlik 654px, butun kenglik, header ostida.
+   Fon rasm (cover) + ustidan qora 20% parda. Matn pastga tekislangan. */
+.hero {
+  position: relative;
+  height: 654px;
+  overflow: clip;
+  display: flex;
+  align-items: flex-end;      /* matn blok pastda */
+  padding-bottom: 60px;       /* Figma: pastdan ~60px */
+  color: var(--white);
+}
+.hero__bg {
+  position: absolute;
+  inset: 0;
+}
+.hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero__bg::after {            /* qora 20% parda */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+.hero__inner {
+  position: relative;        /* parda ostida qolmasin */
+}
+.hero__offer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;                 /* Figma: matn bloki -> tugma */
+  width: 588px;              /* Figma */
+  max-width: 100%;
+}
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;                 /* Figma: eyebrow -> sarlavha */
+}
+.hero__eyebrow {
+  text-transform: uppercase;
+}
+/* .hero__title -> <h1>, o'lchami base.css'dan (56px) */
+
+/* ---------- SEKSIYALAR ----------
+   Figma: seksiyalar orasi ~76px, seksiya ichida sarlavha -> grid 32px. */
+.home-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 76px;
+  padding-block: 76px;       /* hero'dan va footer'dan oldin */
+}
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+/* .section__title -> <h2>, o'lchami base.css'dan (40px) */
+
+/* ---------- SHOP BY CATEGORY ----------
+   Figma: 3 ustun, aspect 384/440, radius 8, rasm to'ldiradi,
+   pastda 16px padding ichida shisha tugma (butun kenglikda). */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.category-card {
+  position: relative;
+  aspect-ratio: 384 / 440;
+  border-radius: var(--radius);
+  overflow: clip;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+  background: var(--color-surface); /* rasm (API) kelguncha ko'rinib tursin */
+}
+.category-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.category-card__btn {          /* .btn-glass ustiga */
+  position: relative;         /* rasm ustida */
+  width: 100%;
+  background: rgba(255, 255, 255, 0.16); /* Figma: kategoriya tugmasi */
+  color: var(--white);
+}

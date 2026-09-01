@@ -1,0 +1,4 @@
+# Statik sayt — hech qanday build bosqichi yo'q.
+# Netlify shu papkani (repo ildizini) to'g'ridan-to'g'ri tarqatadi.
+[build]
+  publish = "."

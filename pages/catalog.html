@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diploma Shop — Katalog</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+
+  <link rel="stylesheet" href="../css/reset.css" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/ui.css" />
+  <link rel="stylesheet" href="/components/header.css" />
+  <link rel="stylesheet" href="/components/footer.css" />
+  <link rel="stylesheet" href="../css/pages/catalog.css" />
+</head>
+<body>
+  <div id="header" data-component="header"></div>
+
+  <main class="catalog">
+    <!-- CHAP: filtr paneli. Figma: SF Pro shrift, 1px och ramka, radius 20. -->
+    <aside class="filters">
+      <div class="filters__head">
+        <p class="filters__title">Filters</p>
+        <img src="/assets/icons/filter.svg" alt="" width="24" height="24" />
+      </div>
+
+      <div class="filters__divider"></div>
+
+      <!-- Kategoriyalar — bittasini bosib tanlash (API'da category=<id>) -->
+      <div class="filters__group" data-category-list>
+        <button class="filters__row" type="button" data-category="1">
+          <span>Categorie 1</span>
+          <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+        </button>
+        <button class="filters__row" type="button" data-category="2">
+          <span>Categorie 2</span>
+          <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+        </button>
+        <button class="filters__row" type="button" data-category="3">
+          <span>Categorie 3</span>
+          <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+        </button>
+      </div>
+
+      <div class="filters__divider"></div>
+
+      <!-- Narx oralig'i -->
+      <div class="filters__group">
+        <div class="filters__row filters__row--static">
+          <span class="filters__subtitle">Price</span>
+          <img class="filters__chevron filters__chevron--up" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+        </div>
+        <div class="price-range">
+          <input class="price-range__input price-range__input--min" type="range" min="0" max="500" value="50" aria-label="Eng past narx" />
+          <input class="price-range__input price-range__input--max" type="range" min="0" max="500" value="200" aria-label="Eng yuqori narx" />
+          <div class="price-range__track"><div class="price-range__fill"></div></div>
+          <div class="price-range__labels">
+            <span data-price-min>$50</span>
+            <span data-price-max>$200</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filters__divider"></div>
+
+      <button class="filters__apply" type="button" data-apply-filter>Apply Filter</button>
+    </aside>
+
+    <!-- O'NG: sarlavha + mahsulotlar to'ri -->
+    <div class="catalog__content">
+      <h1 class="catalog__title">All products</h1>
+      <!-- kartochkalarni js/pages/catalog.js API'dan chizadi -->
+      <div class="product-grid" data-products></div>
+      <!-- TODO: paginatsiya (keyingi bosqich) -->
+    </div>
+  </main>
+
+  <div id="footer" data-component="footer"></div>
+
+  <script type="module" src="../js/pages/catalog.js"></script>
+</body>
+</html>

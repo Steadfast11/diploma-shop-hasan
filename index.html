@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diploma Shop — Bosh sahifa</title>
+
+  <!-- Inter shrifti — yagona tashqi manba (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+
+  <!-- Umumiy stillar. Har sahifada AYNAN shu tartibda ulanadi:
+       reset -> variables -> base -> ui -> (shu sahifaning stili) -->
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/ui.css" />
+  <link rel="stylesheet" href="/components/header.css" />
+  <link rel="stylesheet" href="/components/footer.css" />
+  <link rel="stylesheet" href="css/pages/home.css" />
+</head>
+<body>
+  <!-- Header shu bo'sh div ichiga js/components.js orqali qo'yiladi -->
+  <div id="header" data-component="header"></div>
+
+  <main>
+    <!-- HERO — butun kenglik (shuning uchun .container'dan tashqarida) -->
+    <section class="hero">
+      <div class="hero__bg" aria-hidden="true">
+        <img src="/assets/images/hero.jpg" alt="" />
+      </div>
+      <div class="hero__inner container">
+        <div class="hero__offer">
+          <div class="hero__text">
+            <p class="hero__eyebrow">Discover Nature’s Finest Ingredients</p>
+            <h1 class="hero__title">Glow with nature’s finest, every single day</h1>
+          </div>
+          <a href="/pages/catalog.html" class="btn-glass hero__btn">Shop now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seksiyalar — 1200px konteyner ichida -->
+    <div class="container home-sections">
+      <section class="section">
+        <h2 class="section__title">Best sellers</h2>
+        <!-- kartochkalarni js/pages/home.js API'dan chizadi -->
+        <div class="product-grid" data-bestsellers></div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">Shop by category</h2>
+        <div class="category-grid" data-categories></div>
+      </section>
+
+      <section class="section">
+        <h2 class="section__title">Featured products</h2>
+        <div class="product-grid" data-featured></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer ham js/components.js orqali qo'yiladi -->
+  <div id="footer" data-component="footer"></div>
+
+  <!-- type="module": fayllar bir-birini import/export qila oladi -->
+  <script type="module" src="js/pages/home.js"></script>
+</body>
+</html>

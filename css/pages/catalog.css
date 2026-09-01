@@ -1,0 +1,202 @@
+/* ============================================================
+   pages/catalog.css — Katalog ("All products") sahifasi
+   Figma (1920px): chapda filtr paneli (chetdan 45px), o'ngda
+   sarlavha + 4 ustunli mahsulot to'ri (bosh sahifa bilan bir joyda,
+   1200px, markazda). Filtr paneli SF Pro shriftida.
+   ============================================================ */
+
+.catalog {
+  position: relative;
+  padding-block: 42px 76px;    /* Figma: header'dan 42, footer'dan oldin 76 */
+}
+
+/* --- o'ng qism: sarlavha + grid (bosh sahifadagi konteyner bilan bir xil) --- */
+.catalog__content {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;                   /* Figma: sarlavha -> grid */
+}
+.catalog__title {
+  font-size: var(--fs-h2);     /* Figma: "All products" 40px (h1 emas, h2 o'lchami) */
+}
+
+/* --- chap qism: filtr paneli (Figma: chap bo'sh joyda, left 45px) --- */
+.filters {
+  position: absolute;
+  top: 42px;
+  left: 45px;
+  width: 295px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px 24px;          /* Figma: py-20 px-24 */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+
+  font-family: var(--font-system); /* Figma: SF Pro Display */
+  letter-spacing: normal;          /* SF Pro'da manfiy tracking yo'q */
+}
+
+.filters__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.filters__title,
+.filters__subtitle {
+  font-weight: 600;
+  font-size: 20px;
+  color: #000;
+}
+
+.filters__divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* kategoriya qatori — tugma (bosilganda API'ga category=<id>) */
+.filters__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+}
+.filters__row--static {
+  cursor: default;
+}
+/* tanlangan kategoriya */
+.filters__row[aria-pressed="true"] {
+  color: #000;
+  font-weight: 600;
+}
+
+.filters__chevron {
+  transform: rotate(-90deg);  /* o'ngga ishora (yopiq) */
+}
+.filters__chevron--up {
+  transform: rotate(180deg);  /* tepaga ishora (ochiq) */
+}
+
+/* --- narx oralig'i (ikki tutqichli slider) --- */
+.price-range {
+  position: relative;
+  height: 44px;
+}
+.price-range__track {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 999px;
+}
+.price-range__fill {
+  position: absolute;
+  height: 100%;
+  background: #000;
+  border-radius: 999px;
+  /* chap/kenglik JS'da hisoblanadi (keyingi bosqich) */
+}
+.price-range__input {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  background: none;
+  pointer-events: none;       /* faqat tutqich bosiladi */
+  -webkit-appearance: none;
+  appearance: none;
+}
+.price-range__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #000;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.price-range__input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 50%;
+  background: #000;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.price-range__labels {
+  position: absolute;
+  top: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #000;
+}
+
+/* --- Apply Filter tugmasi --- */
+.filters__apply {
+  height: 48px;
+  border: 0;
+  border-radius: 62px;        /* Figma: to'liq yumaloq */
+  background: var(--black);
+  color: var(--white);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ============================================================
+   RESPONSIVE — Figma faqat 1920px beradi; kichik ekranlarda
+   filtr panelini yuqoriga olamiz (chapda joy qolmaydi).
+   ============================================================ */
+@media (max-width: 1499px) {
+  .catalog {
+    width: min(100% - 2 * var(--gutter), var(--container));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .filters {
+    position: static;
+    width: auto;
+  }
+  .catalog__content {
+    width: auto;
+  }
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr); /* joy kamaydi */
+  }
+}
+
+@media (max-width: 900px) {
+  .catalog {
+    grid-template-columns: 1fr;   /* filtr tepada */
+  }
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

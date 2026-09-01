@@ -1,0 +1,9 @@
+{
+  "name": "diploma-shop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Diplom loyihasi — Sandbox Shop uchun frontend (toza HTML/CSS/JS)",
+  "scripts": {
+    "dev": "npx --yes serve -l 5173 ."
+  }
+}
