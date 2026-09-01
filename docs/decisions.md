@@ -49,5 +49,60 @@ Doskada "nega bunday?" degan savolga tayyor javob.
   `Subtotal = Total = ` API `total`. `Discount = 0` (bo'sh savat maketида ham "~0%" ko'rsatilgan).
 - Muqobil: chegirma qatorini olib tashlash — maketдан chetlashish, shart emas.
 
-## Keyingi qarorlar
-(Kod yozgan sari shu yerga qo'shib boramiz: flex vs grid, rem vs px, breakpointlar, ...)
+## Qurilish davomidagi qarorlar
+
+### `.container` — `width: min(100% - 2*gutter, 1200px)`
+- **Sabab:** katta ekranda AYNAN 1200px (Figma), kichik ekranda `100% - 48px`
+  (ikki chetda 24px). `min()` "ko'pi bilan" ma'nosini beradi -> gorizontal skroll yo'q.
+- **Muqobil:** `max-width + padding` — desktop'da 1200px o'rniga 1160px chiqadi (padding ichkarida).
+
+### Filtr holati URL query'da; o'zgarganda sahifa QAYTA yuklanadi
+- **Sabab:** holat bitta manba (URL) — qayta chizish mantig'i shart emas,
+  "orqaga" tugmasi va havola ulashish (`?category=...&minPrice=...`) ishlaydi.
+- **Muqobil:** JS bilan holat saqlab, DOM'ni qayta chizish — ko'proq kod, holat bug'lari.
+
+### `api.js` — yagona `fetch` nuqtasi, `request()` yordamchisi
+- base URL, `Authorization: Bearer`, xato -> `throw` bir joyda.
+- Chaqiruvchi joy `try/catch` bilan ushlaydi. 401 -> token tozalanadi.
+
+### Xato -> `throw` (return emas)
+- **Sabab:** muvaffaqiyatli javob va xato ikki xil "yo'l". `throw` bilan chaqiruvchi
+  `try { ok } catch { xato }` deb yozadi — `if (result.error)` tekshiruvi kerak emas.
+
+### Savat: mehmon (localStorage) / kirgan (server) — `cart-store.js` yashiradi
+- Sahifa "qaysi holat?" demайdi. Login paytida mehmon savati serverga ko'chiriladi
+  (`mergeGuestCartIntoAccount`).
+- **Chegirma:** API savatida chegirma yo'q -> "Order Summary" da `Subtotal = Total`,
+  `Discount (~0%) = 0`.
+
+### Ba'zi sahifalar SF Pro Display shriftida (Figma shunday)
+- Katalog filtri, savat "Order Summary", mahsulot sahifasi mazmuni, kirish/profil
+  tugmalari — Figma'da SF Pro. `--font-system` (`-apple-system`) Mac'da aynan SF Pro'ni beradi.
+- Qolgan hammasi Inter. (Dizaynerning UI-kit aralashmasi.)
+
+### Kirish — telefon o'rniga EMAIL
+- O'qituvchi shunday dedi; API `POST /login` faqat `{email, password}`.
+
+### Mahsulot kartochkasi UNIVERSAL — faqat backend maydonlari
+- `image, title, price` — nima kelsa shu. Soxta eski narx / "-20%" / "New" belgilari
+  (Figma'da bor) — chizilmaydi, chunki API'da bunday maydon yo'q.
+
+### Animatsiya: IntersectionObserver + xavfsizlik to'ri
+- `[data-reveal]` element ko'rinishga kirganda paydo bo'ladi (`js/reveal.js`).
+- **Xavfsizlik to'ri:** 1.5s dan keyin hammasi ko'rsatiladi — observer ishlamasa
+  ham kontent abadiy yashirin qolmasin.
+- `prefers-reduced-motion` — foydalanuvchi xohlamasa animatsiya o'chadi.
+
+### Dev server: `serve` + `serve.json` (`cleanUrls: false`)
+- `cleanUrls: false` — URL'dan `.html` va `?query` olib tashlanmasin
+  (Netlify ham `.html` ni saqlaydi, statik sayt).
+- `components.js` `/components/x.html?v=1` — kesh-buzish.
+
+### `esc()` — backend matnini HTML'ga xavfsiz qo'yish
+- Mahsulot nomi / izoh backenddan keladi. `< > & " '` belgilari MATN bo'lib
+  chizilsin, HTML bo'lib emas (XSS himoya).
+
+### API javob shakllari (kutilmagan)
+- `/products/:id` -> `{ product: {...} }` (ichida `comments` ham)
+- `/cart` va o'zgartirishlar -> `{ message, cart: {...} }` (api.js ichini ochib beradi)
+- `/orders` (POST) -> `{ message, order: {...} }`

@@ -1,4 +1,13 @@
 # Statik sayt — hech qanday build bosqichi yo'q.
-# Netlify shu papkani (repo ildizini) to'g'ridan-to'g'ri tarqatadi.
+# Netlify repo ildizini to'g'ridan-to'g'ri tarqatadi.
 [build]
   publish = "."
+
+# .html kengaytmasi saqlansin (bizning ichki havolalar /pages/x.html)
+[build.processing]
+  skip_processing = false
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

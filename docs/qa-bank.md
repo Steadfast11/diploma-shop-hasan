@@ -1,27 +1,162 @@
-# Savol-javob banki (himoyaga tayyorgarlik)
+# Savol-javob banki (40 daqiqalik himoyaga tayyorgarlik)
 
-Har mavzu bo'yicha kutiladigan savollar va qisqa javoblar.
-Kod yozilgach to'ldiriladi. Namuna savollar:
+O'qituvchi xohlagan fayl/qatordan so'raydi. Har mavzu: **savol → qisqa javob**.
+
+---
 
 ## HTML / tuzilish
-- Nega `index.html` ildizda, qolganlari `pages/` da? (`../` yo'llari)
-- `<script type="module">` nima beradi? Oddiy `<script>` dan farqi?
-- `<div id="header">` bo'sh — nega? Kim to'ldiradi?
 
-## CSS / pixel-perfect
-- `.container` qanday markazlashgan? Nega `max-width` + `margin-inline: auto`?
-- `rem` va `px` — qayerda qaysi biri, nega?
-- Breakpoint qiymatlari qayerdan? (Figma: desktop / mobile)
-- CSS o'zgaruvchilari (`--color-...`) nega `:root` da?
+**`index.html` ildizda, qolganlari `pages/` da — nega?**
+Bosh sahifa saytning "kirish nuqtasi" (`/`). Qolgan sahifalar `pages/` da guruhlangan.
+Shuning uchun `pages/*.html` dagi nisbiy yo'llar `../css/...`.
+
+**`<script type="module">` — oddiy `<script>` dan farqi?**
+`module`: `import`/`export` ishlaydi, o'z scope'i bor (global o'zgaruvchi hosil qilmaydi),
+avtomatik `defer` (HTML tayyor bo'lgach ishlaydi), `"use strict"`.
+
+**`<div id="header">` bo'sh — kim to'ldiradi?**
+`js/components.js` `fetch("/components/header.html?v=1")` qilib, javob matnini
+`div.innerHTML` ga qo'yadi. Header 7 marta yozilmaydi — 1 marta `components/` da.
+
+**`data-*` va `id` farqi? Nega `data-cart-count`?**
+`id` sahifada YAGONA bo'lishi kerak. `data-*` — JS uchun erkin "belgi", takrorlanishi mumkin.
+`data-cart-count` — JS shu `<span>` ni topib son yozadi.
+
+**`aria-label` nega bor?**
+Sahifada 2 ta `<nav>` — screen reader ularni ajrata olsin ("Asosiy menyu" / "Akkaunt menyusi").
+
+---
+
+## CSS
+
+**`.container` markazlashuvi qanday ishlaydi?**
+`width: min(100% - 48px, 1200px)` + `margin-inline: auto`. `auto` — ortiqcha bo'sh joyni
+chap/o'ng teng bo'ladi → markaz. `min()` → katta ekranda 1200px, kichikda `100% - 48px`.
+
+**Nega `min()`, oddiy `max-width` emas?**
+`max-width: 1200px` + `padding: 24px` → desktop'da kontent 1152px chiqadi (padding ichkarida).
+`min()` bilan desktop'da AYNAN 1200px (Figma talabi).
+
+**CSS o'zgaruvchisi (`--color-*`) nega `:root` da?**
+`:root` = `<html>`, eng yuqori element. O'zgaruvchi meros bo'yicha pastga tarqaladi →
+hamma element ko'radi. Rang o'zgarsa — bitta qator.
+
+**`box-sizing: border-box` nima beradi?**
+`width` ichiga `padding` va `border` kiradi. `width: 282px` desak — aynan 282px,
+grid buzilmaydi.
+
+**`reset.css` nima uchun?**
+Brauzerlar (Chrome/Safari/FF) default `margin`, `font-size` beradi — har xil.
+Reset ularni tenglaydi → toza asos, har piksel bizniki (pixel-perfect).
+
+**Nega ba'zi joyda SF Pro, ba'zi joyda Inter?**
+Figma shunday chizilgan (dizayner UI-kit aralashtirgan). Filtr paneli, Order Summary,
+mahsulot sahifasi — SF Pro (`--font-system`, Mac'da `-apple-system`). Qolgani — Inter.
+
+**Breakpoint qiymatlari qayerdan?**
+768px — mobil (Figma mobil frame 390px), 900/1024/560 — grid ustunlarini kamaytirish uchun
+oraliq nuqtalar (kontent siqilib qolmasin).
+
+**`flex` yoki `grid` — qayerda qaysi?**
+Bir o'lchovli qatorlar (nav, tugmalar yonma-yon) → `flex`. Ikki o'lchovli to'r
+(mahsulotlar 4 ustun) → `grid`. Header `grid: 1fr auto 1fr` — logo aniq markazda.
+
+**Trash ikonka qanday qizil bo'ldi?**
+SVG qora edi. `.cart-item__remove img { filter: ... }` — CSS filter bilan qizilga bo'yadik.
+
+---
 
 ## JavaScript
-- `api.js` nega kerak? Har joyda `fetch` yozsak nima yomon?
-- `async/await` va `.then()` — nega birini tanladik?
-- `try/catch` qayerda? 401 kelsa nima bo'ladi?
-- Mehmon savati va kirgan foydalanuvchi savati — farqi, qayerda saqlanadi?
-- `localStorage` va `sessionStorage` farqi?
+
+**`api.js` nima uchun kerak? Har joyda `fetch` yozsak nima yomon?**
+Base URL, token qo'shish, xato ishlovi — takrorlanadi. `api.js` da bir marta.
+Endpoint o'zgarsa — bitta joy.
+
+**`async/await` — `.then()` dan farqi?**
+Ikkalasi ham "Promise" bilan ishlaydi. `await` kodni tepadan pastga o'qiladigan qiladi
+(`const x = await fn()`). `try/catch` bilan xatoni ushlash oson.
+
+**`request()` da `if (!res.ok)` — nega `throw`, `return` emas?**
+`throw` bilan chaqiruvchi `try { muvaffaqiyat } catch { xato }` deb yozadi.
+`return` bo'lsa har joyda `if (result.error)` tekshirish kerak edi.
+
+**401 kelganda nima bo'ladi?**
+`request()` `clearToken()` chaqiradi (sessiya tugagan). Keyingi `isLoggedIn()` — `false`.
+Foydalanuvchi qayta kirishi kerak.
+
+**Mehmon savati va kirgan foydalanuvchi savati — farqi, qayerda?**
+Mehmon → `localStorage` (`storage.js`). Kirgan → server (`api.js`).
+`cart-store.js` ikkisini yashiradi — sahifa "qaysi holat?" demайdi.
+
+**`localStorage` va `sessionStorage`?**
+`localStorage` — brauzer yopilsa ham qoladi. `sessionStorage` — tab yopilsa o'chadi.
+Bizga token uzoq turishi kerak → `localStorage`.
+
+**`storage.js` da `try/catch` nega?**
+`localStorage` to'la bo'lsa yoki brauzer bloklagan bo'lsa — xato beradi.
+Bir joyda ushlab, `null` qaytaramiz, sayt yiqilmaydi.
+
+**`esc()` nima qiladi va nega kerak?**
+Mahsulot nomi / izoh backenddan keladi. Ichida `<script>` yoki `<` `>` bo'lsa —
+ular MATN bo'lib chizilsin, HTML kod bo'lib emas. XSS himoyasi.
+
+**Event delegation nima? (`cart.js` da)**
+Har `.cart-item` ga alohida `addEventListener` o'rniga, BITTA listener ota elementга
+(`[data-cart-main]`). Bosilganda `e.target.closest(...)` bilan qaysi element ekanini topamiz.
+Kamroq listener, dinamik qo'shilgan elementlar ham ishlaydi.
+
+**`IntersectionObserver` — nima?**
+Brauzer elementning ekranда ko'rinishini kuzatadi. Ko'ringanda callback → `.is-visible`
+klassi → CSS animatsiyani boshlaydi. Scroll hodisasini har millisekund tekshirishdan tez.
+
+**Animatsiya xavfsizlik to'ri — nega?**
+Agar observer biror sabab bilan ishlamasa, `[data-reveal]` element `opacity: 0` bo'lib
+abadiy yashirin qolardi. `setTimeout(1500)` — har holda ko'rsatamiz.
+
+**`URLSearchParams` — nima uchun?**
+URL query'ni (`?category=1&minPrice=10`) o'qish/yozishning toza yo'li.
+Qo'lда `split("&")` qilmaymiz.
+
+**Filtr o'zgarganда nega butun sahifa qayta yuklanadi?**
+Holat bitta joyда — URL. Qayta chizish mantig'i shart emas. "Orqaga" tugmasi va
+havola ulashish (`?category=...`) ishlaydi. Kod sodda.
+
+**`Promise.all` (components.js) — nega?**
+Header va footer'ni PARALLEL yuklaydi (biri ikkinchisini kutmaydi) → tezroq.
+
+---
 
 ## API
-- Token qayerda saqlanadi va qanday yuboriladi?
-- 429 xatosi nima? Undan qanday qochamiz?
-- Buyurtmadagi narx nega "snapshot"?
+
+**Token qayerда saqlanadi va qanday yuboriladi?**
+`localStorage` (`storage.setToken`). Har privat so'rovда `request()`
+`headers["Authorization"] = "Bearer " + token` qo'shadi.
+
+**429 xatosi nima? Undan qanday qochamiz?**
+"Juda ko'p so'rov" (120/daqiqa). Cheksiz `fetch` sikli yozmaymiz, keraksiz
+so'rovlarni takrorlamaymiz.
+
+**Buyurtмадаги narx nega "snapshot"?**
+`POST /orders` da server narx/nomни buyurtmага ko'chiradi. Keyin mahsulot narxi
+o'zgarsa ham, tarixда eski narx qoladi.
+
+**`GET /cart` javobi qanday keladi?**
+`{ message, cart: { items, total } }`. `api.js` `unwrapCart` bilan ichini
+(`{ items, total }`) qaytaradi.
+
+**"My orders" narxsiz — nega?**
+Figma shunday (faqat rasm + nom). Har buyurtмадаги `items` ni yig'ib grid qilamiz.
+
+---
+
+## Loyihaviy
+
+**Nega framework ishlatmadingiz?**
+ТЗ talabi. Va pixel-perfect uchun CSS'ни to'liq nazorat qilish kerak.
+
+**Deploy qanday?**
+Statik sayt → GitHub → Netlify. `netlify.toml`: `publish = "."`, build yo'q.
+
+**Pixel-perfect'ni qanday ta'minladingiz?**
+Figma MCP bilan har frame'дан aniq o'lchov/rang/shrift olinди, `variables.css` da
+token qilinди, har komponent brauzerда Figma qiymati bilan solиштирилди (±1px).
