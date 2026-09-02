@@ -42,8 +42,12 @@
   <div id="header" data-component="header"></div>
 
   <main id="main" class="catalog">
+    <!-- Mobil filter ochilganda orqa fonni xiralashtiradi; bosilsa yopiladi. -->
+    <button class="filters__backdrop" type="button" data-filter-close
+            aria-label="Close filters" tabindex="-1"></button>
+
     <!-- CHAP: filtr paneli. Figma: SF Pro shrift, 1px och ramka, radius 20. -->
-    <aside class="filters">
+    <aside class="filters" id="catalog-filters">
       <div class="filters__head">
         <p class="filters__title">Filters</p>
         <img src="/assets/icons/filter.svg" alt="" width="24" height="24" />
@@ -97,6 +101,12 @@
     <div class="catalog__content">
       <div class="catalog__head" data-reveal>
         <h1 class="catalog__title" data-split>All products</h1>
+        <!-- Figma mobil: filter paneli shu ikonka orqali modal bo'lib ochiladi. -->
+        <button class="catalog__filter-toggle" type="button" data-filter-open
+                aria-controls="catalog-filters" aria-expanded="false"
+                aria-label="Open filters">
+          <img src="/assets/icons/filter.svg" alt="" width="18" height="18" />
+        </button>
         <!-- Qidiruv: API'da server-tomon qidiruv yo'q -> hozir yuklangan
              ro'yxatni nom bo'yicha mahalliy (client-side) filtrlaydi. -->
         <input class="catalog__search" type="search" placeholder="Search loaded products…"

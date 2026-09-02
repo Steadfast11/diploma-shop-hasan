@@ -32,6 +32,45 @@ const grid = document.querySelector("[data-products]");
 const categoryList = document.querySelector("[data-category-list]");
 const categoryGroup = categoryList.closest(".filters__group");
 
+/* --- Mobil filter modal --- */
+const filterPanel = document.querySelector(".filters");
+const filterOpenBtn = document.querySelector("[data-filter-open]");
+const filterCloseBtn = document.querySelector("[data-filter-close]");
+const mobileFilter = window.matchMedia("(max-width: 768px)");
+
+function setMobileFilter(open, returnFocus = false) {
+  const shouldOpen = open && mobileFilter.matches;
+  document.body.classList.toggle("catalog-filter-open", shouldOpen);
+  filterOpenBtn.setAttribute("aria-expanded", String(shouldOpen));
+
+  if (mobileFilter.matches) {
+    filterPanel.setAttribute("role", "dialog");
+    filterPanel.setAttribute("aria-modal", "true");
+    filterPanel.setAttribute("aria-label", "Product filters");
+  } else {
+    filterPanel.removeAttribute("role");
+    filterPanel.removeAttribute("aria-modal");
+    filterPanel.removeAttribute("aria-label");
+  }
+
+  if (shouldOpen) {
+    window.__lenis?.stop();
+    filterPanel.querySelector("button")?.focus();
+  } else {
+    window.__lenis?.start();
+    if (returnFocus && mobileFilter.matches) filterOpenBtn.focus();
+  }
+}
+
+filterOpenBtn.addEventListener("click", () => setMobileFilter(true));
+filterCloseBtn.addEventListener("click", () => setMobileFilter(false, true));
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && document.body.classList.contains("catalog-filter-open")) {
+    setMobileFilter(false, true);
+  }
+});
+mobileFilter.addEventListener("change", () => setMobileFilter(false));
+
 /* --- 2. Kategoriyalar --- */
 async function loadCategories() {
   try {
@@ -201,6 +240,7 @@ document.querySelector("[data-apply-filter]").addEventListener("click", () => {
   syncUrl();
   refreshClearBtn();
   loadProducts();
+  setMobileFilter(false);
 });
 
 // "Clear filters" -> hamma filtrni bekor qilamiz (reload YO'Q)

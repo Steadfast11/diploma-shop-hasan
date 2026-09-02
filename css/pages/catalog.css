@@ -47,6 +47,12 @@
   border-color: var(--black);
 }
 
+/* Figma'da filter tugmasi va xira fon faqat mobil holatda ko'rinadi. */
+.catalog__filter-toggle,
+.filters__backdrop {
+  display: none;
+}
+
 /* "Filtrni tozalash" — matn havola, Apply Filter ostida */
 .filters__clear {
   align-self: center;
@@ -288,15 +294,90 @@
   }
 }
 
-/* Mobil — filtr tepaga, mahsulotlar 2 ustun */
+/* Mobil — Figma: 2 ustunli grid va ikonka orqali ochiladigan filter modal. */
 @media (max-width: 768px) {
   .catalog {
-    grid-template-columns: 1fr;
+    display: block;
+    padding-block: 24px 56px;
+  }
+  .catalog__content {
+    gap: 24px;
+  }
+  .catalog__head {
+    flex-wrap: nowrap;
+  }
+  .catalog__title {
+    font-size: 28px;
+  }
+  .catalog__search {
+    display: none;
+  }
+  .catalog__filter-toggle {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-surface);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 8px;
+    row-gap: 24px;
+  }
+
+  .filters__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s var(--ease-soft, ease), visibility 0.3s;
+  }
+  .filters {
+    position: fixed;
+    z-index: 91;
+    top: 50%;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    background: var(--white);
+    transform: translateY(-50%) scale(0.98);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-soft, ease),
+                transform 0.3s var(--ease-soft, ease),
+                visibility 0.3s;
+  }
+  body.catalog-filter-open .filters__backdrop {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+  body.catalog-filter-open .filters {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(-50%) scale(1);
   }
 }
 
-/* Telefon — 1 ustun */
-@media (max-width: 560px) {
+/* Juda tor telefon — matn siqilib qolmasligi uchun 1 ustun. */
+@media (max-width: 320px) {
   .product-grid {
     grid-template-columns: 1fr;
   }

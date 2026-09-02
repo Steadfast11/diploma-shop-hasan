@@ -117,7 +117,15 @@ export function initMotion() {
   }
 
   /* --- Sahifa ochilishi: main juda oz pastdan yumshoq paydo bo'ladi --- */
-  gsap.from("main", { autoAlpha: 0, y: 8, duration: 0.9, ease: "power2.out" });
+  gsap.from("main", {
+    autoAlpha: 0,
+    y: 8,
+    duration: 0.9,
+    ease: "power2.out",
+    // Tugagach transform qolsa, main ichidagi position:fixed modal
+    // viewportga emas, uzun main blokiga nisbatan joylashib qoladi.
+    clearProps: "transform",
+  });
 
   ScrollTrigger.refresh();
   window.addEventListener("load", () => ScrollTrigger.refresh());
