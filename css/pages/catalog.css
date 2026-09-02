@@ -250,12 +250,14 @@
    bo'sh joyda (chetdan 45px). Bu joylashuv FAQAT chap margin filtr
    sig'adigan darajada keng bo'lganda ishlaydi:
      margin = (100vw - 1200) / 2  >=  filtr eni + oraliq
-     -> 100vw >= 1920px
+     -> amalda brauzer viewporti taxminan 1880px yoki undan keng
 
-   Shuning uchun 1920px'da absolyut filtr (Figma), undan kichik
-   ekranda esa ikkita haqiqiy ustun: [filtr] [kontent].
+   Shuning uchun keng desktopda absolyut filtr (Figma), undan kichik
+   ekranda esa ikkita haqiqiy ustun: [filtr] [kontent]. 1919px emas:
+   brauzer ramkasi sabab oddiy desktop oynasi 1920px'dan bir oz kichik
+   bo'ladi, lekin Figma'dagi 4 ta karta uchun joy hali ham yetadi.
    ============================================================ */
-@media (max-width: 1919px) {
+@media (max-width: 1879px) {
   .catalog {
     /* endi butun blok markazda; filtr absolyut emas, grid ustuni */
     width: min(100% - 2 * var(--gutter), var(--container));
