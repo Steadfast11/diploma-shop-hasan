@@ -60,6 +60,18 @@ async function loadCategories() {
 const moreBtn = document.querySelector("[data-load-more]");
 let shownPage = 1;
 
+// Grid o'zgarganda Lenis eski sahifa balandligida qolib ketmasin.
+// Ikki kadr kutamiz: brauzer avval yangi kartalarni joylashtirib oladi,
+// keyin skroll chegarasi va ScrollTrigger nuqtalari qayta hisoblanadi.
+function refreshScrollLayout() {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.__lenis?.resize();
+      window.ScrollTrigger?.refresh();
+    });
+  });
+}
+
 function fetchPage(page) {
   return api.getProducts({
     category: filter.category || undefined,
@@ -86,6 +98,7 @@ async function loadProducts() {
     grid.innerHTML = data.products.map(productCardHTML).join("");
     revealCards(grid); // kartochkalar birin-ketin chiqadi
     updateMoreBtn(data.pages);
+    refreshScrollLayout();
   } catch (e) {
     showError(grid, e.message);
   } finally {
@@ -105,6 +118,7 @@ moreBtn.addEventListener("click", async () => {
     grid.insertAdjacentHTML("beforeend", data.products.map(productCardHTML).join(""));
     revealCards(grid, firstNew);
     updateMoreBtn(data.pages);
+    refreshScrollLayout();
   } catch (e) {
     toast(friendlyError(e), "error");
   } finally {
