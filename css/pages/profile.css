@@ -97,11 +97,18 @@
   }
 }
 
-/* Figma (yangilangan): "My orders" bo'limi TELEFON versiyasida yo'q.
+/* Figma (yangilangan): TELEFON versiyasida profil sahifasida faqat
+   akkaunt bloki (ism / telefon / email / "Log out") qoladi.
+   "My orders", "Favorites" va "Language" bo'limlari ko'rinmaydi.
+   Header va footer bunga kirmaydi — ular <main> dan tashqarida.
+
+   Qoidani "head dan BOSHQA hammasi" deb yozamiz: keyin yangi bo'lim
+   qo'shilsa ham telefonda o'z-o'zidan yashirin bo'ladi.
    768px — saytdagi "telefon" chegarasi (shu kenglikda header ham burger
-   menyuga o'tadi), shuning uchun bir xil chegarani ishlatamiz. */
+   menyuga o'tadi), shuning uchun bir xil chegarani ishlatamiz.
+   Yashirish faqat CSS'da: ekran kattaysa bo'limlar qaytadi. */
 @media (max-width: 768px) {
-  [data-orders-section] {
+  .profile > *:not(.profile__head) {
     display: none;
   }
 }

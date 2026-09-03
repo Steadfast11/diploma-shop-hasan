@@ -122,12 +122,19 @@ Doskada "nega bunday?" degan savolga tayyor javob.
 2. **Login va Register sahifalarida footer yo'q.** `<div id="footer">`
    va endi keraksiz `footer.css` havolasi olib tashlandi.
    `components.js` footer div'ini topmasa jimgina to'xtaydi — xato yo'q.
-3. **Profil: "My orders" TELEFON versiyasida ko'rinmaydi.**
-   `[data-orders-section]` + `@media (max-width: 768px) { display: none }`.
+3. **Profil: TELEFON versiyasida faqat akkaunt bloki qoladi.**
+   Ism / telefon / email / "Log out" — shu. "My orders", "Favorites" va
+   "Language" bo'limlari ko'rinmaydi.
+   `@media (max-width: 768px) { .profile > *:not(.profile__head) { display: none } }`
+   Qoida ataylab "head dan BOSHQA hammasi" deb yozilgan: keyin yangi
+   bo'lim qo'shilsa ham telefonda o'z-o'zidan yashirin bo'ladi.
    768px — saytdagi "telefon" chegarasi (header shu yerda burger'ga o'tadi).
-   Yashirish faqat CSS'da: ekran kattalashsa bo'lim qaytadan ko'rinadi.
+   Yashirish faqat CSS'da: ekran kattalashsa bo'limlar qaytadan ko'rinadi.
    Ma'lumot baribir olinadi (bitta so'rov) — shunda ekran burilganda
    qayta so'rov kerak bo'lmaydi.
+   **Cheklov:** tilni almashtirish (Google Translate) telefonda profil
+   sahifasidan ochilmaydi. Tanlangan til `googtrans` cookie'da saqlangani
+   uchun kompyuterda tanlansa telefonda ham amal qiladi.
 4. **Narx filtri 0–100$** (avval 0–500$). Slider `max` va tutqichlarning
    boshlang'ich qiymati ($0 / $100 — to'liq oraliq), "Clear filters" ham
    shu qiymatlarga qaytadi.
