@@ -39,14 +39,17 @@
 
   <!-- Hero rasmi — sahifadagi eng katta element (Google "LCP" deb o'lchaydi).
        Oldindan (CSS'dan ham avval) yuklashni boshlaymiz -> sayt tezroq ochiladi. -->
-  <link rel="preload" as="image" href="/assets/images/hero.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="/assets/images/hero.webp" fetchpriority="high" />
 
-  <!-- Inter shrifti — endi YAGONA tashqi manba (Google Fonts) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+  <!-- API — barcha ma'lumot shu yerdan keladi. Ulanishni oldindan
+       ochib qo'yamiz (DNS + TLS), shunda birinchi so'rov tezroq ketadi. -->
+  <link rel="preconnect" href="https://api.wepro.uz" crossorigin />
 
+  <!-- Inter shrifti LOYIHA ICHIDA (css/fonts.css). Sahifadagi matn lotin
+       bo'lgani uchun brauzer faqat "latin" bo'lagini yuklaydi. -->
+  <link rel="preload" as="font" type="font/woff2"
+        href="/assets/fonts/inter-latin.woff2" crossorigin />
+  <link rel="stylesheet" href="css/fonts.css" />
   <!-- Umumiy stillar. Har sahifada AYNAN shu tartibda ulanadi:
        reset -> variables -> base -> ui -> (shu sahifaning stili) -->
   <link rel="stylesheet" href="css/reset.css" />
@@ -74,7 +77,13 @@
     <!-- HERO — butun kenglik (shuning uchun .container'dan tashqarida) -->
     <section class="hero">
       <div class="hero__bg" aria-hidden="true">
-        <img src="/assets/images/hero.jpg" alt="" fetchpriority="high" data-parallax />
+        <!-- webp 79% yengil (205 KB -> 43 KB). <picture>: webp'ni
+             qo'llamaydigan eski brauzer jpg ni oladi. -->
+        <picture>
+          <source srcset="/assets/images/hero.webp" type="image/webp" />
+          <img src="/assets/images/hero.jpg" alt="" width="1920" height="1207"
+               fetchpriority="high" decoding="async" data-parallax />
+        </picture>
       </div>
       <div class="hero__inner container">
         <div class="hero__offer">

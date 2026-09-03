@@ -16,11 +16,15 @@
   <meta name="theme-color" content="#000000" />
   <meta name="robots" content="noindex, follow" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+  <!-- API — barcha ma'lumot shu yerdan keladi. Ulanishni oldindan
+       ochib qo'yamiz (DNS + TLS), shunda birinchi so'rov tezroq ketadi. -->
+  <link rel="preconnect" href="https://api.wepro.uz" crossorigin />
 
+  <!-- Inter shrifti LOYIHA ICHIDA (css/fonts.css). Sahifadagi matn lotin
+       bo'lgani uchun brauzer faqat "latin" bo'lagini yuklaydi. -->
+  <link rel="preload" as="font" type="font/woff2"
+        href="/assets/fonts/inter-latin.woff2" crossorigin />
+  <link rel="stylesheet" href="../css/fonts.css" />
   <link rel="stylesheet" href="../css/reset.css" />
   <link rel="stylesheet" href="../css/variables.css" />
   <link rel="stylesheet" href="../css/base.css" />

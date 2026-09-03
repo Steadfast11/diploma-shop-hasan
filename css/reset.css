@@ -22,11 +22,19 @@ body {
 }
 
 img,
-picture,
 video,
 svg {
    display: block;
    max-width: 100%;
+}
+
+/* <picture> — faqat "o'ram", o'zi quti yaratmasin.
+   display: contents bilan u layoutdan butunlay chiqib ketadi va ichidagi
+   <img> xuddi to'g'ridan-to'g'ri ota-elementda turgandek joylashadi.
+   Shu sabab webp uchun <picture> qo'shganimizda mavjud CSS (masalan
+   .hero__bg img { height: 100% }) o'zgarishsiz ishlayveradi. */
+picture {
+   display: contents;
 }
 
 input,

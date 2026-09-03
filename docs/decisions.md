@@ -196,6 +196,45 @@ yaltirash beradi. JS bilan havolani ushlab qolish esa `Ctrl+click`,
 "orqaga" tugmasi va bfcache'ni buzish xavfini tug'diradi. Foydasidan
 zarari ko'p -> qilinmadi.
 
+### Optimizatsiya: shrift woff2 (o'zimizda), rasm webp
+**Shrift — Google Fonts o'rniga LOYIHA ICHIDA** (`css/fonts.css` +
+`assets/fonts/*.woff2`):
+- Nega: tashqi so'rov (DNS + TLS ulanish) yo'qoladi; Google'ga bog'liqlik
+  yo'q; CSP qattiqlashadi (`font-src 'self'`, `style-src` dan
+  `fonts.googleapis.com` olib tashlandi).
+- **Faqat woff2** — barcha zamonaviy brauzerlar qo'llaydi, eng ixcham
+  format. `.ttf`/`.woff` zaxira nusxalar shart emas.
+- **Bitta fayl, hamma qalinlik:** Inter — "variable font". Google 400/500/600
+  uchun uchta URL beradi, lekin ular AYNI BIR FAYL (md5 bilan tekshirildi).
+  Shuning uchun `font-weight: 100 900` deb oraliq yozdik: 12 fayl o'rniga 4 ta.
+- **`unicode-range`:** brauzer sahifadagi matnga qarab faqat kerakli bo'lakni
+  yuklaydi. Inglizcha sahifada `latin` (47 KB) tushadi; eng katta
+  `latin-ext` (83 KB) UMUMAN yuklanmaydi. Kirill (18 KB) esa API'dan
+  ruscha matn kelsa ishlatiladi (API xato xabarlari ruscha, mahsulot
+  nomlari ham bo'lishi mumkin) — shuning uchun uni saqlab qoldik.
+- Greek va vietnamese bo'laklari olinmadi — bizga kerak emas, kerak
+  bo'lganda brauzer tizim shriftiga tushadi.
+- `font-display: swap` — shrift yuklanguncha matn tizim shriftida ko'rinadi.
+- Bosh sahifada `latin` bo'lagi `<link rel="preload">` bilan oldindan
+  so'raladi (CSS o'qilishini kutmaydi).
+
+**Rasm — webp (asl fayl zaxirada):**
+- `hero.jpg` 205 KB -> `hero.webp` 43 KB (**-79%**)
+- `logo.png` 26 KB -> `logo.webp` 6 KB (**-76%**, shaffoflik saqlandi)
+- `<picture>` ishlatiladi: webp'ni qo'llamaydigan brauzer `<img>` dagi
+  asl faylni oladi. Asl fayllar `og:image` va JSON-LD `logo` uchun ham
+  kerak — ijtimoiy tarmoq botlari webp'ni hamma joyda qo'llamaydi.
+- **`picture { display: contents }`** (reset.css): `<picture>` o'zi quti
+  yaratmasin, aks holda `.hero__bg img { height: 100% }` buzilardi
+  (100% "auto" balandlikdan hisoblanib qolardi).
+
+**Boshqa:**
+- `<link rel="preconnect" href="https://api.wepro.uz">` — barcha ma'lumot
+  shu yerdan keladi, ulanish oldindan ochiladi.
+- Hero `<img>` ga `width`/`height` berildi -> joy oldindan band qilinadi,
+  sahifa "sakramaydi" (CLS = 0).
+- `/assets/*` (rasm, ikonka, shrift) va `/js/vendor/*` — bir yillik kesh.
+
 ### Dev server: `serve` + `serve.json` (`cleanUrls: false`)
 - `cleanUrls: false` — URL'dan `.html` va `?query` olib tashlanmasin
   (Netlify ham `.html` ni saqlaydi, statik sayt).
