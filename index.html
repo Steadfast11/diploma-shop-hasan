@@ -37,11 +37,11 @@
   }
   </script>
 
-  <!-- Inter shrifti — yagona tashqi manba (Google Fonts) -->
   <!-- Hero rasmi — sahifadagi eng katta element (Google "LCP" deb o'lchaydi).
        Oldindan (CSS'dan ham avval) yuklashni boshlaymiz -> sayt tezroq ochiladi. -->
   <link rel="preload" as="image" href="/assets/images/hero.jpg" fetchpriority="high" />
 
+  <!-- Inter shrifti — endi YAGONA tashqi manba (Google Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
@@ -109,10 +109,6 @@
 
   <!-- Footer ham js/components.js orqali qo'yiladi -->
   <div id="footer" data-component="footer"></div>
-
-  <!-- Google Translate: har sahifada (yashirin) -> cookie orqali boshqa sahifa ham tarjima qilinadi. Ko'rinadigani faqat profile.html da. -->
-  <div id="google_translate_element" hidden></div>
-  <script src="js/translate.js" defer></script>
 
   <!-- type="module": fayllar bir-birini import/export qila oladi -->
   <script type="module" src="js/pages/home.js"></script>

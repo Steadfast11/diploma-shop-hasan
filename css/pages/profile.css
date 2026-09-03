@@ -2,7 +2,7 @@
    pages/profile.css — Profile ("My Profile" + "My orders" + "Favorites")
    Figma: 1200px centered. Top: profile info (16px eyebrow, 56px name,
    16px phone/email, "Log out" button). Below: "My orders" grid, no price
-   (matches Figma exactly). "Favorites" and "Language" sections are ours —
+   (matches Figma exactly). The "Favorites" section is ours —
    same visual pattern so they don't stand out.
    ============================================================ */
 
@@ -68,20 +68,6 @@
   font-size: 14px;
 }
 
-/* Language (Google Translate) — small, understated */
-.profile__lang {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.profile__lang-title {
-  font-size: 20px;
-  font-family: var(--font-system);
-  letter-spacing: normal;
-}
-#google_translate_element {
-  font-family: var(--font-system);
-}
 
 @media (max-width: 900px) {
   .product-grid {
@@ -99,7 +85,7 @@
 
 /* Figma (yangilangan): TELEFON versiyasida profil sahifasida faqat
    akkaunt bloki (ism / telefon / email / "Log out") qoladi.
-   "My orders", "Favorites" va "Language" bo'limlari ko'rinmaydi.
+   "My orders" va "Favorites" bo'limlari ko'rinmaydi.
    Header va footer bunga kirmaydi — ular <main> dan tashqarida.
 
    Qoidani "head dan BOSHQA hammasi" deb yozamiz: keyin yangi bo'lim

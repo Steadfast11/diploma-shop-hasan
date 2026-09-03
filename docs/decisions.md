@@ -123,8 +123,9 @@ Doskada "nega bunday?" degan savolga tayyor javob.
    va endi keraksiz `footer.css` havolasi olib tashlandi.
    `components.js` footer div'ini topmasa jimgina to'xtaydi — xato yo'q.
 3. **Profil: TELEFON versiyasida faqat akkaunt bloki qoladi.**
-   Ism / telefon / email / "Log out" — shu. "My orders", "Favorites" va
-   "Language" bo'limlari ko'rinmaydi.
+   Ism / telefon / email / "Log out" — shu. "My orders" va "Favorites"
+   bo'limlari ko'rinmaydi. ("Language" bo'limi keyinchalik butunlay
+   olib tashlandi — pastdagi "Sayt tili" qaroriga qarang.)
    `@media (max-width: 768px) { .profile > *:not(.profile__head) { display: none } }`
    Qoida ataylab "head dan BOSHQA hammasi" deb yozilgan: keyin yangi
    bo'lim qo'shilsa ham telefonda o'z-o'zidan yashirin bo'ladi.
@@ -132,9 +133,6 @@ Doskada "nega bunday?" degan savolga tayyor javob.
    Yashirish faqat CSS'da: ekran kattalashsa bo'limlar qaytadan ko'rinadi.
    Ma'lumot baribir olinadi (bitta so'rov) — shunda ekran burilganda
    qayta so'rov kerak bo'lmaydi.
-   **Cheklov:** tilni almashtirish (Google Translate) telefonda profil
-   sahifasidan ochilmaydi. Tanlangan til `googtrans` cookie'da saqlangani
-   uchun kompyuterda tanlansa telefonda ham amal qiladi.
 4. **Narx filtri 0–100$** (avval 0–500$). Slider `max` va tutqichlarning
    boshlang'ich qiymati ($0 / $100 — to'liq oraliq), "Clear filters" ham
    shu qiymatlarga qaytadi.
@@ -207,20 +205,22 @@ zarari ko'p -> qilinmadi.
 - Mahsulot nomi / izoh backenddan keladi. `< > & " '` belgilari MATN bo'lib
   chizilsin, HTML bo'lib emas (XSS himoya).
 
-### Sayt tili — default INGLIZCHA, jahon tillariga Google Translate orqali
+### Sayt tili — faqat INGLIZCHA (tarjima tizimi YO'Q)
 - Barcha foydalanuvchiga ko'rinadigan matn (label, xato, toast, sarlavha) —
   inglizcha. `<html lang="en">`. Kod izohlari o'zbekcha qoladi — ular Hasan
   uchun, sayt kontenti emas.
-- **Jahon tiллariga tarjima:** loyihada backend/tarjima API yo'q, va 190+
-  tilni qo'lda yozib bo'lmaydi. Yagona amaliy yechim — Google'ning bepul
-  "Website Translator" widgeti (`js/translate.js`): butun sahifани JONLI
-  tarjima qiladi, hech qanaqa matn qo'lda yozilmaydi.
-- Widget faqat `profile.html`да ko'rinади ("Language" bo'limi); boshqa
-  sahifаларда yashirin holда yuklanади, chunki tanlangan til `googtrans`
-  cookie'да saqlanади va shu skript ishga tushган har qanaqa sahифада
-  o'sha tilni o'qiб qo'llайди — shu sabab BUTUN sayt tarjима qilinади.
-- **Cheklov:** bu tashqi (CDN emas — jonli) xizmat, vendor qila olmaymiz.
-  Internet yo'q joyda yoki Google xizmatни o'zgartirsa ishlамaslиги mumkin.
+- **Google Translate widgeti OLIB TASHLANDI** (o'qituvchi so'radi).
+  Nima o'chdi: `js/translate.js`, har sahifadagi yashirin
+  `#google_translate_element` div va skript, profil sahifasidagi
+  "Language" bo'limi, `css/ui.css` dagi widget stillari.
+- **Foydasi:** endi tashqi (vendor qilib bo'lmaydigan, jonli) xizmatga
+  bog'liqlik yo'q. Yagona tashqi manba — Google Fonts (Inter shrifti).
+  CSP ancha qattiqlashdi: `script-src 'self'` (endi `'unsafe-inline'` ham,
+  `translate.google.com` ham kerak emas), `frame-src 'none'`,
+  `connect-src` da faqat bizning API.
+- **Muqobil:** har matnni qo'lda 190+ tilga tarjima qilish — imkonsiz;
+  server tomonda tarjima — bizda backend yo'q. Shuning uchun sayt
+  bir tilli (inglizcha) qoldi.
 
 ### Buzilgan rasm -> toza kulrang quti (broken-icon emas)
 - API'дан kelgan `image` URL 404 bo'lsa (yoki bo'sh), brauzer "buzilgan
