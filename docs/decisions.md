@@ -111,6 +111,32 @@ Doskada "nega bunday?" degan savolga tayyor javob.
 - motion.js'da ham 2s xavfsizlik: ekranda ko'rinib, hali yashirin bloklarni majburan ochadi.
 - `.has-motion` klassi: GSAP faol bo'lganda CSS reveal qoidalarini o'chiradi (ikki xil animatsiya to'qnashmasin).
 
+### O'qituvchi Figma'ni yangiladi (2026-09-02) — 5 ta o'zgarish
+1. **Kategoriya sahifasi olib tashlandi.** `pages/category.html`,
+   `js/pages/category.js`, `css/pages/category.css` o'chirildi.
+   Bosh sahifadagi "Shop by category" kartochkalari endi katalogga,
+   o'sha kategoriya tanlangan holda ketadi:
+   `/pages/catalog.html?category=<id>`. Katalog `?category=` ni
+   allaqachon o'qiydi -> qo'shimcha kod kerak bo'lmadi va "har bir
+   ko'rinadigan control ishlasin" qoidasi buzilmadi.
+2. **Login va Register sahifalarida footer yo'q.** `<div id="footer">`
+   va endi keraksiz `footer.css` havolasi olib tashlandi.
+   `components.js` footer div'ini topmasa jimgina to'xtaydi — xato yo'q.
+3. **Profil: "My orders" TELEFON versiyasida ko'rinmaydi.**
+   `[data-orders-section]` + `@media (max-width: 768px) { display: none }`.
+   768px — saytdagi "telefon" chegarasi (header shu yerda burger'ga o'tadi).
+   Yashirish faqat CSS'da: ekran kattalashsa bo'lim qaytadan ko'rinadi.
+   Ma'lumot baribir olinadi (bitta so'rov) — shunda ekran burilganda
+   qayta so'rov kerak bo'lmaydi.
+4. **Narx filtri 0–100$** (avval 0–500$). Slider `max` va tutqichlarning
+   boshlang'ich qiymati ($0 / $100 — to'liq oraliq), "Clear filters" ham
+   shu qiymatlarga qaytadi.
+5. **Mahsulot sahifasi butunlay SF Pro Display** (header/footer'dan
+   tashqari). Shrift bitta joyda — `<main class="product">` da beriladi,
+   ichidagi hamma element (sarlavha, matn, tugma) meros oladi.
+   Ilgari har qoidada alohida yozilgan `font-family` takrorlari olib
+   tashlandi. Header/footer `<main>` dan tashqarida -> ularga tegmaydi.
+
 ### Qo'shimcha animatsiyalar — dizaynga TEGMASDAN
 Qoida: har bir animatsiya faqat "bezak". Ishlamay qolsa sayt to'g'ri
 ko'rinishi SHART. Shuning uchun hamma joyda "xavfsiz yo'nalish" tanlandi.

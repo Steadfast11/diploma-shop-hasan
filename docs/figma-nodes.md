@@ -9,7 +9,7 @@ Barcha ekran bitta canvas (`0:1` "Pages") ustida yonma-yon frame.
 |------|-------|
 | `1:346` | Bosh sahifa |
 | `2:3321` | Katalog — "All products" + filtr paneli |
-| `2:8034` | Kategoriya — "Creams" (filtrsiz grid) |
+| ~~`2:8034`~~ | ~~Kategoriya~~ — o'qituvchi Figma'dan OLIB TASHLADI |
 | `2:5782` | Savat — mahsulotlar bilan ("Your bag" + "Order Summary") |
 | `2:6680` | Savat — bo'sh ("No products in your bag") |
 | `2:7339` | Mahsulot sahifasi (asosiy) |
@@ -25,7 +25,7 @@ Barcha ekran bitta canvas (`0:1` "Pages") ustida yonma-yon frame.
 |------|-------|
 | `1:523` | Bosh sahifa (mobil) |
 | `2:3452` | Katalog (mobil) |
-| `2:8153` | Kategoriya (mobil) |
+| ~~`2:8153`~~ | ~~Kategoriya (mobil)~~ — olib tashlandi |
 | `2:6495` | Savat (mobil) |
 | `2:7647` | Mahsulot (mobil) |
 | `10:9165` | Kirish (mobil) |

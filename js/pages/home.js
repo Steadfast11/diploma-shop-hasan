@@ -27,7 +27,7 @@ function categoryCardHTML(c) {
     ? `<img class="img-fallback" src="${esc(c.image)}" alt="" loading="lazy" />`
     : "";
   return `
-    <a class="category-card" href="/pages/category.html?id=${encodeURIComponent(c._id)}">
+    <a class="category-card" href="/pages/catalog.html?category=${encodeURIComponent(c._id)}">
       ${bg}
       <span class="btn-glass category-card__btn">${esc(c.title)}</span>
     </a>`;

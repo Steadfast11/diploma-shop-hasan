@@ -3,13 +3,20 @@
    Figma (1920): chapda rasm galereyasi (610x530 + 152px thumbnaillar),
    o'ngda ma'lumot (nom / narx / tavsif / qty + Add to cart).
    Pastda "All Reviews" + izoh kartalari (2 ustun).
-   Bu sahifa mazmuni SF Pro Display shriftida (Figma).
+
+   SHRIFT (Figma yangilangan): bu sahifada header va footer'dan tashqari
+   HAMMA narsa — sarlavha, matn, tugma — SF Pro Display. Shuning uchun
+   shriftni bitta joyda, <main class="product"> ga beramiz va ichidagi
+   hamma element meros oladi. Header/footer <main> dan tashqarida ->
+   ularga ta'sir qilmaydi.
    ============================================================ */
 
 .product {
   padding-block: 42px 76px;
   display: flex;
   flex-direction: column;
+  font-family: var(--font-system);   /* -apple-system -> SF Pro Display */
+  letter-spacing: normal;            /* Inter uchun berilgan -0.06em bekor */
 }
 
 /* ---------- Yuqori: galereya + ma'lumot ---------- */
@@ -58,8 +65,6 @@
 .product__info {
   display: flex;
   flex-direction: column;
-  font-family: var(--font-system);
-  letter-spacing: normal;
   color: var(--black);
 }
 .product__title {
@@ -133,8 +138,6 @@
   justify-content: space-between;
 }
 .reviews__title {
-  font-family: var(--font-system);
-  letter-spacing: normal;
   font-weight: 600;
   font-size: 24px;
   display: flex;
@@ -152,8 +155,6 @@
   border-radius: 62px;
   background: var(--black);
   color: var(--white);
-  font-family: var(--font-system);
-  letter-spacing: normal;
   font-size: 16px;
   padding-inline: 24px;
   cursor: pointer;
@@ -171,8 +172,6 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  font-family: var(--font-system);
-  letter-spacing: normal;
 }
 .review-card__author {
   display: flex;

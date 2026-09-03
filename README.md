@@ -25,7 +25,6 @@ Brauzerда: `http://localhost:5173`
 |------|------|
 | `index.html` | Bosh sahifa (hero + Best sellers + Shop by category + Featured products) |
 | `pages/catalog.html` | "All products" + filtr paneli (kategoriya + narx slideri) |
-| `pages/category.html` | Bitta kategoriya mahsulotlari (`?id=`) |
 | `pages/product.html` | Mahsulot (`?id=`): galereya, narx, qty, Add to cart, izohlar |
 | `pages/cart.html` | Savatcha + Order Summary + checkout |
 | `pages/login.html` / `register.html` | Kirish (email) / Ro'yxatdan o'tish |

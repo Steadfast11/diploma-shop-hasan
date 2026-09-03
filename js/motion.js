@@ -27,6 +27,65 @@ export function initMotion() {
   gsap.defaults({ ease: "power2.out" }); // yumshoq to'xtash
   document.documentElement.classList.add("has-motion");
 
+  /* --- XAVFSIZLIK TO'RI ---
+     ATAYLAB ENG BOSHDA ro'yxatdan o'tkazamiz: pastdagi animatsiya kodining
+     birortasi xato bersa ham, to'r baribir qurilgan bo'ladi. (Aks holda
+     to'r aynan u eng kerak bo'lgan holatda ro'yxatdan o'tmay qolardi.)
+
+     Animatsiya negadir tugamay qolsa, kontent yashirin qolib ketmasin.
+     Eng xavfli hol: sahifa FON TABDA ochilgan bo'lsa — brauzer animatsiya
+     kadrlarini to'xtatib turadi va gsap.from(...) elementni "from"
+     holatida (opacity 0 / visibility hidden) qoldiradi. `main` uchun bu
+     ayniqsa yomon: ichidagi hamma narsa `visibility` ni meros oladi.
+
+     Shuning uchun: 2s dan keyin VA sahifa har safar ko'rinadigan bo'lganda
+     ekrandagi yashirin qolgan narsalarni majburan ochamiz.
+     Ekrandan tashqaridagilarga tegmaymiz — ular skroll bilan chiqadi. */
+  const inView = (el) => {
+    const r = el.getBoundingClientRect();
+    return r.top < window.innerHeight && r.bottom > 0;
+  };
+
+  function safetyNet() {
+    // 1) main — butun sahifani yashirib qo'yishi mumkin
+    const mainEl = document.querySelector("main");
+    if (mainEl && getComputedStyle(mainEl).visibility === "hidden") {
+      gsap.set(mainEl, { autoAlpha: 1, clearProps: "transform" });
+    }
+    // 2) reveal bloklari
+    document.querySelectorAll("[data-reveal], [data-reveal-stagger]").forEach((el) => {
+      if (parseFloat(getComputedStyle(el).opacity) === 0 && inView(el)) {
+        gsap.set(el, { autoAlpha: 1, y: 0 });
+        gsap.set(el.children, { autoAlpha: 1, y: 0 });
+      }
+    });
+    // 3) so'z-maska (hero + [data-split] sarlavhalar) — so'zlar maska
+    //    ortida "osilib" qolmasin
+    //    MUHIM: ScrollTrigger "top 92%" da ishga tushadi. Shuning uchun
+    //    faqat SHU nuqtadan o'tgan sarlavhalarni tuzatamiz — ekran eng
+    //    chetida turgan, hali navbati kelmagan sarlavhaga tegmaymiz.
+    document.querySelectorAll("[data-hero-line], [data-split]").forEach((title) => {
+      const r = title.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight * 0.92) {
+        gsap.set(title.querySelectorAll(".m-word__in"), { yPercent: 0 });
+      }
+    });
+    // 4) hero tugmasi — u kechikish (delay) bilan chiqadi, shuning uchun
+    //    to'xtab qolish ehtimoli eng yuqori
+    const btn = document.querySelector(".hero__btn");
+    if (btn && inView(btn) && getComputedStyle(btn).visibility === "hidden") {
+      gsap.set(btn, { autoAlpha: 1, y: 0 });
+    }
+  }
+
+  setTimeout(safetyNet, 2000);
+  // Fon tabda ochilgan sahifa ko'rinadigan bo'lganda ham tekshiramiz
+  // (animatsiyalar o'sha payt qayta boshlanadi -> ularga vaqt beramiz).
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) setTimeout(safetyNet, 1500);
+  });
+
+
   /* --- Lenis: yumshoq, sekin inersiyali skroll --- */
   const lenis = new Lenis({
     duration: 1.5,        // uzoqroq -> silliqroq to'xtash
@@ -129,19 +188,6 @@ export function initMotion() {
 
   ScrollTrigger.refresh();
   window.addEventListener("load", () => ScrollTrigger.refresh());
-
-  /* Xavfsizlik to'ri: 2s dan keyin EKRANDA ko'rinib turgan, lekin hali
-     yashirin bloklarni majburan ko'rsatamiz (ScrollTrigger ishlamay qolsa). */
-  setTimeout(() => {
-    document.querySelectorAll("[data-reveal], [data-reveal-stagger]").forEach((el) => {
-      const r = el.getBoundingClientRect();
-      const hidden = parseFloat(getComputedStyle(el).opacity) === 0;
-      if (hidden && r.top < window.innerHeight && r.bottom > 0) {
-        gsap.set(el, { autoAlpha: 1, y: 0 });
-        gsap.set(el.children, { autoAlpha: 1, y: 0 });
-      }
-    });
-  }, 2000);
 
   return true;
 }

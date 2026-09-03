@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- pages/product.html?id=... and pages/category.html?id=... are generated
-     from live backend data (Sandbox Shop API) and can't be enumerated
-     ahead of time on a static site — only the fixed pages are listed. -->
+<!-- pages/product.html?id=... is generated from live backend data
+     (Sandbox Shop API) and can't be enumerated ahead of time on a static
+     site — only the fixed pages are listed. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://diploma-shop-z84469105.netlify.app/</loc>

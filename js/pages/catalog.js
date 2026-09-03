@@ -252,8 +252,8 @@ clearBtn.addEventListener("click", () => {
   categoryList.querySelectorAll("[data-category]").forEach((row) => {
     row.setAttribute("aria-pressed", "false");
   });
-  minInput.value = 50;
-  maxInput.value = 200;
+  minInput.value = 0;   // Figma (yangilangan): oraliq 0-100$
+  maxInput.value = 100;
   syncSlider();
   syncUrl();
   refreshClearBtn();

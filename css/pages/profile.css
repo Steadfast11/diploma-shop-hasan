@@ -96,3 +96,12 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Figma (yangilangan): "My orders" bo'limi TELEFON versiyasida yo'q.
+   768px — saytdagi "telefon" chegarasi (shu kenglikda header ham burger
+   menyuga o'tadi), shuning uchun bir xil chegarani ishlatamiz. */
+@media (max-width: 768px) {
+  [data-orders-section] {
+    display: none;
+  }
+}

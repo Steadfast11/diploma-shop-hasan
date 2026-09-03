@@ -10,7 +10,7 @@ Figma maketi asosida. Backend: `https://api.wepro.uz/sandbox-shop` (`api-referen
 |---|--------|------|-----|
 | 1 | Bosh sahifa | `index.html` | `GET /products/bestsellers`, `GET /categories`, `GET /products/newest` (yoki `/products`) |
 | 2 | Katalog (All products) | `pages/catalog.html` | `GET /categories`, `GET /products?category=&minPrice=&maxPrice=&page=&limit=` |
-| 3 | Kategoriya (Creams) | `pages/category.html` | `GET /categories/:id/products` |
+| 3 | ~~Kategoriya (Creams)~~ | O'CHIRILDI — o'qituvchi Figma'dan olib tashladi (kategoriya endi katalog filtri orqali) | — |
 | 4 | Mahsulot sahifasi | `pages/product.html` | `GET /products/:id` (+ comments), `POST /cart`, `POST /products/:id/comments`, `DELETE .../comments/:id` |
 | 5 | Savatcha (Your bag) | `pages/cart.html` | `GET/PATCH/DELETE /cart`, `POST /orders` |
 | 6 | Kirish (Log in) | `pages/login.html` | `POST /login` |
@@ -104,7 +104,7 @@ Har bosqichда: men tushuntiraman → sen yozasan → men savol beraman → `do
 **B3. Katalog + Kategoriya (statik)**
 - [ ] filtr paneli (kategoriyalar, narx slider, Apply Filter)
 - [ ] mahsulot grid + paginatsiya ko'rinishi
-- [ ] `category.html` (filtrсiz variant)
+- [x] ~~`category.html`~~ — Figma'dan olib tashlandi
 - [ ] bo'sh-natija holati
 - [ ] responsive (filtr panel mobil'да yuqoriга yoki drawer)
 
@@ -173,5 +173,5 @@ Har bosqichда: men tushuntiraman → sen yozasan → men savol beraman → `do
 
 ## 5. Skelet o'zgarishlari (bajarildi)
 - `orders.html/js/css` → `profile.html/js/css` (maketда profil + buyurtmalar bitta ekran)
-- `pages/category.html` + `js/pages/category.js` qo'shildi
+- ~~`pages/category.html` + `js/pages/category.js`~~ — keyinchalik Figma'dan olib tashlandi
 - `components/modal.html` + `modal.css` qo'shildi
