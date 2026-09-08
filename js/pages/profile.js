@@ -11,8 +11,8 @@
    ============================================================ */
 
 import { initLayout } from "../components.js";
-import * as api from "../api.js";
-import { requireAuth, currentUser, doLogout } from "../auth.js";
+import * as api from "../core/api.js";
+import { requireAuth, currentUser, doLogout } from "../core/auth.js";
 import { esc, formatPhone, showError, showEmpty, productCardHTML, revealCards } from "../ui.js";
 
 initLayout();

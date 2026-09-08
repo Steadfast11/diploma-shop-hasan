@@ -166,7 +166,7 @@ qo'yadi -> bosilganda deyarli darrov ochiladi. Har manzil bir marta,
 Har maydon ostida alohida `.field__error`. `blur` da tekshiramiz; xato chiqса
 `input` da qayta baholaymiz; `submit` da hammasini. Noto'g'ri maydon —
 `aria-invalid="true"` + `aria-describedby`. Birinchi noto'g'riga `focus`.
-Valid bo'lmaguncha API'ga so'rov yubormaymiz. Mantiq `js/validation.js` daги
+Valid bo'lmaguncha API'ga so'rov yubormaymiz. Mantiq `js/core/validation.js` daги
 sodda funksiyalarда (`validateName` va h.k.), `register.js` faqat ulaydi.
 
 **Nega telefon uchun kutubxona (intl-tel-input), qo'lда regex emas?**

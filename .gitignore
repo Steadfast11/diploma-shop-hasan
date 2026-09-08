@@ -4,6 +4,10 @@ node_modules/
 .env.*
 *.log
 
+# VS Code — .vscode/settings.json JAMOAVIY (papka ko'rinishi), qolgani mahalliy
+.vscode/*
+!.vscode/settings.json
+
 # Claude Code — faqat launch.json kerak, qolgani mahalliy
 .claude/*
 !.claude/launch.json

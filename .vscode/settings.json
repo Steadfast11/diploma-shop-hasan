@@ -1,0 +1,16 @@
+{
+  // Yon paneldan KERAKSIZ narsalarni yashiramiz. Bular loyihaning bir qismi
+  // emas: node_modules — kutubxonalar, .netlify — deploy keshи, .DS_Store —
+  // macOS fayli. Hammasi .gitignore'da ham bor, GitHub'ga chiqmaydi.
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.netlify": true,
+    "**/.DS_Store": true
+  },
+  // Bog'liq fayllarni bittasining ostiga yig'ib qo'yamiz.
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": "package-lock.json, serve.json, netlify.toml",
+    "index.html": "404.html, robots.txt, sitemap.xml, README.md"
+  }
+}

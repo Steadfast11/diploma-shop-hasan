@@ -6,8 +6,8 @@
    ============================================================ */
 
 import { initLayout } from "../components.js";
-import { doLogin, safeNext } from "../auth.js";
-import { mergeGuestCartIntoAccount } from "../cart-store.js";
+import { doLogin, safeNext } from "../core/auth.js";
+import { mergeGuestCartIntoAccount } from "../core/cart-store.js";
 
 initLayout();
 

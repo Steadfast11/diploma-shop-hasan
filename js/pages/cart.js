@@ -9,9 +9,9 @@
    ============================================================ */
 
 import { initLayout } from "../components.js";
-import * as cartStore from "../cart-store.js";
-import * as api from "../api.js";
-import { isLoggedIn } from "../auth.js";
+import * as cartStore from "../core/cart-store.js";
+import * as api from "../core/api.js";
+import { isLoggedIn } from "../core/auth.js";
 import { money, esc, showError, toast, friendlyError, openModal, countUp, playOnce } from "../ui.js";
 
 initLayout();

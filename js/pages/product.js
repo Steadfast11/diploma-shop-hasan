@@ -10,9 +10,9 @@
    ============================================================ */
 
 import { initLayout } from "../components.js";
-import * as api from "../api.js";
-import * as cartStore from "../cart-store.js";
-import { isLoggedIn, currentUser } from "../auth.js";
+import * as api from "../core/api.js";
+import * as cartStore from "../core/cart-store.js";
+import { isLoggedIn, currentUser } from "../core/auth.js";
 import {
   money,
   esc,

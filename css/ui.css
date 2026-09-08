@@ -151,7 +151,7 @@
 /* ============================================================
    ANIMATSIYALAR
    - scroll-reveal: element ko'rinishga kirganda paydo bo'ladi
-     (js/reveal.js IntersectionObserver bilan .is-visible qo'yadi)
+     (js/effects/reveal.js IntersectionObserver bilan .is-visible qo'yadi)
    - hover / bosish: mayda javob
    - prefers-reduced-motion: foydalanuvchi xohlamasa hammasi o'chadi
    ============================================================ */

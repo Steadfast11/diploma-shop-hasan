@@ -74,10 +74,10 @@ Umumiy: **har sahifa skripti bir xil 4 bosqich** —
 
 ## 7. Ro'yxatdan o'tish (inline validatsiya)
 1. `register.js` faqat "ulaydi". Tekshiruv sodda funksiyalarda:
-   - `js/validation.js` — `validateName` (3–10 harf, `\p{L}`), `validateSurname` (3–15 harf),
+   - `js/core/validation.js` — `validateName` (3–10 harf, `\p{L}`), `validateSurname` (3–15 harf),
      `validateEmail` (qat'iy format, bo'shliq/ketma-ket nuqta rad), `validatePassword`
      (8–64, kamida 1 harf + 1 raqam), `validatePasswordConfirmation`
-   - `js/phone-input.js` — telefon: `intl-tel-input` kutubxonasi (loyiha ichida,
+   - `js/effects/phone-input.js` — telefon: `intl-tel-input` kutubxonasi (loyiha ichida,
      `js/vendor/intl-tel-input/`). `initialCountry:"uz"`, `separateDialCode`,
      `strictMode`. `utils.js` lokal fayldan `import()` bilan yuklanadi.
      `isValidNumber()` + `getValidationError()` → inglizcha sabab

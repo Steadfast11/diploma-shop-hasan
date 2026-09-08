@@ -8,7 +8,7 @@
    ============================================================ */
 
 import { initLayout } from "../components.js";
-import * as api from "../api.js";
+import * as api from "../core/api.js";
 import {
   productCardHTML,
   showError,

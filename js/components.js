@@ -6,10 +6,10 @@
    (file:// da ishlamaydi). README: `npm run dev`.
    ============================================================ */
 
-import { isLoggedIn } from "./auth.js";
-import { getCount, subscribe } from "./cart-store.js";
-import { initReveal } from "./reveal.js";
-import { initMotion } from "./motion.js";
+import { isLoggedIn } from "./core/auth.js";
+import { getCount, subscribe } from "./core/cart-store.js";
+import { initReveal } from "./effects/reveal.js";
+import { initMotion } from "./effects/motion.js";
 import { toast, playOnce } from "./ui.js";
 
 // Bitta komponentni yuklab, kerakli div ichiga qo'yadi.

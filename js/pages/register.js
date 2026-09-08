@@ -2,8 +2,8 @@
    pages/register.js — Ro'yxatdan o'tish (inline validatsiya)
 
    Tekshiruv mantig'i bu faylда EMAS — u sodda funksiyalarga bo'lingan:
-     js/validation.js   — name / surname / email / password / confirm
-     js/phone-input.js  — telefon (intl-tel-input, barcha davlatlar)
+     js/core/validation.js   — name / surname / email / password / confirm
+     js/effects/phone-input.js  — telefon (intl-tel-input, barcha davlatlar)
    Bu fayl faqat "ulaydi": qachon tekshirish, xatoni qayerga ko'rsatish,
    valid bo'lса API'ga yuborish.
 
@@ -13,16 +13,16 @@
    ============================================================ */
 
 import { initLayout } from "../components.js";
-import { doRegister, safeNext } from "../auth.js";
-import { mergeGuestCartIntoAccount } from "../cart-store.js";
+import { doRegister, safeNext } from "../core/auth.js";
+import { mergeGuestCartIntoAccount } from "../core/cart-store.js";
 import {
   validateName,
   validateSurname,
   validateEmail,
   validatePassword,
   validatePasswordConfirmation,
-} from "../validation.js";
-import { createPhoneInput } from "../phone-input.js";
+} from "../core/validation.js";
+import { createPhoneInput } from "../effects/phone-input.js";
 import { playOnce } from "../ui.js";
 
 initLayout();

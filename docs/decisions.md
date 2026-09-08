@@ -98,7 +98,7 @@ Doskada "nega bunday?" degan savolga tayyor javob.
 
 ### Animatsiya: 2 qatlam — GSAP ("wow") + CSS reveal (zaxira)
 - **GSAP + ScrollTrigger + Lenis** (`js/vendor/` da, CDN'siz — Netlify'da ham,
-  offline ham ishlaydi, ~128KB). `js/motion.js`:
+  offline ham ishlaydi, ~128KB). `js/effects/motion.js`:
   - Lenis yumshoq skroll
   - hero sarlavhasi so'zlarga bo'linib maska ortidan ko'tariladi (`gsap.fromTo`,
     `gsap.from` EMAS — `from` element'ni "from" holatida qoldirib ketardi)
@@ -106,7 +106,7 @@ Doskada "nega bunday?" degan savolga tayyor javob.
   - `[data-reveal]` / `[data-reveal-stagger]` bloklari ScrollTrigger bilan pastdan chiqadi
     (grid BOLALARINI alohida emas — ular API'dan keyin keladi, poyga bo'lardi)
   - `main` sahifa ochilishida pastdan paydo bo'ladi
-- **Zaxira (`js/reveal.js`):** GSAP yo'q yoki `prefers-reduced-motion` bo'lsa —
+- **Zaxira (`js/effects/reveal.js`):** GSAP yo'q yoki `prefers-reduced-motion` bo'lsa —
   IntersectionObserver + CSS. Bu ham 1.5s xavfsizlik to'ri bilan.
 - motion.js'da ham 2s xavfsizlik: ekranda ko'rinib, hali yashirin bloklarni majburan ochadi.
 - `.has-motion` klassi: GSAP faol bo'lganda CSS reveal qoidalarini o'chiradi (ikki xil animatsiya to'qnashmasin).
@@ -198,7 +198,7 @@ yaltirash beradi. JS bilan havolani ushlab qolish esa `Ctrl+click`,
 zarari ko'p -> qilinmadi.
 
 ### Optimizatsiya: shrift woff2 (o'zimizda), rasm webp
-**Shrift — Google Fonts o'rniga LOYIHA ICHIDA** (`css/fonts.css` +
+**Shrift — Google Fonts o'rniga LOYIHA ICHIDA** (`css/base/fonts.css` +
 `assets/fonts/*.woff2`):
 - Nega: tashqi so'rov (DNS + TLS ulanish) yo'qoladi; Google'ga bog'liqlik
   yo'q; CSP qattiqlashadi (`font-src 'self'`, `style-src` dan
@@ -278,7 +278,7 @@ zarari ko'p -> qilinmadi.
   `blur` da tekshiriladi, tuzatil boshlansa qayta baholanadi, `submit` da hammasi.
   `aria-invalid` + `aria-describedby` — skrinrider ham biladi. Valid bo'lmaguncha
   API'ga so'rov yo'q.
-- **Tekshiruv mantig'i alohida sodda funksiyalarда** (`js/validation.js`) — chalkash
+- **Tekshiruv mantig'i alohida sodda funksiyalarда** (`js/core/validation.js`) — chalkash
   katta `submit` callback emas. Doskада bitta funksiyани ko'rsatib tushuntirса bo'ladi.
 - **Nega barcha davlat regexlari qo'lda yozilmagan:** har davlatning telefon
   uzunligi/formati har xil (190+ davlat). Ularni qo'lда regex bilan yozish — xato

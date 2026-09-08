@@ -13,8 +13,8 @@
    ============================================================ */
 
 import { initLayout } from "../components.js";
-import * as api from "../api.js";
-import { PAGE_SIZE } from "../config.js";
+import * as api from "../core/api.js";
+import { PAGE_SIZE } from "../core/config.js";
 import { productCardHTML, showError, showEmpty, esc, toast, friendlyError, skeletonCardsHTML, revealCards } from "../ui.js";
 
 initLayout();
