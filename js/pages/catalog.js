@@ -35,7 +35,8 @@ const categoryGroup = categoryList.closest(".filters__group");
 /* --- Mobil filter modal --- */
 const filterPanel = document.querySelector(".filters");
 const filterOpenBtn = document.querySelector("[data-filter-open]");
-const filterCloseBtn = document.querySelector("[data-filter-close]");
+/* Yopish tugmalari ikkita: xira fon va sheet tepasidagi ikonka. */
+const filterCloseBtns = document.querySelectorAll("[data-filter-close]");
 const mobileFilter = window.matchMedia("(max-width: 768px)");
 
 function setMobileFilter(open, returnFocus = false) {
@@ -53,6 +54,10 @@ function setMobileFilter(open, returnFocus = false) {
     filterPanel.removeAttribute("aria-label");
   }
 
+  // Orqa fon skroll qilinmasin. Sensorli ekranda Lenis yo'q (motion.js),
+  // shuning uchun body'ning o'zini ham qulflaymiz.
+  document.body.style.overflow = shouldOpen ? "hidden" : "";
+
   if (shouldOpen) {
     window.__lenis?.stop();
     filterPanel.querySelector("button")?.focus();
@@ -63,7 +68,9 @@ function setMobileFilter(open, returnFocus = false) {
 }
 
 filterOpenBtn.addEventListener("click", () => setMobileFilter(true));
-filterCloseBtn.addEventListener("click", () => setMobileFilter(false, true));
+filterCloseBtns.forEach((btn) =>
+  btn.addEventListener("click", () => setMobileFilter(false, true))
+);
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && document.body.classList.contains("catalog-filter-open")) {
     setMobileFilter(false, true);

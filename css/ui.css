@@ -46,35 +46,6 @@
   background: var(--color-surface); /* rasm kelguncha och kulrang */
 }
 
-/* Sevimlilar (heart) tugmasi — Figma'da yo'q, biz qo'shdik.
-   API'da wishlist yo'q -> localStorage (favorites.js). */
-.product-card__fav {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(6px);
-  color: var(--black);
-  cursor: pointer;
-  transition: transform 0.35s var(--ease-soft, ease);
-}
-.product-card__fav svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-}
-.product-card__fav.is-fav svg {
-  fill: var(--black);
-}
-.product-card__fav:active {
-  transform: scale(0.9);
-}
 .product-card__info {
   display: flex;
   gap: 8px;
@@ -399,17 +370,6 @@ img.img-fallback.is-loaded.img-fade {
 @keyframes img-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
-}
-
-/* ---------- Sevimlilar: qo'shilganda bir marta "sakraydi" ---------- */
-.product-card__fav.fav-pop,
-.product__fav.fav-pop {
-  animation: fav-pop 0.45s var(--ease-soft);
-}
-@keyframes fav-pop {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.25); }
-  100% { transform: scale(1); }
 }
 
 /* ---------- Miqdor raqami almashganda yuqoridan siljib keladi ---------- */

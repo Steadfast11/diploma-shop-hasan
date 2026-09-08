@@ -14,14 +14,12 @@ import { initLayout } from "../components.js";
 import * as api from "../api.js";
 import { requireAuth, currentUser, doLogout } from "../auth.js";
 import { esc, formatPhone, showError, showEmpty, productCardHTML, revealCards } from "../ui.js";
-import { getFavorites, isFavorite } from "../favorites.js";
 
 initLayout();
 
 if (requireAuth()) {
   const headEl = document.querySelector("[data-profile-head]");
   const ordersEl = document.querySelector("[data-orders]");
-  const favEl = document.querySelector("[data-favorites]");
 
   function renderHead(u) {
     headEl.innerHTML = `
@@ -74,21 +72,4 @@ if (requireAuth()) {
       revealCards(ordersEl); // kartochkalar birin-ketin chiqadi
     })
     .catch((e) => showError(ordersEl, e.message));
-
-  // 4) favorites (local only — API has no wishlist endpoint)
-  function renderFavorites() {
-    const favorites = getFavorites();
-    if (!favorites.length) return showEmpty(favEl, "No favorites yet");
-    favEl.innerHTML = favorites.map(productCardHTML).join("");
-    revealCards(favEl);
-  }
-  renderFavorites();
-  // unfavorited here -> drop it from the list right away
-  favEl.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-fav]");
-    if (!btn) return;
-    setTimeout(() => {
-      if (!isFavorite(btn.dataset.id)) renderFavorites();
-    }, 0);
-  });
 }

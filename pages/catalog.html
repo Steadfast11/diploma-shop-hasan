@@ -50,56 +50,64 @@
     <button class="filters__backdrop" type="button" data-filter-close
             aria-label="Close filters" tabindex="-1"></button>
 
-    <!-- CHAP: filtr paneli. Figma: SF Pro shrift, 1px och ramka, radius 20. -->
-    <aside class="filters" id="catalog-filters">
-      <div class="filters__head">
-        <p class="filters__title">Filters</p>
-        <img src="/assets/icons/filter.svg" alt="" width="24" height="24" />
-      </div>
+    <!-- CHAP: filtr paneli. Figma: SF Pro shrift, 1px och ramka, radius 20.
+         .filters-col — panelning "ustuni": u sahifa balandligicha cho'ziladi,
+         panelning o'zi esa uning ichida sticky bo'lib scroll bilan yuradi. -->
+    <div class="filters-col">
+      <aside class="filters" id="catalog-filters">
+        <div class="filters__head">
+          <p class="filters__title">Filters</p>
+          <!-- Mobil sheet'da bu ikonka yopish tugmasi (desktopda oddiy ikonka). -->
+          <button class="filters__close" type="button" data-filter-close
+                  aria-label="Close filters">
+            <img src="/assets/icons/filter.svg" alt="" width="24" height="24" />
+          </button>
+        </div>
 
-      <div class="filters__divider"></div>
+        <div class="filters__divider"></div>
 
-      <!-- Kategoriyalar — bittasini bosib tanlash (API'da category=<id>) -->
-      <div class="filters__group" data-category-list>
-        <button class="filters__row" type="button" data-category="1">
-          <span>Categorie 1</span>
-          <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
-        </button>
-        <button class="filters__row" type="button" data-category="2">
-          <span>Categorie 2</span>
-          <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
-        </button>
-        <button class="filters__row" type="button" data-category="3">
-          <span>Categorie 3</span>
-          <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
-        </button>
-      </div>
+        <!-- Kategoriyalar — bittasini bosib tanlash (API'da category=<id>) -->
+        <div class="filters__group" data-category-list>
+          <button class="filters__row" type="button" data-category="1">
+            <span>Categorie 1</span>
+            <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+          </button>
+          <button class="filters__row" type="button" data-category="2">
+            <span>Categorie 2</span>
+            <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+          </button>
+          <button class="filters__row" type="button" data-category="3">
+            <span>Categorie 3</span>
+            <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+          </button>
+        </div>
 
-      <div class="filters__divider"></div>
+        <div class="filters__divider"></div>
 
-      <!-- Narx oralig'i — sarlavhani bosib ochib/yopiladi -->
-      <div class="filters__group">
-        <button class="filters__row filters__row--static" type="button"
-                data-price-toggle aria-expanded="true" aria-controls="price-panel">
-          <span class="filters__subtitle">Price</span>
-          <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
-        </button>
-        <div class="price-range" id="price-panel" data-price-panel>
-          <input class="price-range__input price-range__input--min" type="range" min="0" max="100" value="0" aria-label="Minimum price" />
-          <input class="price-range__input price-range__input--max" type="range" min="0" max="100" value="100" aria-label="Maximum price" />
-          <div class="price-range__track"><div class="price-range__fill"></div></div>
-          <div class="price-range__labels">
-            <span data-price-min>$0</span>
-            <span data-price-max>$100</span>
+        <!-- Narx oralig'i — sarlavhani bosib ochib/yopiladi -->
+        <div class="filters__group">
+          <button class="filters__row filters__row--static" type="button"
+                  data-price-toggle aria-expanded="true" aria-controls="price-panel">
+            <span class="filters__subtitle">Price</span>
+            <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+          </button>
+          <div class="price-range" id="price-panel" data-price-panel>
+            <input class="price-range__input price-range__input--min" type="range" min="0" max="100" value="0" aria-label="Minimum price" />
+            <input class="price-range__input price-range__input--max" type="range" min="0" max="100" value="100" aria-label="Maximum price" />
+            <div class="price-range__track"><div class="price-range__fill"></div></div>
+            <div class="price-range__labels">
+              <span data-price-min>$0</span>
+              <span data-price-max>$100</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="filters__divider"></div>
+        <div class="filters__divider"></div>
 
-      <button class="filters__apply" type="button" data-apply-filter>Apply Filter</button>
-      <button class="filters__clear" type="button" data-clear-filter hidden>Clear filters</button>
-    </aside>
+        <button class="filters__apply" type="button" data-apply-filter>Apply Filter</button>
+        <button class="filters__clear" type="button" data-clear-filter hidden>Clear filters</button>
+      </aside>
+    </div>
 
     <!-- O'NG: sarlavha + mahsulotlar to'ri -->
     <div class="catalog__content">

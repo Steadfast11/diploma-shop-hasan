@@ -47,6 +47,13 @@
   <div id="header" data-component="header"></div>
 
   <main id="main" class="container product">
+    <!-- Orqaga qaytish — tepa chap burchak. Brauzer tarixi bo'lsa o'shanga,
+         bo'lmasa katalogga qaytadi (js/pages/product.js). -->
+    <button class="product__back" type="button" data-back aria-label="Go back">
+      <img src="/assets/icons/chevron.svg" alt="" width="20" height="20" />
+      <span>Back</span>
+    </button>
+
     <div class="product__top" data-reveal>
       <div class="product__gallery" data-gallery></div>
       <div class="product__info" data-info></div>

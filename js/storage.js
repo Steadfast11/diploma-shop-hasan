@@ -10,7 +10,6 @@ const KEYS = {
   token: "diploma_shop_token",
   user: "diploma_shop_user",
   guestCart: "diploma_shop_guest_cart",
-  favorites: "diploma_shop_favorites",
 };
 
 // Ichki: xavfsiz o'qish (xato bo'lsa fallback qaytaradi)
@@ -57,5 +56,3 @@ export const clearGuestCart = () => remove(KEYS.guestCart);
 /* ---- Sevimlilar ----
    API'da wishlist endpointi yo'q -> mahalliy saqlanadi (brauzerga tegishli).
    Format: [{ _id, title, price, image }] */
-export const getFavorites = () => read(KEYS.favorites, []);
-export const setFavorites = (items) => write(KEYS.favorites, items);

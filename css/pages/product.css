@@ -19,6 +19,31 @@
   letter-spacing: normal;            /* Inter uchun berilgan -0.06em bekor */
 }
 
+/* ---------- Orqaga qaytish tugmasi (tepa chap burchak) ---------- */
+.product__back {
+  align-self: flex-start;      /* .product — flex column, shuning uchun chapga */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  margin-bottom: 24px;
+  padding-inline: 16px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 62px;
+  background: var(--white);
+  font: inherit;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+  transition: background 0.2s var(--ease-soft, ease);
+}
+.product__back:hover {
+  background: var(--color-surface);
+}
+.product__back img {
+  transform: rotate(90deg);    /* chevron pastga qaraydi -> chapga buramiz */
+}
+
 /* ---------- Yuqori: galereya + ma'lumot ---------- */
 .product__top {
   display: grid;
@@ -100,30 +125,6 @@
   cursor: pointer;
 }
 
-/* Sevimlilar (heart) — Figma'da yo'q, biz qo'shdik (API'da wishlist yo'q -> mahalliy) */
-.product__fav {
-  width: 48px;
-  height: 48px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 50%;
-  background: var(--white);
-  display: grid;
-  place-items: center;
-  color: var(--black);
-  cursor: pointer;
-  transition: transform 0.35s var(--ease-soft, ease);
-}
-.product__fav svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-}
-.product__fav.is-fav svg {
-  fill: var(--black);
-}
-.product__fav:active {
-  transform: scale(0.92);
-}
 
 /* ---------- Izohlar ---------- */
 .reviews {
@@ -214,13 +215,42 @@
     grid-template-columns: 1fr;
   }
 }
+/* Mobil (Figma): nom + narx kichrayadi, "Add to cart" qolgan bo'sh joyni
+   to'ldiradi, "All Reviews" va "Write a Review" esa BITTA qatorda turadi. */
 @media (max-width: 560px) {
-  .reviews__head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
   .product__title {
-    font-size: 32px;
+    font-size: 28px;
+  }
+  .product__price {
+    font-size: 24px;
+    margin-top: 8px;
+  }
+
+  .product__actions {
+    gap: 12px;
+  }
+  .product__add {
+    flex: 1;                 /* miqdor tugmasidan keyingi hamma joy */
+    padding-inline: 24px;    /* endi kenglik flex'dan keladi */
+  }
+
+  .reviews {
+    margin-top: 48px;
+  }
+  .reviews__head {
+    gap: 12px;               /* ustma-ust emas — yonma-yon (Figma) */
+  }
+  .reviews__title {
+    font-size: 20px;
+  }
+  .reviews__write {
+    flex: 0 0 auto;          /* sarlavha uzun bo'lsa ham siqilmasin */
+    height: 40px;
+    padding-inline: 18px;
+    font-size: 14px;
+  }
+
+  .review-card {
+    padding: 20px;
   }
 }

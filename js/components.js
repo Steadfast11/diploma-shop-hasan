@@ -10,7 +10,6 @@ import { isLoggedIn } from "./auth.js";
 import { getCount, subscribe } from "./cart-store.js";
 import { initReveal } from "./reveal.js";
 import { initMotion } from "./motion.js";
-import { toggleFavorite } from "./favorites.js";
 import { toast, playOnce } from "./ui.js";
 
 // Bitta komponentni yuklab, kerakli div ichiga qo'yadi.
@@ -149,30 +148,6 @@ function wirePrefetch() {
   });
 }
 
-// Har qanaqa mahsulot kartochkasidagi "sevimlilar" (heart) tugmasi.
-// Delegatsiya: kartochkalar API'dan keyin qo'shilsa ham ishlaydi.
-// preventDefault/stopPropagation — kartochka <a> ichida, sahifaga o'tib
-// ketmasin.
-function wireFavorites() {
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-fav]");
-    if (!btn) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const nowFav = toggleFavorite({
-      _id: btn.dataset.id,
-      title: btn.dataset.title,
-      price: Number(btn.dataset.price),
-      image: btn.dataset.image,
-    });
-    btn.classList.toggle("is-fav", nowFav);
-    btn.setAttribute("aria-pressed", String(nowFav));
-    btn.setAttribute("aria-label", nowFav ? "Remove from favorites" : "Add to favorites");
-    // Faqat QO'SHILGANDA yurakcha bir marta sakraydi (sahifa ochilganda emas).
-    if (nowFav) playOnce(btn, "fav-pop");
-  });
-}
-
 function showCartMergeWarning() {
   try {
     if (sessionStorage.getItem("diploma_shop_cart_merge_warning") !== "1") return;
@@ -192,7 +167,6 @@ export async function initLayout() {
   wireHeaderAuth();
   wireHeaderMenu();
   initLogoIntro();
-  wireFavorites();
   wireImageFallback();
   wireImageFade();
   wirePrefetch();

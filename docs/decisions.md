@@ -123,8 +123,9 @@ Doskada "nega bunday?" degan savolga tayyor javob.
    va endi keraksiz `footer.css` havolasi olib tashlandi.
    `components.js` footer div'ini topmasa jimgina to'xtaydi — xato yo'q.
 3. **Profil: TELEFON versiyasida faqat akkaunt bloki qoladi.**
-   Ism / telefon / email / "Log out" — shu. "My orders" va "Favorites"
-   bo'limlari ko'rinmaydi. ("Language" bo'limi keyinchalik butunlay
+   Ism / telefon / email / "Log out" — shu. "My orders" bo'limi
+   ko'rinmaydi. ("Favorites" bo'limi keyinchalik butunlay olib
+   tashlandi — Figma'da yo'q edi va API'da wishlist endpoint yo'q.) ("Language" bo'limi keyinchalik butunlay
    olib tashlandi — pastdagi "Sayt tili" qaroriga qarang.)
    `@media (max-width: 768px) { .profile > *:not(.profile__head) { display: none } }`
    Qoida ataylab "head dan BOSHQA hammasi" deb yozilgan: keyin yangi

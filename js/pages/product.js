@@ -25,7 +25,6 @@ import {
   flyToBag,
   playOnce,
 } from "../ui.js";
-import { isFavorite } from "../favorites.js";
 
 initLayout();
 
@@ -34,6 +33,13 @@ const galleryEl = document.querySelector("[data-gallery]");
 const infoEl = document.querySelector("[data-info]");
 const reviewsEl = document.querySelector("[data-reviews]");
 const countEl = document.querySelector("[data-review-count]");
+
+/* Orqaga: tarix bo'lsa bir qadam orqaga, to'g'ridan-to'g'ri havola
+   ochilgan bo'lsa (tarix bo'sh) katalogga qaytamiz. */
+document.querySelector("[data-back]").addEventListener("click", () => {
+  if (history.length > 1) history.back();
+  else location.href = "/pages/catalog.html";
+});
 
 let product = null;
 
@@ -69,14 +75,6 @@ function infoHTML(p) {
         <button class="qty__btn" type="button" data-inc aria-label="Increase"><img src="/assets/icons/plus.svg" alt="" width="20" height="20" /></button>
       </div>
       <button class="product__add" type="button" data-add>Add to cart</button>
-      <button class="product__fav${isFavorite(p._id) ? " is-fav" : ""}" type="button" data-fav
-              data-id="${esc(p._id)}" data-title="${esc(p.title)}"
-              data-price="${p.price}" data-image="${esc(p.image || "")}"
-              aria-pressed="${isFavorite(p._id)}" aria-label="Add to favorites">
-        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-          <path d="M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.5 5.7 4.5c2 0 3.6 1.2 4.3 2.8.7-1.6 2.3-2.8 4.3-2.8 3.7 0 5.2 3.9 3.7 7.2C19.5 16.4 12 21 12 21z"/>
-        </svg>
-      </button>
     </div>`;
 }
 

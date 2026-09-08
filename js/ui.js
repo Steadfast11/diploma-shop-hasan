@@ -3,7 +3,6 @@
    Maqsad: sahifa skriptlari qisqa va o'qishli bo'lsin.
    ============================================================ */
 
-import { isFavorite } from "./favorites.js";
 
 // Narx: 19.99 -> "$19.99"
 export const money = (n) => "$" + Number(n).toFixed(2);
@@ -38,8 +37,6 @@ export function productCardHTML(p) {
   const image = p.image
     ? `<img class="product-card__image img-fallback" src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy" />`
     : `<div class="product-card__image"></div>`; // rasm yo'q -> bo'sh kulrang
-  const fav = isFavorite(p._id);
-
   return `
     <article class="product-card">
       <a class="product-card__link" href="/pages/product.html?id=${encodeURIComponent(p._id)}">
@@ -51,14 +48,6 @@ export function productCardHTML(p) {
           <p class="product-card__price">${money(p.price)}</p>
         </div>
       </a>
-      <button class="product-card__fav${fav ? " is-fav" : ""}" type="button" data-fav
-              data-id="${esc(p._id)}" data-title="${esc(p.title)}"
-              data-price="${p.price}" data-image="${esc(p.image || "")}"
-              aria-pressed="${fav}" aria-label="${fav ? "Remove from" : "Add to"} favorites">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-          <path d="M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.5 5.7 4.5c2 0 3.6 1.2 4.3 2.8.7-1.6 2.3-2.8 4.3-2.8 3.7 0 5.2 3.9 3.7 7.2C19.5 16.4 12 21 12 21z"/>
-        </svg>
-      </button>
     </article>`;
 }
 
@@ -278,16 +267,31 @@ export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }
   returnFocus = document.activeElement;
   const el = document.createElement("div");
   el.className = "modal";
+  // Karta = <form>, tugma = type="submit". Shu tufayli oyna Enter bilan
+  // ham yuboriladi (brauzerning o'z xatti-harakati), tugmani bosish bilan
+  // ham — ikkalasi ham bitta "submit" hodisasiga tushadi.
   el.innerHTML = `
     <div class="modal__overlay" data-close></div>
-    <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <form class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <p class="modal__title" id="modal-title">${esc(title)}</p>
       <div class="modal__body">${bodyHTML}</div>
-      <button class="modal__btn" type="button" data-confirm>${esc(buttonText)}</button>
-    </div>`;
+      <button class="modal__btn" type="submit" data-confirm>${esc(buttonText)}</button>
+    </form>`;
   el.addEventListener("click", (e) => {
-    if (e.target.closest("[data-close]")) return closeModal();
-    if (e.target.closest("[data-confirm]")) onConfirm ? onConfirm(el) : closeModal();
+    if (e.target.closest("[data-close]")) closeModal();
+  });
+  el.addEventListener("submit", (e) => {
+    e.preventDefault(); // sahifa qayta yuklanmasin
+    onConfirm ? onConfirm(el) : closeModal();
+  });
+  // <textarea> ichida Enter odatda yangi qator qo'shadi va formani
+  // yubormaydi. Bizga Enter = "yuborish" kerak, yangi qator esa
+  // Shift+Enter bilan qoladi.
+  el.querySelector("textarea")?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      el.querySelector(".modal__box").requestSubmit();
+    }
   });
   document.addEventListener("keydown", onModalKeydown);
   document.body.style.overflow = "hidden"; // orqa fon skroll qilinmasin

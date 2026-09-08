@@ -23,10 +23,10 @@
   max-width: 100%;
   background: var(--white);
   border-radius: 20px;
-  padding: 24px;
+  padding: 28px 24px 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
   font-family: var(--font-system);
   letter-spacing: normal;
   animation: modal-in 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -42,14 +42,20 @@
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+/* Figma: yirik qalin sarlavha, ostida kulrang izoh — ikkalasi bir-biriga
+   yaqin (shuning uchun umumiy 24px oraliqni bu juftlik uchun kamaytiramiz). */
 .modal__title {
-  font-weight: 600;
-  font-size: 20px;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
   color: var(--black);
 }
 .modal__body {
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 16px;
+}
+.modal__title + .modal__body {
+  margin-top: -16px;
 }
 .modal__label {
   display: block;
@@ -71,13 +77,15 @@
   outline: none;
   border-color: var(--black);
 }
+/* Figma: to'liq kenglikdagi qora tugma — burchaklari to'g'ri, yumaloq emas. */
 .modal__btn {
-  height: 48px;
+  height: 56px;
   border: 0;
-  border-radius: 62px;
+  border-radius: 0;
   background: var(--black);
   color: var(--white);
   font: inherit;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
 }

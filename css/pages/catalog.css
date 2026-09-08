@@ -93,12 +93,20 @@
   opacity: 0.6;
 }
 
-/* --- chap qism: filtr paneli (Figma: chap bo'sh joyda, left 45px) --- */
-.filters {
+/* --- chap qism: filtr paneli (Figma: chap bo'sh joyda, left 45px) ---
+   Ustun (.filters-col) sahifa balandligini egallaydi, panelning o'zi esa
+   uning ichida `sticky` — shuning uchun pastga scroll qilganda ekranda
+   qolib, biz bilan birga harakatlanadi. */
+.filters-col {
   position: absolute;
   top: 42px;
+  bottom: 76px;              /* .catalog padding-block bilan bir xil */
   left: 45px;
   width: 295px;
+}
+.filters {
+  position: sticky;
+  top: 24px;                 /* ekran tepasidan qoladigan bo'shliq */
 
   display: flex;
   flex-direction: column;
@@ -121,6 +129,17 @@
   font-weight: 600;
   font-size: 20px;
   color: #000;
+}
+
+/* Ikonka tugmasi: mobil sheet'da yopish uchun ishlaydi, desktopda esa
+   Figma'dagidek oddiy ikonka bo'lib turadi (bosilmaydi). */
+.filters__close {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: none;
 }
 
 .filters__divider {
@@ -179,6 +198,16 @@
   position: relative;
   height: 44px;
 }
+/* Chiziq va yozuvlar HTML'da inputlardan KEYIN turadi -> ular ustida
+   chiziladi va tutqichning aynan o'rtasidagi bosishni "yeb" qo'yardi
+   (faqat aylananing tepasi/pasti ushlanardi). Bosishni o'tkazib
+   yuboramiz — endi aylananing istalgan nuqtasi ishlaydi. */
+.price-range__track,
+.price-range__fill,
+.price-range__labels {
+  pointer-events: none;
+}
+
 .price-range__track {
   position: absolute;
   top: 8px;
@@ -273,9 +302,10 @@
     gap: 32px;
     align-items: start;
   }
-  .filters {
-    position: static;
+  .filters-col {
+    position: static;         /* endi u oddiy grid ustuni */
     width: auto;
+    align-self: stretch;      /* qatorning to'liq balandligi -> sticky yura oladi */
   }
   .catalog__content {
     width: auto;         /* grid ustuni kengligini oladi */
@@ -345,17 +375,23 @@
     visibility: hidden;
     transition: opacity 0.3s var(--ease-soft, ease), visibility 0.3s;
   }
+  /* Figma: filtr pastdan ko'tariladigan "sheet" — ekran tubiga yopishgan,
+     to'liq kenglikda, faqat tepa burchaklari yumaloq. */
   .filters {
     position: fixed;
     z-index: 91;
-    top: 50%;
-    left: 16px;
-    right: 16px;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: auto;
-    max-height: calc(100dvh - 32px);
+    max-height: 85dvh;
     overflow-y: auto;
+    padding: 24px 16px calc(24px + env(safe-area-inset-bottom));
+    border: 0;
+    border-radius: 20px 20px 0 0;
     background: var(--white);
-    transform: translateY(-50%) scale(0.98);
+    transform: translateY(100%);   /* yopiq holat: ekran ostida */
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -372,7 +408,13 @@
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: translateY(-50%) scale(1);
+    transform: translateY(0);
+  }
+
+  /* Sheet tepasidagi filtr ikonkasi = yopish tugmasi (Figma). */
+  .filters__close {
+    pointer-events: auto;
+    cursor: pointer;
   }
 }
 

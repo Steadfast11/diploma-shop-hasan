@@ -86,18 +86,28 @@ export function initMotion() {
   });
 
 
-  /* --- Lenis: yumshoq, sekin inersiyali skroll --- */
-  const lenis = new Lenis({
-    duration: 1.5,        // uzoqroq -> silliqroq to'xtash
-    smoothWheel: true,
-    wheelMultiplier: 0.9, // g'ildirak biroz "yengil"
-    easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)), // expo.out
-  });
-  // Boshqa modullar (masalan telefon davlat ro'yxati) skrollни vaqtincha
-  // to'xtata olsin: window.__lenis.stop() / .start().
-  window.__lenis = lenis;
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  /* --- Lenis: yumshoq, sekin inersiyali skroll ---
+     FAQAT sichqoncha/g'ildirakli qurilmalarda. Sensorli ekranda Lenis
+     barmoq harakatini o'ziga oladi va uni 1.5 soniyalik animatsiya bilan
+     "quvib" boradi: barmoq surilayotganda sahifa qotib turadi, qo'yib
+     yuborilganda esa birdan sakrab qoladi. Telefon brauzerining o'z
+     skrolli allaqachon silliq — shuning uchun u yerda Lenis'ni yoqmaymiz. */
+  const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
+  if (!isTouch) {
+    const lenis = new Lenis({
+      duration: 1.5,        // uzoqroq -> silliqroq to'xtash
+      smoothWheel: true,
+      wheelMultiplier: 0.9, // g'ildirak biroz "yengil"
+      easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)), // expo.out
+    });
+    // Boshqa modullar (masalan telefon davlat ro'yxati) skrollni vaqtincha
+    // to'xtata olsin: window.__lenis?.stop() / .start().
+    // Sensorli ekranda __lenis bo'lmaydi -> chaqiruvlar `?.` bilan yozilgan.
+    window.__lenis = lenis;
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+  }
   gsap.ticker.lagSmoothing(0);
 
   /* --- Blok reveal: [data-reveal] / [data-reveal-stagger] ko'rinishga kirganda

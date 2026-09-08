@@ -172,19 +172,43 @@
     width: auto;
   }
 }
+/* Mobil (Figma): rasm chapda kvadrat, o'ngda nom + narx, ularning
+   TAGIDA bitta qator — chapda qizil savat ikonkasi, o'ngda miqdor
+   tugmasi. Order Summary'da esa faqat "Total" qoladi. */
 @media (max-width: 480px) {
+  .cart__title {
+    font-size: 28px;             /* katalogdagi mobil sarlavha bilan bir xil */
+  }
+
   .cart-item {
-    grid-template-columns: 96px 1fr;
+    position: relative;          /* miqdor tugmasi shu qatorga nisbatan */
+    grid-template-columns: 124px 1fr;
+    column-gap: 16px;
   }
   .cart-item__media,
   .cart-item__image {
-    width: 96px;
+    width: 124px;
   }
   .cart-item__image {
-    height: 96px;
+    height: 124px;
   }
+  .cart-item__info {
+    min-height: 124px;           /* rasm balandligi */
+  }
+  /* savat ikonkasi pastki qatorga tushadi */
+  .cart-item__remove {
+    margin-top: auto;
+  }
+  /* miqdor tugmasi — o'sha pastki qatorning o'ng chekkasida */
   .cart-item .qty {
-    grid-column: 2;
-    justify-self: start;
+    position: absolute;
+    right: 0;
+    bottom: 17px;                /* .cart-item padding-block bilan bir xil */
+  }
+
+  /* Figma mobil: faqat Total ko'rsatiladi */
+  .order-summary__row:not(.order-summary__row--total),
+  .order-summary__divider {
+    display: none;
   }
 }
