@@ -11,26 +11,26 @@
 }
 
 /* --- o'ng qism: sarlavha + grid (bosh sahifadagi konteyner bilan bir xil) --- */
-.catalog__content {
+.catalog-content {
   width: min(100% - 2 * var(--gutter), var(--container));
   margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: 32px;                   /* Figma: sarlavha -> grid */
 }
-.catalog__title {
+.catalog-title {
   font-size: var(--fs-h2);     /* Figma: "All products" 40px (h1 emas, h2 o'lchami) */
 }
 
 /* Sarlavha + qidiruv qatori (Figma'da yo'q — biz qo'shdik) */
-.catalog__head {
+.catalog-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
 }
-.catalog__search {
+.catalog-search {
   width: 260px;
   max-width: 100%;
   height: 44px;
@@ -42,19 +42,19 @@
   font-size: 14px;
   background: var(--white);
 }
-.catalog__search:focus-visible {
+.catalog-search:focus-visible {
   outline: none;
   border-color: var(--black);
 }
 
 /* Figma'da filter tugmasi va xira fon faqat mobil holatda ko'rinadi. */
-.catalog__filter-toggle,
-.filters__backdrop {
+.catalog-filter-toggle,
+.filter-backdrop {
   display: none;
 }
 
 /* "Filtrni tozalash" — matn havola, Apply Filter ostida */
-.filters__clear {
+.filter-clear {
   align-self: center;
   padding: 0;
   border: 0;
@@ -66,13 +66,13 @@
   text-decoration: underline;
   cursor: pointer;
 }
-.filters__clear[hidden] {
+.filter-clear[hidden] {
   display: none;
 }
 
 /* "Ko'proq yuklash" — Figma'da yo'q, faqat pages > 1 bo'lsa ko'rinadi.
    Uslub mos: qora pill tugma, markazda. */
-.catalog__more {
+.catalog-more {
   align-self: center;
   margin-top: 8px;
   height: 48px;
@@ -86,25 +86,25 @@
   font-size: 14px;
   cursor: pointer;
 }
-.catalog__more[hidden] {
+.catalog-more[hidden] {
   display: none;
 }
-.catalog__more:disabled {
+.catalog-more:disabled {
   opacity: 0.6;
 }
 
 /* --- chap qism: filtr paneli (Figma: chap bo'sh joyda, left 45px) ---
-   Ustun (.filters-col) sahifa balandligini egallaydi, panelning o'zi esa
+   Ustun (.filter-col) sahifa balandligini egallaydi, panelning o'zi esa
    uning ichida `sticky` — shuning uchun pastga scroll qilganda ekranda
    qolib, biz bilan birga harakatlanadi. */
-.filters-col {
+.filter-col {
   position: absolute;
   top: 42px;
   bottom: 76px;              /* .catalog padding-block bilan bir xil */
   left: 45px;
   width: 295px;
 }
-.filters {
+.filter {
   position: sticky;
   top: 24px;                 /* ekran tepasidan qoladigan bo'shliq */
 
@@ -119,13 +119,13 @@
   letter-spacing: normal;          /* SF Pro'da manfiy tracking yo'q */
 }
 
-.filters__head {
+.filter-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.filters__title,
-.filters__subtitle {
+.filter-title,
+.filter-subtitle {
   font-weight: 600;
   font-size: 20px;
   color: #000;
@@ -133,7 +133,7 @@
 
 /* Ikonka tugmasi: mobil sheet'da yopish uchun ishlaydi, desktopda esa
    Figma'dagidek oddiy ikonka bo'lib turadi (bosilmaydi). */
-.filters__close {
+.filter-close {
   display: grid;
   place-items: center;
   padding: 0;
@@ -142,19 +142,19 @@
   pointer-events: none;
 }
 
-.filters__divider {
+.filter-divider {
   height: 1px;
   background: rgba(0, 0, 0, 0.1);
 }
 
-.filters__group {
+.filter-group {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 /* kategoriya qatori — tugma (bosilganda API'ga category=<id>) */
-.filters__row {
+.filter-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -168,24 +168,24 @@
   cursor: pointer;
 }
 /* tanlangan kategoriya */
-.filters__row[aria-pressed="true"] {
+.filter-row[aria-pressed="true"] {
   color: #000;
   font-weight: 600;
 }
 
-.filters__chevron {
+.filter-chevron {
   transform: rotate(-90deg);  /* o'ngga ishora (yopiq/tanlanmagan) */
   transition: transform 0.2s var(--ease-soft, ease);
 }
 /* tanlangan kategoriya -> pastga ishora ("ochiq") */
-.filters__row[aria-pressed="true"] .filters__chevron {
+.filter-row[aria-pressed="true"] .filter-chevron {
   transform: rotate(0deg);
 }
 /* Price sarlavhasi: ochiq -> tepaga, yopiq -> pastga */
-[data-price-toggle] .filters__chevron {
+[data-price-toggle] .filter-chevron {
   transform: rotate(0deg);
 }
-[data-price-toggle][aria-expanded="true"] .filters__chevron {
+[data-price-toggle][aria-expanded="true"] .filter-chevron {
   transform: rotate(180deg);
 }
 /* yopilgan narx paneli */
@@ -194,7 +194,7 @@
 }
 
 /* --- narx oralig'i (ikki tutqichli slider) --- */
-.price-range {
+.price {
   position: relative;
   height: 44px;
 }
@@ -202,13 +202,13 @@
    chiziladi va tutqichning aynan o'rtasidagi bosishni "yeb" qo'yardi
    (faqat aylananing tepasi/pasti ushlanardi). Bosishni o'tkazib
    yuboramiz — endi aylananing istalgan nuqtasi ishlaydi. */
-.price-range__track,
-.price-range__fill,
-.price-range__labels {
+.price-track,
+.price-fill,
+.price-labels {
   pointer-events: none;
 }
 
-.price-range__track {
+.price-track {
   position: absolute;
   top: 8px;
   left: 0;
@@ -217,14 +217,14 @@
   background: rgba(0, 0, 0, 0.15);
   border-radius: 999px;
 }
-.price-range__fill {
+.price-fill {
   position: absolute;
   height: 100%;
   background: #000;
   border-radius: 999px;
   /* chap/kenglik JS'da hisoblanadi (keyingi bosqich) */
 }
-.price-range__input {
+.price-input {
   position: absolute;
   top: 2px;
   left: 0;
@@ -236,7 +236,7 @@
   -webkit-appearance: none;
   appearance: none;
 }
-.price-range__input::-webkit-slider-thumb {
+.price-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 16px;
@@ -246,7 +246,7 @@
   cursor: pointer;
   pointer-events: auto;
 }
-.price-range__input::-moz-range-thumb {
+.price-input::-moz-range-thumb {
   width: 16px;
   height: 16px;
   border: 0;
@@ -255,7 +255,7 @@
   cursor: pointer;
   pointer-events: auto;
 }
-.price-range__labels {
+.price-labels {
   position: absolute;
   top: 24px;
   width: 100%;
@@ -266,7 +266,7 @@
 }
 
 /* --- Apply Filter tugmasi --- */
-.filters__apply {
+.filter-apply {
   height: 48px;
   border: 0;
   border-radius: 62px;        /* Figma: to'liq yumaloq */
@@ -302,12 +302,12 @@
     gap: 32px;
     align-items: start;
   }
-  .filters-col {
+  .filter-col {
     position: static;         /* endi u oddiy grid ustuni */
     width: auto;
     align-self: stretch;      /* qatorning to'liq balandligi -> sticky yura oladi */
   }
-  .catalog__content {
+  .catalog-content {
     width: auto;         /* grid ustuni kengligini oladi */
     margin-inline: 0;
     min-width: 0;         /* grid bolasi cho'zilib ketmasin */
@@ -330,19 +330,19 @@
     display: block;
     padding-block: 24px 56px;
   }
-  .catalog__content {
+  .catalog-content {
     gap: 24px;
   }
-  .catalog__head {
+  .catalog-head {
     flex-wrap: nowrap;
   }
-  .catalog__title {
+  .catalog-title {
     font-size: 28px;
   }
-  .catalog__search {
+  .catalog-search {
     display: none;
   }
-  .catalog__filter-toggle {
+  .catalog-filter-toggle {
     flex: 0 0 auto;
     width: 32px;
     height: 32px;
@@ -360,7 +360,7 @@
     row-gap: 24px;
   }
 
-  .filters__backdrop {
+  .filter-backdrop {
     position: fixed;
     inset: 0;
     z-index: 90;
@@ -377,7 +377,7 @@
   }
   /* Figma: filtr pastdan ko'tariladigan "sheet" — ekran tubiga yopishgan,
      to'liq kenglikda, faqat tepa burchaklari yumaloq. */
-  .filters {
+  .filter {
     position: fixed;
     z-index: 91;
     top: auto;
@@ -399,12 +399,12 @@
                 transform 0.3s var(--ease-soft, ease),
                 visibility 0.3s;
   }
-  body.catalog-filter-open .filters__backdrop {
+  body.catalog-filter-open .filter-backdrop {
     display: block;
     opacity: 1;
     visibility: visible;
   }
-  body.catalog-filter-open .filters {
+  body.catalog-filter-open .filter {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -412,7 +412,7 @@
   }
 
   /* Sheet tepasidagi filtr ikonkasi = yopish tugmasi (Figma). */
-  .filters__close {
+  .filter-close {
     pointer-events: auto;
     cursor: pointer;
   }

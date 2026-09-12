@@ -24,21 +24,21 @@
    Figma: rasm (aspect 282/324, radius 8) + 8px gap + (nom | narx).
    Nom va narx: 16px, bir qatorda, nom cho'zilib narxni o'ngga suradi.
    Mazmun (rasm/nom/narx) BACKENDDAN keladi — bu faqat qolip. */
-.product-card {
+.card {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.product-card__link {
+.card-link {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.product-card__media {
+.card-media {
   position: relative; /* sevimlilar tugmasi shu ustiga joylashadi */
 }
-.product-card__image {
+.card-image {
   width: 100%;
   aspect-ratio: 282 / 324;
   object-fit: cover;
@@ -46,15 +46,15 @@
   background: var(--color-surface); /* rasm kelguncha och kulrang */
 }
 
-.product-card__info {
+.card-info {
   display: flex;
   gap: 8px;
 }
-.product-card__title {
+.card-title {
   flex: 1;            /* bo'sh joyni egallaydi -> narxni o'ngga suradi */
   min-width: 0;
 }
-.product-card__price {
+.card-price {
   white-space: nowrap;
 }
 
@@ -92,7 +92,7 @@
   font-family: var(--font-system);
   letter-spacing: normal;
 }
-.qty__btn {
+.qty-btn {
   width: 20px;
   height: 20px;
   padding: 0;
@@ -102,18 +102,18 @@
   place-items: center;
   cursor: pointer;
 }
-.qty__btn img {
+.qty-btn img {
   width: 20px;
   height: 20px;
 }
-.qty__value {
+.qty-value {
   font-size: 14px;
   min-width: 1ch;
   text-align: center;
 }
 
 /* ---------- 404 sahifasi ---------- */
-.not-found {
+.notfound {
   padding-block: 96px;
   display: flex;
   flex-direction: column;
@@ -121,18 +121,18 @@
   gap: 16px;
   text-align: left;
 }
-.not-found__code {
+.notfound-code {
   font-size: 16px;
   color: var(--color-text-muted);
   letter-spacing: normal;
 }
-.not-found__title {
+.notfound-title {
   font-size: var(--fs-h2);
 }
-.not-found__text {
+.notfound-text {
   color: var(--color-text-muted);
 }
-.not-found__link {
+.notfound-link {
   margin-top: 8px;
   background: var(--black);
   color: var(--white);
@@ -144,7 +144,7 @@
   padding: 40px 0;
   color: var(--color-text-muted);
 }
-.state-message--error {
+.state-message-error {
   color: var(--color-danger);
 }
 
@@ -184,15 +184,15 @@
   opacity: 1;
   transform: translate(-50%, 0);
 }
-.toast--error {
+.toast-error {
   background: var(--color-danger);
 }
 
 /* ---------- Skeleton (yuklanish holati) ---------- */
-.skeleton .product-card__image {
+.skeleton .card-image {
   animation: skeleton-pulse 1.3s ease-in-out infinite;
 }
-.skeleton__line {
+.skeleton-line {
   display: block;
   height: 16px;
   width: 60%;
@@ -231,7 +231,7 @@
   border-radius: 2px;
 }
 .btn-glass:focus-visible,
-.order-summary__checkout:focus-visible {
+.summary-checkout:focus-visible {
   outline-color: var(--white);
 }
 
@@ -266,46 +266,46 @@
 [data-reveal-stagger].is-visible > *:nth-child(n + 9) { transition-delay: 620ms; }
 
 /* mahsulot kartochkasi — rasm ustiga borilganda sekin, ozgina kattalashadi */
-.product-card__image {
+.card-image {
   transition: transform 0.9s var(--ease-soft);
 }
-.product-card:hover .product-card__image {
+.card:hover .card-image {
   transform: scale(1.025);
 }
 
 /* tugmalar — bosilganda juda oz cho'kish, yumshoq qaytish */
 .btn-glass,
-.product__add,
-.reviews__write,
-.order-summary__checkout,
-.filters__apply,
-.auth__submit,
-.profile__logout,
-.modal__btn {
+.product-add,
+.reviews-write,
+.summary-checkout,
+.filter-apply,
+.auth-submit,
+.profile-logout,
+.modal-btn {
   transition: transform 0.35s var(--ease-soft), opacity 0.3s ease;
 }
 .btn-glass:active,
-.product__add:active,
-.reviews__write:active,
-.order-summary__checkout:active,
-.filters__apply:active,
-.auth__submit:active,
-.profile__logout:active,
-.modal__btn:active {
+.product-add:active,
+.reviews-write:active,
+.summary-checkout:active,
+.filter-apply:active,
+.auth-submit:active,
+.profile-logout:active,
+.modal-btn:active {
   transform: scale(0.99);
 }
 
 /* havolalar rangi/hover — yumshoq */
 a,
-.site-header__nav a,
-.site-header__account a,
-.site-footer__col a,
-.cart-item__title {
+.header-nav a,
+.header-account a,
+.footer-col a,
+.cart-item-title {
   transition: opacity 0.3s ease;
 }
-.site-header__nav a:hover,
-.site-header__account a:hover,
-.site-footer__col a:hover {
+.header-nav a:hover,
+.header-account a:hover,
+.footer-col a:hover {
   opacity: 0.55;
 }
 
@@ -330,7 +330,7 @@ a,
   padding-bottom: 0.14em;
   margin-bottom: -0.14em;
 }
-.m-word__in {
+.m-word-in {
   display: inline-block;
   will-change: transform;
 }
@@ -351,8 +351,8 @@ a,
    yuklanish paytidagi ko'rinish AVVALGIDEK (kulrang quti).
    img-fallback klassini faqat JS qo'yadi -> JS ishlamasa bunday rasm
    umuman chizilmaydi (ko'rinmay qolib ketish xavfi yo'q). */
-.product-card__media,
-.cart-item__media {
+.card-media,
+.cart-item-media {
   background: var(--color-surface);
   border-radius: var(--radius);
 }
@@ -373,7 +373,7 @@ img.img-fallback.is-loaded.img-fade {
 }
 
 /* ---------- Miqdor raqami almashganda yuqoridan siljib keladi ---------- */
-.qty__value.is-changed {
+.qty-value.is-changed {
   animation: qty-roll 0.28s var(--ease-soft);
 }
 @keyframes qty-roll {
@@ -382,11 +382,11 @@ img.img-fallback.is-loaded.img-fade {
 }
 
 /* ---------- Kategoriya kartochkasi: mahsulot kartochkasi kabi hover-zoom ----------
-   (.category-card da `overflow: clip` bor -> rasm chetidan chiqmaydi) */
-.category-card img {
+   (.category da `overflow: clip` bor -> rasm chetidan chiqmaydi) */
+.category img {
   transition: transform 0.9s var(--ease-soft);
 }
-.category-card:hover img {
+.category:hover img {
   transform: scale(1.05);
 }
 

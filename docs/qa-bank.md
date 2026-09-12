@@ -62,7 +62,7 @@ Bir o'lchovli qatorlar (nav, tugmalar yonma-yon) → `flex`. Ikki o'lchovli to'r
 (mahsulotlar 4 ustun) → `grid`. Header `grid: 1fr auto 1fr` — logo aniq markazda.
 
 **Trash ikonka qanday qizil bo'ldi?**
-SVG qora edi. `.cart-item__remove img { filter: ... }` — CSS filter bilan qizilga bo'yadik.
+SVG qora edi. `.cart-item-remove img { filter: ... }` — CSS filter bilan qizilga bo'yadik.
 
 ---
 
@@ -163,7 +163,7 @@ qo'yadi -> bosilganda deyarli darrov ochiladi. Har manzil bir marta,
 `?id=...` hisobga olinmaydi (HTML fayl bitta), tashqi havolalar tegilmaydi.
 
 **Register formasi qanday tekshiriladi?**
-Har maydon ostida alohida `.field__error`. `blur` da tekshiramiz; xato chiqса
+Har maydon ostida alohida `.field-error`. `blur` da tekshiramiz; xato chiqса
 `input` da qayta baholaymiz; `submit` da hammasini. Noto'g'ri maydon —
 `aria-invalid="true"` + `aria-describedby`. Birinchi noto'g'riga `focus`.
 Valid bo'lmaguncha API'ga so'rov yubormaymiz. Mantiq `js/core/validation.js` daги

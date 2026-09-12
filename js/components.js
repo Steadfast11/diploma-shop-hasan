@@ -38,7 +38,7 @@ async function refreshCartCount() {
 // Kirilmagan bo'lsa "Account" havolasi login sahifasiga ketsin.
 function wireHeaderAuth() {
   if (isLoggedIn()) return;
-  const acc = document.querySelector('.site-header__account a[href$="profile.html"]');
+  const acc = document.querySelector('.header-account a[href$="profile.html"]');
   if (acc) acc.href = "/pages/login.html";
 }
 
@@ -47,8 +47,8 @@ function wireHeaderMenu() {
   const burger = document.querySelector("[data-burger]");
   if (!burger) return;
   burger.addEventListener("click", () => {
-    const header = burger.closest(".site-header");
-    const open = header.classList.toggle("site-header--menu-open");
+    const header = burger.closest(".header");
+    const open = header.classList.toggle("header-menu-open");
     burger.setAttribute("aria-expanded", String(open));
   });
 }
@@ -56,8 +56,8 @@ function wireHeaderMenu() {
 // Logo intro birinchi kirishda va RELOAD qilinganda ishlaydi.
 // Shu tab ichida boshqa sahifaga oddiy o'tilganda qayta ishlamaydi.
 function initLogoIntro() {
-  const logo = document.querySelector(".site-header__logo");
-  const header = logo?.closest(".site-header");
+  const logo = document.querySelector(".header-logo");
+  const header = logo?.closest(".header");
   if (!logo || !header) return;
 
   let alreadyPlayed = false;
@@ -70,7 +70,7 @@ function initLogoIntro() {
   const isReload = navigation?.type === "reload";
   if (alreadyPlayed && !isReload) return;
 
-  header.classList.add("site-header--intro");
+  header.classList.add("header-intro");
   logo.classList.add("is-intro");
   try {
     sessionStorage.setItem("diploma_shop_logo_intro", "1");

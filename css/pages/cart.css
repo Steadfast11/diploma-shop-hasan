@@ -15,17 +15,17 @@
   align-items: start;
 }
 
-.cart__main {
+.cart-main {
   display: flex;
   flex-direction: column;
   gap: 30px;                 /* sarlavha -> ro'yxat */
 }
-.cart__title {
+.cart-title {
   font-size: var(--fs-h2);   /* 40px */
 }
 
 /* bo'sh holat: "No products in your bag" */
-.cart__empty {
+.cart-empty {
   background: var(--color-surface);
   border-radius: var(--radius);
   padding: 40px 24px;
@@ -40,7 +40,7 @@
   align-items: start;
   padding-block: 17px;       /* Figma: qatorlar orasi ~190px pitch (176 + 14) */
 }
-.cart-item__media {
+.cart-item-media {
   display: block;
   width: 176px;
 }
@@ -56,28 +56,28 @@
   transform: translateX(-10px);
   pointer-events: none;
 }
-.cart-item__image {
+.cart-item-image {
   width: 176px;
   height: 176px;
   border-radius: var(--radius);
   object-fit: cover;
   background: var(--color-surface);
 }
-.cart-item__info {
+.cart-item-info {
   display: flex;
   flex-direction: column;
   min-height: 176px;
 }
-.cart-item__title {
+.cart-item-title {
   display: block;
 }
-.cart-item__title:hover {
+.cart-item-title:hover {
   text-decoration: underline;
 }
-.cart-item__price {
+.cart-item-price {
   margin-top: 10px;
 }
-.cart-item__remove {
+.cart-item-remove {
   margin-top: 30px;
   padding: 0;
   border: 0;
@@ -87,7 +87,7 @@
   height: 24px;
 }
 /* Figma trash — qizil */
-.cart-item__remove img {
+.cart-item-remove img {
   width: 24px;
   height: 24px;
   filter: brightness(0) saturate(100%) invert(28%) sepia(94%)
@@ -98,7 +98,7 @@
 }
 
 /* ---------- Order Summary (qora karta) ---------- */
-.order-summary {
+.summary {
   background: var(--black);
   border: 1px solid var(--on-dark-line);
   border-radius: 20px;
@@ -113,41 +113,41 @@
   font-family: var(--font-system);
   letter-spacing: normal;
 }
-.order-summary__title {
+.summary-title {
   font-weight: 600;
   font-size: 24px;
 }
-.order-summary__rows {
+.summary-rows {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-.order-summary__row {
+.summary-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 20px;
 }
-.order-summary__row > span:first-child {
+.summary-row > span:first-child {
   color: var(--on-dark-muted);
 }
-.order-summary__row > span:last-child {
+.summary-row > span:last-child {
   font-weight: 600;
 }
-.order-summary__row--discount > span:last-child {
+.summary-row-discount > span:last-child {
   color: var(--color-danger);
 }
-.order-summary__divider {
+.summary-divider {
   height: 1px;
   background: var(--on-dark-line);
 }
-.order-summary__row--total > span:first-child {
+.summary-row-total > span:first-child {
   color: var(--white);
 }
-.order-summary__row--total > span:last-child {
+.summary-row-total > span:last-child {
   font-size: 24px;
 }
-.order-summary__checkout {
+.summary-checkout {
   height: 48px;
   border: 0;
   border-radius: 62px;
@@ -157,7 +157,7 @@
   font-size: 14px;
   cursor: pointer;
 }
-.order-summary__checkout:disabled {
+.summary-checkout:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -168,7 +168,7 @@
     grid-template-columns: 1fr;
     row-gap: 40px;
   }
-  .order-summary {
+  .summary {
     width: auto;
   }
 }
@@ -176,7 +176,7 @@
    TAGIDA bitta qator — chapda qizil savat ikonkasi, o'ngda miqdor
    tugmasi. Order Summary'da esa faqat "Total" qoladi. */
 @media (max-width: 480px) {
-  .cart__title {
+  .cart-title {
     font-size: 28px;             /* katalogdagi mobil sarlavha bilan bir xil */
   }
 
@@ -185,18 +185,18 @@
     grid-template-columns: 124px 1fr;
     column-gap: 16px;
   }
-  .cart-item__media,
-  .cart-item__image {
+  .cart-item-media,
+  .cart-item-image {
     width: 124px;
   }
-  .cart-item__image {
+  .cart-item-image {
     height: 124px;
   }
-  .cart-item__info {
+  .cart-item-info {
     min-height: 124px;           /* rasm balandligi */
   }
   /* savat ikonkasi pastki qatorga tushadi */
-  .cart-item__remove {
+  .cart-item-remove {
     margin-top: auto;
   }
   /* miqdor tugmasi — o'sha pastki qatorning o'ng chekkasida */
@@ -207,8 +207,8 @@
   }
 
   /* Figma mobil: faqat Total ko'rsatiladi */
-  .order-summary__row:not(.order-summary__row--total),
-  .order-summary__divider {
+  .summary-row:not(.summary-row-total),
+  .summary-divider {
     display: none;
   }
 }

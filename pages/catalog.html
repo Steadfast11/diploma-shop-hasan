@@ -47,86 +47,86 @@
 
   <main id="main" class="catalog">
     <!-- Mobil filter ochilganda orqa fonni xiralashtiradi; bosilsa yopiladi. -->
-    <button class="filters__backdrop" type="button" data-filter-close
+    <button class="filter-backdrop" type="button" data-filter-close
             aria-label="Close filters" tabindex="-1"></button>
 
     <!-- CHAP: filtr paneli. Figma: SF Pro shrift, 1px och ramka, radius 20.
-         .filters-col — panelning "ustuni": u sahifa balandligicha cho'ziladi,
+         .filter-col — panelning "ustuni": u sahifa balandligicha cho'ziladi,
          panelning o'zi esa uning ichida sticky bo'lib scroll bilan yuradi. -->
-    <div class="filters-col">
-      <aside class="filters" id="catalog-filters">
-        <div class="filters__head">
-          <p class="filters__title">Filters</p>
+    <div class="filter-col">
+      <aside class="filter" id="catalog-filters">
+        <div class="filter-head">
+          <p class="filter-title">Filters</p>
           <!-- Mobil sheet'da bu ikonka yopish tugmasi (desktopda oddiy ikonka). -->
-          <button class="filters__close" type="button" data-filter-close
+          <button class="filter-close" type="button" data-filter-close
                   aria-label="Close filters">
             <img src="/assets/icons/filter.svg" alt="" width="24" height="24" />
           </button>
         </div>
 
-        <div class="filters__divider"></div>
+        <div class="filter-divider"></div>
 
         <!-- Kategoriyalar — bittasini bosib tanlash (API'da category=<id>) -->
-        <div class="filters__group" data-category-list>
-          <button class="filters__row" type="button" data-category="1">
+        <div class="filter-group" data-category-list>
+          <button class="filter-row" type="button" data-category="1">
             <span>Categorie 1</span>
-            <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+            <img class="filter-chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
           </button>
-          <button class="filters__row" type="button" data-category="2">
+          <button class="filter-row" type="button" data-category="2">
             <span>Categorie 2</span>
-            <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+            <img class="filter-chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
           </button>
-          <button class="filters__row" type="button" data-category="3">
+          <button class="filter-row" type="button" data-category="3">
             <span>Categorie 3</span>
-            <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+            <img class="filter-chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
           </button>
         </div>
 
-        <div class="filters__divider"></div>
+        <div class="filter-divider"></div>
 
         <!-- Narx oralig'i — sarlavhani bosib ochib/yopiladi -->
-        <div class="filters__group">
-          <button class="filters__row filters__row--static" type="button"
+        <div class="filter-group">
+          <button class="filter-row filter-row-static" type="button"
                   data-price-toggle aria-expanded="true" aria-controls="price-panel">
-            <span class="filters__subtitle">Price</span>
-            <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+            <span class="filter-subtitle">Price</span>
+            <img class="filter-chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
           </button>
-          <div class="price-range" id="price-panel" data-price-panel>
-            <input class="price-range__input price-range__input--min" type="range" min="0" max="100" value="0" aria-label="Minimum price" />
-            <input class="price-range__input price-range__input--max" type="range" min="0" max="100" value="100" aria-label="Maximum price" />
-            <div class="price-range__track"><div class="price-range__fill"></div></div>
-            <div class="price-range__labels">
+          <div class="price" id="price-panel" data-price-panel>
+            <input class="price-input price-input-min" type="range" min="0" max="100" value="0" aria-label="Minimum price" />
+            <input class="price-input price-input-max" type="range" min="0" max="100" value="100" aria-label="Maximum price" />
+            <div class="price-track"><div class="price-fill"></div></div>
+            <div class="price-labels">
               <span data-price-min>$0</span>
               <span data-price-max>$100</span>
             </div>
           </div>
         </div>
 
-        <div class="filters__divider"></div>
+        <div class="filter-divider"></div>
 
-        <button class="filters__apply" type="button" data-apply-filter>Apply Filter</button>
-        <button class="filters__clear" type="button" data-clear-filter hidden>Clear filters</button>
+        <button class="filter-apply" type="button" data-apply-filter>Apply Filter</button>
+        <button class="filter-clear" type="button" data-clear-filter hidden>Clear filters</button>
       </aside>
     </div>
 
     <!-- O'NG: sarlavha + mahsulotlar to'ri -->
-    <div class="catalog__content">
-      <div class="catalog__head" data-reveal>
-        <h1 class="catalog__title" data-split>All products</h1>
+    <div class="catalog-content">
+      <div class="catalog-head" data-reveal>
+        <h1 class="catalog-title" data-split>All products</h1>
         <!-- Figma mobil: filter paneli shu ikonka orqali modal bo'lib ochiladi. -->
-        <button class="catalog__filter-toggle" type="button" data-filter-open
+        <button class="catalog-filter-toggle" type="button" data-filter-open
                 aria-controls="catalog-filters" aria-expanded="false"
                 aria-label="Open filters">
           <img src="/assets/icons/filter.svg" alt="" width="18" height="18" />
         </button>
         <!-- Qidiruv: API'da server-tomon qidiruv yo'q -> hozir yuklangan
              ro'yxatni nom bo'yicha mahalliy (client-side) filtrlaydi. -->
-        <input class="catalog__search" type="search" placeholder="Search loaded products…"
+        <input class="catalog-search" type="search" placeholder="Search loaded products…"
                aria-label="Search currently loaded products" data-search />
       </div>
       <!-- kartochkalarni js/pages/catalog.js API'dan chizadi -->
       <div class="product-grid" data-products data-reveal-stagger></div>
-      <button class="catalog__more" type="button" data-load-more hidden>Load more</button>
+      <button class="catalog-more" type="button" data-load-more hidden>Load more</button>
     </div>
   </main>
 

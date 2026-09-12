@@ -16,25 +16,25 @@
   padding-bottom: 60px;       /* Figma: pastdan ~60px */
   color: var(--white);
 }
-.hero__bg {
+.hero-bg {
   position: absolute;
   inset: 0;
 }
-.hero__bg img {
+.hero-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.hero__bg::after {            /* qora 20% parda */
+.hero-bg::after {            /* qora 20% parda */
   content: "";
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.2);
 }
-.hero__inner {
+.hero-inner {
   position: relative;        /* parda ostida qolmasin */
 }
-.hero__offer {
+.hero-offer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -42,15 +42,15 @@
   width: 588px;              /* Figma */
   max-width: 100%;
 }
-.hero__text {
+.hero-text {
   display: flex;
   flex-direction: column;
   gap: 16px;                 /* Figma: eyebrow -> sarlavha */
 }
-.hero__eyebrow {
+.hero-eyebrow {
   text-transform: uppercase;
 }
-/* .hero__title -> <h1>, o'lchami base.css'dan (56px) */
+/* .hero-title -> <h1>, o'lchami base.css'dan (56px) */
 
 /* ---------- SEKSIYALAR ----------
    Figma: seksiyalar orasi ~76px, seksiya ichida sarlavha -> grid 32px. */
@@ -65,7 +65,7 @@
   flex-direction: column;
   gap: 32px;
 }
-/* .section__title -> <h2>, o'lchami base.css'dan (40px) */
+/* .section-title -> <h2>, o'lchami base.css'dan (40px) */
 
 /* ---------- SHOP BY CATEGORY ----------
    Figma: 3 ustun, aspect 384/440, radius 8, rasm to'ldiradi,
@@ -75,7 +75,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
-.category-card {
+.category {
   position: relative;
   aspect-ratio: 384 / 440;
   border-radius: var(--radius);
@@ -85,14 +85,14 @@
   padding: 16px;
   background: var(--color-surface); /* rasm (API) kelguncha ko'rinib tursin */
 }
-.category-card img {
+.category img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.category-card__btn {          /* .btn-glass ustiga */
+.category-btn {          /* .btn-glass ustiga */
   position: relative;         /* rasm ustida */
   width: 100%;
   background: rgba(255, 255, 255, 0.16); /* Figma: kategoriya tugmasi */
@@ -110,11 +110,11 @@
     height: 600px;
     padding-bottom: 56px;
   }
-  .hero__eyebrow,
-  .hero__title {
+  .hero-eyebrow,
+  .hero-title {
     /* Figma mobil hero tugmasi: oq matn, ochroq fon */
   }
-  .hero__btn {
+  .hero-btn {
     background: rgba(255, 255, 255, 0.16);
     color: var(--white);
   }

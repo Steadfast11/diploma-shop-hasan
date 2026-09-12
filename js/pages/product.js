@@ -49,14 +49,14 @@ function galleryHTML(p) {
   // O'rovchi div: kulrang joy-tutgich shunda turadi -> rasm yuklangach
   // yumshoq ochiladi, thumbnail bosilganda esa crossfade bo'ladi.
   const main = images[0]
-    ? `<div class="product__main"><img class="product__main-image img-fallback" src="${esc(images[0])}" alt="${esc(p.title)}" data-main /></div>`
-    : `<div class="product__main"><div class="product__main-image"></div></div>`;
+    ? `<div class="product-main"><img class="product-main-image img-fallback" src="${esc(images[0])}" alt="${esc(p.title)}" data-main /></div>`
+    : `<div class="product-main"><div class="product-main-image"></div></div>`;
   const thumbs =
     images.length > 1
-      ? `<div class="product__thumbs">${images
+      ? `<div class="product-thumbs">${images
           .map(
             (src, i) =>
-              `<img class="product__thumb ${i === 0 ? "product__thumb--active" : ""}" src="${esc(src)}" alt="" data-thumb />`
+              `<img class="product-thumb ${i === 0 ? "product-thumb-active" : ""}" src="${esc(src)}" alt="" data-thumb />`
           )
           .join("")}</div>`
       : "";
@@ -65,16 +65,16 @@ function galleryHTML(p) {
 
 function infoHTML(p) {
   return `
-    <h1 class="product__title">${esc(p.title)}</h1>
-    <p class="product__price">${money(p.price)}</p>
-    ${p.description ? `<p class="product__desc">${esc(p.description)}</p>` : ""}
-    <div class="product__actions">
+    <h1 class="product-title">${esc(p.title)}</h1>
+    <p class="product-price">${money(p.price)}</p>
+    ${p.description ? `<p class="product-desc">${esc(p.description)}</p>` : ""}
+    <div class="product-actions">
       <div class="qty">
-        <button class="qty__btn" type="button" data-dec aria-label="Decrease"><img src="/assets/icons/minus.svg" alt="" width="20" height="20" /></button>
-        <span class="qty__value" data-qty>1</span>
-        <button class="qty__btn" type="button" data-inc aria-label="Increase"><img src="/assets/icons/plus.svg" alt="" width="20" height="20" /></button>
+        <button class="qty-btn" type="button" data-dec aria-label="Decrease"><img src="/assets/icons/minus.svg" alt="" width="20" height="20" /></button>
+        <span class="qty-value" data-qty>1</span>
+        <button class="qty-btn" type="button" data-inc aria-label="Increase"><img src="/assets/icons/plus.svg" alt="" width="20" height="20" /></button>
       </div>
-      <button class="product__add" type="button" data-add>Add to cart</button>
+      <button class="product-add" type="button" data-add>Add to cart</button>
     </div>`;
 }
 
@@ -89,11 +89,11 @@ function reviewCardHTML(c) {
     ? new Date(c.at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : "";
   return `
-    <div class="review-card" data-comment-id="${esc(c._id)}">
-      <div class="review-card__author">${esc(c.author)}<img src="/assets/icons/verified.svg" alt="" width="24" height="24" /></div>
-      <p class="review-card__text">${esc(c.text)}</p>
-      ${date ? `<p class="review-card__date">Posted on ${esc(date)}</p>` : ""}
-      ${mine ? `<button class="review-card__delete" type="button" data-delete>Remove</button>` : ""}
+    <div class="review" data-comment-id="${esc(c._id)}">
+      <div class="review-author">${esc(c.author)}<img src="/assets/icons/verified.svg" alt="" width="24" height="24" /></div>
+      <p class="review-text">${esc(c.text)}</p>
+      ${date ? `<p class="review-date">Posted on ${esc(date)}</p>` : ""}
+      ${mine ? `<button class="review-delete" type="button" data-delete>Remove</button>` : ""}
     </div>`;
 }
 
@@ -166,7 +166,7 @@ galleryEl.addEventListener("click", (e) => {
   main.src = thumb.src;
   galleryEl
     .querySelectorAll("[data-thumb]")
-    .forEach((t) => t.classList.toggle("product__thumb--active", t === thumb));
+    .forEach((t) => t.classList.toggle("product-thumb-active", t === thumb));
 });
 
 infoEl.addEventListener("click", async (e) => {
@@ -206,10 +206,10 @@ document.querySelector("[data-write-review]").addEventListener("click", () => {
   }
   openModal({
     title: "Leave a comment",
-    bodyHTML: `<label class="modal__label">Text</label><textarea class="modal__textarea" placeholder="Your comment"></textarea>`,
+    bodyHTML: `<label class="modal-label">Text</label><textarea class="modal-textarea" placeholder="Your comment"></textarea>`,
     buttonText: "Send",
     onConfirm: async (modalEl) => {
-      const text = modalEl.querySelector(".modal__textarea").value.trim();
+      const text = modalEl.querySelector(".modal-textarea").value.trim();
       if (text.length < 2 || text.length > 300) {
         toast("Comment must be 2–300 characters", "error");
         return;

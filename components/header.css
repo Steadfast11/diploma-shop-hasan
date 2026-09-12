@@ -5,13 +5,13 @@
    Mobil (<768px): burger | logo | akkaunt; Home/Products burger ichida.
    ============================================================ */
 
-.site-header {
+.header {
   position: relative;
   background: var(--white);
   border-bottom: 1px solid var(--color-line); /* 1px #000 */
 }
 
-.site-header__inner {
+.header-inner {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -19,17 +19,17 @@
   padding-inline: var(--header-pad-x); /* 60px */
 }
 
-.site-header__nav,
-.site-header__account {
+.header-nav,
+.header-account {
   display: flex;
   align-items: center;
   gap: 40px;
 }
-.site-header__account {
+.header-account {
   justify-self: end;
 }
 
-.site-header__logo {
+.header-logo {
   --logo-full-width: 147px;
   --logo-icon-width: 56px;
 
@@ -39,10 +39,10 @@
   height: 51px;
   overflow: hidden;
 }
-.site-header__logo.is-intro {
+.header-logo.is-intro {
   animation: logo-intro 1.8s var(--ease-soft, ease) both;
 }
-.site-header__logo img {
+.header-logo img {
   display: block;
   width: var(--logo-full-width);
   min-width: var(--logo-full-width);
@@ -86,7 +86,7 @@
 }
 
 /* Logo ochilgach bir marta nozik yorug'lik o'tadi. */
-.site-header__logo::after {
+.header-logo::after {
   content: "";
   position: absolute;
   inset: -12px auto -12px -40%;
@@ -96,7 +96,7 @@
   pointer-events: none;
   opacity: 0;
 }
-.site-header__logo.is-intro::after {
+.header-logo.is-intro::after {
   animation: logo-shine 0.75s ease-out 1.38s both;
 }
 @keyframes logo-shine {
@@ -106,10 +106,10 @@
 }
 
 /* Intro paytida header menyulari logo ortidan ketma-ket chiqadi. */
-.site-header--intro .site-header__nav {
+.header-intro .header-nav {
   animation: header-item-in 0.5s var(--ease-soft, ease) 1.36s both;
 }
-.site-header--intro .site-header__account {
+.header-intro .header-account {
   animation: header-item-in 0.5s var(--ease-soft, ease) 1.48s both;
 }
 @keyframes header-item-in {
@@ -118,14 +118,14 @@
 }
 
 /* burger — desktopda yashirin */
-.site-header__burger {
+.header-burger {
   display: none;
   padding: 0;
   border: 0;
   background: none;
   cursor: pointer;
 }
-.site-header__burger img {
+.header-burger img {
   display: block;
   width: 24px;
   height: 24px;
@@ -133,32 +133,32 @@
 
 /* ---------- MOBIL ---------- */
 @media (max-width: 768px) {
-  .site-header__inner {
+  .header-inner {
     grid-template-columns: auto 1fr auto;
     height: 66px;                     /* Figma mobil */
     padding-inline: 24px;
     column-gap: 16px;
   }
-  .site-header__burger {
+  .header-burger {
     display: block;
   }
-  .site-header--intro .site-header__burger {
+  .header-intro .header-burger {
     animation: header-item-in 0.5s var(--ease-soft, ease) 1.36s both;
   }
-  .site-header__logo {
+  .header-logo {
     --logo-full-width: 116px;
     --logo-icon-width: 45px;
     height: 40px;
   }
-  .site-header__logo img {
+  .header-logo img {
     height: auto;
   }
-  .site-header__account {
+  .header-account {
     gap: 16px;
   }
 
   /* Home/Products — header ostidan ochiladigan panel */
-  .site-header__nav {
+  .header-nav {
     position: absolute;
     top: 100%;
     left: 0;
@@ -172,17 +172,17 @@
     display: none;
     z-index: 20;
   }
-  .site-header--menu-open .site-header__nav {
+  .header-menu-open .header-nav {
     display: flex;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-header__logo.is-intro,
-  .site-header__logo.is-intro::after,
-  .site-header--intro .site-header__nav,
-  .site-header--intro .site-header__account,
-  .site-header--intro .site-header__burger {
+  .header-logo.is-intro,
+  .header-logo.is-intro::after,
+  .header-intro .header-nav,
+  .header-intro .header-account,
+  .header-intro .header-burger {
     animation: none;
   }
 }

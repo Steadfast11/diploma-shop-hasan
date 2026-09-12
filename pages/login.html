@@ -45,28 +45,28 @@
   <div id="header" data-component="header"></div>
 
   <main id="main" class="auth" data-reveal>
-    <h1 class="auth__title" data-split>Log In</h1>
+    <h1 class="auth-title" data-split>Log In</h1>
 
-    <p class="auth__notice">This is an educational sandbox. Do not use a real password.</p>
+    <p class="auth-notice">This is an educational sandbox. Do not use a real password.</p>
 
     <!-- O'qituvchi: kirish EMAIL bilan (API talab qiladi), maketdagi "Phone" emas -->
-    <form class="auth__form" data-login-form novalidate>
+    <form class="auth-form" data-login-form novalidate>
       <div class="field">
-        <label class="field__label" for="email">Email</label>
-        <input class="field__input" id="email" name="email" type="email"
+        <label class="field-label" for="email">Email</label>
+        <input class="field-input" id="email" name="email" type="email"
                placeholder="email@example.com" autocomplete="email" required />
       </div>
       <div class="field">
-        <label class="field__label" for="password">Password</label>
-        <input class="field__input" id="password" name="password" type="password"
+        <label class="field-label" for="password">Password</label>
+        <input class="field-input" id="password" name="password" type="password"
                placeholder="Your password" autocomplete="current-password" required />
       </div>
 
-      <p class="auth__error" data-error role="alert" hidden></p>
-      <button class="auth__submit" type="submit">Log In</button>
+      <p class="auth-error" data-error role="alert" hidden></p>
+      <button class="auth-submit" type="submit">Log In</button>
     </form>
 
-    <p class="auth__alt">
+    <p class="auth-alt">
       Don't have an account? <a href="/pages/register.html">Register</a>
     </p>
   </main>

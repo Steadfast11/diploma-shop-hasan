@@ -13,10 +13,10 @@
   flex-direction: column;
   gap: 24px;
 }
-.auth__title {
+.auth-title {
   font-size: var(--fs-h2);    /* Inter Medium 40px */
 }
-.auth__notice {
+.auth-notice {
   padding: 12px 14px;
   border: 1px solid var(--color-line-soft);
   border-radius: 4px;
@@ -25,7 +25,7 @@
   line-height: 1.4;
 }
 
-.auth__form {
+.auth-form {
   display: flex;
   flex-direction: column;
   gap: 16px;                   /* Figma: maydon guruhlari orasi */
@@ -36,13 +36,13 @@
   flex-direction: column;
   gap: 10px;                   /* label -> input */
 }
-.field__label {
+.field-label {
   font-family: var(--font-system);
   letter-spacing: normal;
   font-size: 18px;
   color: var(--black);
 }
-.field__input {
+.field-input {
   height: 49px;
   border: 1px solid var(--black);
   border-radius: 4px;
@@ -53,21 +53,21 @@
   color: var(--black);
   background: var(--white);
 }
-.field__input::placeholder {
+.field-input::placeholder {
   color: #6d6d6d;              /* Figma */
 }
-.field__input:focus {
+.field-input:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
 }
 
-.auth__error {
+.auth-error {
   color: var(--color-danger);
   font-size: 14px;
 }
 
 /* Har maydon ostidagi alohida xato matni (inline validatsiya). */
-.field__error {
+.field-error {
   color: var(--color-danger);
   font-family: var(--font-system);
   letter-spacing: normal;
@@ -83,7 +83,7 @@
 
 /* Submit bosilganda birinchi noto'g'ri maydon yengil silkinadi
    (JS "is-shake" klassini qo'yadi va animatsiya tugagach olib tashlaydi). */
-.field__input.is-shake {
+.field-input.is-shake {
   animation: field-shake 0.4s ease;
 }
 @keyframes field-shake {
@@ -92,19 +92,19 @@
   75% { transform: translateX(4px); }
 }
 /* Noto'g'ri maydon — qizil ramka (aria-invalid skrinrider uchun ham). */
-.field__input[aria-invalid="true"] {
+.field-input[aria-invalid="true"] {
   border-color: var(--color-danger);
 }
-.field__input[aria-invalid="true"]:focus {
+.field-input[aria-invalid="true"]:focus {
   box-shadow: 0 0 0 2px rgba(255, 51, 51, 0.25);
 }
 
-/* --- intl-tel-input: mavjud .field__input / dizayn uslubiga moslash --- */
+/* --- intl-tel-input: mavjud .field-input / dizayn uslubiga moslash --- */
 .field .iti {
   display: block;
   width: 100%;
 }
-.field .iti .field__input {
+.field .iti .field-input {
   width: 100%;
 }
 .iti__selected-dial-code {
@@ -196,7 +196,7 @@
   }
 }
 
-.auth__submit {
+.auth-submit {
   height: 48px;
   margin-top: 16px;
   border: 0;
@@ -209,17 +209,17 @@
   font-size: 18px;
   cursor: pointer;
 }
-.auth__submit:disabled {
+.auth-submit:disabled {
   opacity: 0.6;
   cursor: progress;
 }
 
-.auth__alt {
+.auth-alt {
   text-align: center;
   font-size: 14px;
   color: var(--color-text-muted);
 }
-.auth__alt a {
+.auth-alt a {
   color: var(--black);
   text-decoration: underline;
 }

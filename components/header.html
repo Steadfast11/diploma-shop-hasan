@@ -2,27 +2,27 @@
      js/components.js buni har sahifadagi <div id="header"> ichiga joylaydi.
      Desktop: [Home Products] | logo | [Account Bag(N)].
      Mobil: [burger] logo [Account Bag(N)] — Home/Products burger ichida. -->
-<header class="site-header">
-  <div class="site-header__inner">
+<header class="header">
+  <div class="header-inner">
 
-    <button class="site-header__burger" type="button"
+    <button class="header-burger" type="button"
             aria-label="Menu" aria-expanded="false" data-burger>
       <img src="/assets/icons/menu.svg" alt="" width="24" height="24" />
     </button>
 
-    <nav class="site-header__nav" aria-label="Main menu">
+    <nav class="header-nav" aria-label="Main menu">
       <a href="/index.html">Home</a>
       <a href="/pages/catalog.html">Products</a>
     </nav>
 
-    <a href="/index.html" class="site-header__logo">
+    <a href="/index.html" class="header-logo">
       <picture>
         <source srcset="/assets/icons/logo.webp" type="image/webp" />
         <img src="/assets/icons/logo.png" alt="WEPRO" width="147" height="51" />
       </picture>
     </a>
 
-    <nav class="site-header__account" aria-label="Account menu">
+    <nav class="header-account" aria-label="Account menu">
       <a href="/pages/profile.html">Account</a>
       <a href="/pages/cart.html">Bag (<span data-cart-count>0</span>)</a>
     </nav>

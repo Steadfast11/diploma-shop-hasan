@@ -46,58 +46,58 @@
   <div id="header" data-component="header"></div>
 
   <main id="main" class="auth" data-reveal>
-    <h1 class="auth__title" data-split>Register</h1>
+    <h1 class="auth-title" data-split>Register</h1>
 
-    <p class="auth__notice">This is an educational sandbox. Do not use a real password.</p>
+    <p class="auth-notice">This is an educational sandbox. Do not use a real password.</p>
 
-    <form class="auth__form" data-register-form novalidate>
+    <form class="auth-form" data-register-form novalidate>
       <div class="field">
-        <label class="field__label" for="name">Name</label>
-        <input class="field__input" id="name" name="name" type="text" placeholder="Alex"
+        <label class="field-label" for="name">Name</label>
+        <input class="field-input" id="name" name="name" type="text" placeholder="Alex"
                autocomplete="given-name" minlength="3" maxlength="10"
                aria-describedby="name-error" required />
-        <p class="field__error" id="name-error" data-error-for="name" role="alert" hidden></p>
+        <p class="field-error" id="name-error" data-error-for="name" role="alert" hidden></p>
       </div>
       <div class="field">
-        <label class="field__label" for="surname">Surname</label>
-        <input class="field__input" id="surname" name="surname" type="text" placeholder="Adams"
+        <label class="field-label" for="surname">Surname</label>
+        <input class="field-input" id="surname" name="surname" type="text" placeholder="Adams"
                autocomplete="family-name" minlength="3" maxlength="15"
                aria-describedby="surname-error" required />
-        <p class="field__error" id="surname-error" data-error-for="surname" role="alert" hidden></p>
+        <p class="field-error" id="surname-error" data-error-for="surname" role="alert" hidden></p>
       </div>
       <div class="field">
-        <label class="field__label" for="email">Email</label>
-        <input class="field__input" id="email" name="email" type="email" placeholder="email@example.com"
+        <label class="field-label" for="email">Email</label>
+        <input class="field-input" id="email" name="email" type="email" placeholder="email@example.com"
                autocomplete="email" inputmode="email" maxlength="254"
                aria-describedby="email-error" required />
-        <p class="field__error" id="email-error" data-error-for="email" role="alert" hidden></p>
+        <p class="field-error" id="email-error" data-error-for="email" role="alert" hidden></p>
       </div>
       <div class="field">
-        <label class="field__label" for="phone">Phone</label>
-        <input class="field__input" id="phone" name="phone" type="tel" placeholder="90-123-45-67"
+        <label class="field-label" for="phone">Phone</label>
+        <input class="field-input" id="phone" name="phone" type="tel" placeholder="90-123-45-67"
                autocomplete="tel" aria-describedby="phone-error" required />
-        <p class="field__error" id="phone-error" data-error-for="phone" role="alert" hidden></p>
+        <p class="field-error" id="phone-error" data-error-for="phone" role="alert" hidden></p>
       </div>
       <div class="field">
-        <label class="field__label" for="password">Password</label>
-        <input class="field__input" id="password" name="password" type="password" placeholder="Your password"
+        <label class="field-label" for="password">Password</label>
+        <input class="field-input" id="password" name="password" type="password" placeholder="Your password"
                autocomplete="new-password" minlength="8" maxlength="64"
                aria-describedby="password-error" required />
-        <p class="field__error" id="password-error" data-error-for="password" role="alert" hidden></p>
+        <p class="field-error" id="password-error" data-error-for="password" role="alert" hidden></p>
       </div>
       <div class="field">
-        <label class="field__label" for="password2">Repeat your password</label>
-        <input class="field__input" id="password2" name="password2" type="password" placeholder="Your password"
+        <label class="field-label" for="password2">Repeat your password</label>
+        <input class="field-input" id="password2" name="password2" type="password" placeholder="Your password"
                autocomplete="new-password" minlength="8" maxlength="64"
                aria-describedby="password2-error" required />
-        <p class="field__error" id="password2-error" data-error-for="password2" role="alert" hidden></p>
+        <p class="field-error" id="password2-error" data-error-for="password2" role="alert" hidden></p>
       </div>
 
-      <p class="auth__error" data-error role="alert" hidden></p>
-      <button class="auth__submit" type="submit">Create an account</button>
+      <p class="auth-error" data-error role="alert" hidden></p>
+      <button class="auth-submit" type="submit">Create an account</button>
     </form>
 
-    <p class="auth__alt">
+    <p class="auth-alt">
       Already have an account? <a href="/pages/login.html">Log in</a>
     </p>
   </main>

@@ -13,9 +13,9 @@ initLayout();
 
 const form = document.querySelector("[data-login-form]");
 const errEl = form.querySelector("[data-error]");
-const submitBtn = form.querySelector(".auth__submit");
+const submitBtn = form.querySelector(".auth-submit");
 const nextUrl = safeNext(new URLSearchParams(location.search).get("next"));
-const registerLink = document.querySelector(".auth__alt a");
+const registerLink = document.querySelector(".auth-alt a");
 registerLink.href = "/pages/register.html?next=" + encodeURIComponent(nextUrl);
 
 function showError(message) {

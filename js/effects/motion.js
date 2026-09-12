@@ -14,7 +14,7 @@
 function splitWords(el) {
   const words = el.textContent.trim().split(/\s+/);
   el.innerHTML = words
-    .map((w) => `<span class="m-word"><span class="m-word__in">${w}</span></span>`)
+    .map((w) => `<span class="m-word"><span class="m-word-in">${w}</span></span>`)
     .join(" ");
 }
 
@@ -67,12 +67,12 @@ export function initMotion() {
     document.querySelectorAll("[data-hero-line], [data-split]").forEach((title) => {
       const r = title.getBoundingClientRect();
       if (r.bottom > 0 && r.top < window.innerHeight * 0.92) {
-        gsap.set(title.querySelectorAll(".m-word__in"), { yPercent: 0 });
+        gsap.set(title.querySelectorAll(".m-word-in"), { yPercent: 0 });
       }
     });
     // 4) hero tugmasi — u kechikish (delay) bilan chiqadi, shuning uchun
     //    to'xtab qolish ehtimoli eng yuqori
-    const btn = document.querySelector(".hero__btn");
+    const btn = document.querySelector(".hero-btn");
     if (btn && inView(btn) && getComputedStyle(btn).visibility === "hidden") {
       gsap.set(btn, { autoAlpha: 1, y: 0 });
     }
@@ -131,7 +131,7 @@ export function initMotion() {
   if (heroLines.length) {
     heroLines.forEach(splitWords);
     gsap.fromTo(
-      "[data-hero-line] .m-word__in",
+      "[data-hero-line] .m-word-in",
       { yPercent: 105 },
       {
         yPercent: 0,
@@ -142,7 +142,7 @@ export function initMotion() {
       }
     );
   }
-  const heroBtn = document.querySelector(".hero__btn");
+  const heroBtn = document.querySelector(".hero-btn");
   if (heroBtn) {
     gsap.fromTo(
       heroBtn,
@@ -158,7 +158,7 @@ export function initMotion() {
   document.querySelectorAll("[data-split]").forEach((el) => {
     splitWords(el);
     gsap.fromTo(
-      el.querySelectorAll(".m-word__in"),
+      el.querySelectorAll(".m-word-in"),
       { yPercent: 105 },
       {
         yPercent: 0,

@@ -29,11 +29,11 @@ initLayout();
 
 const form = document.querySelector("[data-register-form]");
 const formError = form.querySelector("[data-error]"); // umumiy / server xatosi
-const submitBtn = form.querySelector(".auth__submit");
+const submitBtn = form.querySelector(".auth-submit");
 
 // next: kirilgach qayerga qaytish (login/register orasida ham uzatamiz)
 const nextUrl = safeNext(new URLSearchParams(location.search).get("next"));
-const loginLink = document.querySelector(".auth__alt a");
+const loginLink = document.querySelector(".auth-alt a");
 loginLink.href = "/pages/login.html?next=" + encodeURIComponent(nextUrl);
 
 // Telefon maydoni: kutubxona bilan o'raladi. Foydalanuvchi yozа boshlаsa,

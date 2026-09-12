@@ -35,7 +35,7 @@ Holatlar (bo'sh/xato) ham maketda bor:
 
 Takrorlanadigan UI (`css/ui.css` + `js/ui.js`):
 - `.btn` (qora, to'la kenglikda formalar uchun) va `.btn--pill` (yumaloq: "Add to cart", "Write a Review")
-- `.product-card` — rasm + nom + narx (bosh sahifa, katalog, kategoriya, profil — hammasida bir xil)
+- `.card` — rasm + nom + narx (bosh sahifa, katalog, kategoriya, profil — hammasida bir xil)
 - `.qty` — miqdor tanlagich (`−` `1` `+`) — mahsulot va savat sahifalarida
 - `.field` — label + input (formalar)
 - `.stars` / verified belgi (izohlar)
@@ -97,7 +97,7 @@ Har bosqichда: men tushuntiraman → sen yozasan → men savol beraman → `do
 
 **B2. Bosh sahifa (statik, mock data bilan)**
 - [ ] hero (rasm + matn + "Shop now")
-- [ ] `.product-card` komponenti (bu yerда bir marta, keyin hamma joyда)
+- [ ] `.card` komponenti (bu yerда bir marta, keyin hamma joyда)
 - [ ] "Best sellers" (4 kartochka), "Shop by category" (3 karta), "Featured products" (12)
 - [ ] to'liq responsive
 

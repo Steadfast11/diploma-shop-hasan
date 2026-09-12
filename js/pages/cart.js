@@ -23,24 +23,24 @@ function itemHTML(it) {
   // rasm va nom -> mahsulot sahifasiga havola
   const href = `/pages/product.html?id=${encodeURIComponent(it.productId)}`;
   const image = it.image
-    ? `<img class="cart-item__image img-fallback" src="${esc(it.image)}" alt="${esc(it.title)}" />`
-    : `<div class="cart-item__image"></div>`;
+    ? `<img class="cart-item-image img-fallback" src="${esc(it.image)}" alt="${esc(it.title)}" />`
+    : `<div class="cart-item-image"></div>`;
   return `
     <div class="cart-item" data-id="${esc(it.productId)}">
-      <a class="cart-item__media" href="${href}">${image}</a>
-      <div class="cart-item__info">
-        <a class="cart-item__title" href="${href}">${esc(it.title)}</a>
-        <p class="cart-item__price">${money(it.price)}</p>
-        <button class="cart-item__remove" type="button" data-remove aria-label="Remove">
+      <a class="cart-item-media" href="${href}">${image}</a>
+      <div class="cart-item-info">
+        <a class="cart-item-title" href="${href}">${esc(it.title)}</a>
+        <p class="cart-item-price">${money(it.price)}</p>
+        <button class="cart-item-remove" type="button" data-remove aria-label="Remove">
           <img src="/assets/icons/trash.svg" alt="" width="24" height="24" />
         </button>
       </div>
       <div class="qty">
-        <button class="qty__btn" type="button" data-dec aria-label="Decrease">
+        <button class="qty-btn" type="button" data-dec aria-label="Decrease">
           <img src="/assets/icons/minus.svg" alt="" width="20" height="20" />
         </button>
-        <span class="qty__value">${it.qty}</span>
-        <button class="qty__btn" type="button" data-inc aria-label="Increase">
+        <span class="qty-value">${it.qty}</span>
+        <button class="qty-btn" type="button" data-inc aria-label="Increase">
           <img src="/assets/icons/plus.svg" alt="" width="20" height="20" />
         </button>
       </div>
@@ -49,14 +49,14 @@ function itemHTML(it) {
 
 function summaryHTML(total, isEmpty) {
   return `
-    <p class="order-summary__title">Order Summary</p>
-    <div class="order-summary__rows">
-      <div class="order-summary__row"><span>Subtotal</span><span>${money(total)}</span></div>
-      <div class="order-summary__row order-summary__row--discount"><span>Discount (~0%)</span><span>${money(0)}</span></div>
-      <div class="order-summary__divider"></div>
-      <div class="order-summary__row order-summary__row--total"><span>Total</span><span>${money(total)}</span></div>
+    <p class="summary-title">Order Summary</p>
+    <div class="summary-rows">
+      <div class="summary-row"><span>Subtotal</span><span>${money(total)}</span></div>
+      <div class="summary-row summary-row-discount"><span>Discount (~0%)</span><span>${money(0)}</span></div>
+      <div class="summary-divider"></div>
+      <div class="summary-row summary-row-total"><span>Total</span><span>${money(total)}</span></div>
     </div>
-    <button class="order-summary__checkout" type="button" data-checkout ${isEmpty ? "disabled" : ""}>Go to checkout</button>`;
+    <button class="summary-checkout" type="button" data-checkout ${isEmpty ? "disabled" : ""}>Go to checkout</button>`;
 }
 
 async function render() {
@@ -64,7 +64,7 @@ async function render() {
     const { items, total } = await cartStore.getCart();
     mainEl.innerHTML = items.length
       ? items.map(itemHTML).join("")
-      : `<div class="cart__empty">No products in your bag</div>`;
+      : `<div class="cart-empty">No products in your bag</div>`;
     summaryEl.innerHTML = summaryHTML(total, items.length === 0);
   } catch (e) {
     showError(mainEl, e.message);
@@ -80,7 +80,7 @@ function updateSummary(total) {
   // Subtotal ham, Total ham API'ning `total` iga teng (docs/decisions.md:
   // API savatida chegirma yo'q). "Discount" qatori doim 0 -> tegmaymiz.
   summaryEl
-    .querySelectorAll(".order-summary__row:not(.order-summary__row--discount) span:last-child")
+    .querySelectorAll(".summary-row:not(.summary-row-discount) span:last-child")
     .forEach((cell) => countUp(cell, total, money));
 }
 
@@ -89,7 +89,7 @@ mainEl.addEventListener("click", async (e) => {
   const row = e.target.closest(".cart-item");
   if (!row) return;
   const id = row.dataset.id;
-  const qtyEl = row.querySelector(".qty__value");
+  const qtyEl = row.querySelector(".qty-value");
   const qty = Number(qtyEl.textContent);
 
   /* O'CHIRISH: qator avval yumshoq so'nadi, keyin ro'yxat qayta chiziladi. */
@@ -127,7 +127,7 @@ mainEl.addEventListener("click", async (e) => {
     return;
   }
 
-  const buttons = row.querySelectorAll(".qty__btn");
+  const buttons = row.querySelectorAll(".qty-btn");
   buttons.forEach((b) => (b.disabled = true)); // tez-tez bosilib ketmasin
   try {
     await cartStore.setQty(id, next);

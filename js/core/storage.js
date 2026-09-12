@@ -52,7 +52,3 @@ export const clearUser = () => remove(KEYS.user);
 export const getGuestCart = () => read(KEYS.guestCart, []);
 export const setGuestCart = (items) => write(KEYS.guestCart, items);
 export const clearGuestCart = () => remove(KEYS.guestCart);
-
-/* ---- Sevimlilar ----
-   API'da wishlist endpointi yo'q -> mahalliy saqlanadi (brauzerga tegishli).
-   Format: [{ _id, title, price, image }] */

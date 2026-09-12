@@ -23,11 +23,11 @@ if (requireAuth()) {
 
   function renderHead(u) {
     headEl.innerHTML = `
-      <p class="profile__eyebrow">My Profile</p>
-      <p class="profile__name">${esc(u.name)} ${esc(u.surname)}</p>
-      <p class="profile__phone">${esc(formatPhone(u.phone))}</p>
-      <p class="profile__email">${esc(u.email || "")}</p>
-      <button class="profile__logout" type="button" data-logout>Log out</button>`;
+      <p class="profile-eyebrow">My Profile</p>
+      <p class="profile-name">${esc(u.name)} ${esc(u.surname)}</p>
+      <p class="profile-phone">${esc(formatPhone(u.phone))}</p>
+      <p class="profile-email">${esc(u.email || "")}</p>
+      <button class="profile-logout" type="button" data-logout>Log out</button>`;
   }
 
   // 1) render immediately from cache
@@ -57,15 +57,15 @@ if (requireAuth()) {
       ordersEl.innerHTML = items
         .map(
           (it) => `
-        <a class="product-card" href="/pages/product.html?id=${encodeURIComponent(it.productId)}">
-          <div class="product-card__media">
+        <a class="card" href="/pages/product.html?id=${encodeURIComponent(it.productId)}">
+          <div class="card-media">
             ${
               it.image
-                ? `<img class="product-card__image img-fallback" src="${esc(it.image)}" alt="${esc(it.title)}" loading="lazy" />`
-                : `<div class="product-card__image"></div>`
+                ? `<img class="card-image img-fallback" src="${esc(it.image)}" alt="${esc(it.title)}" loading="lazy" />`
+                : `<div class="card-image"></div>`
             }
           </div>
-          <div class="product-card__info"><p class="product-card__title">${esc(it.title)}</p></div>
+          <div class="card-info"><p class="card-title">${esc(it.title)}</p></div>
         </a>`
         )
         .join("");

@@ -38,7 +38,7 @@ css/
   reset.css       brauzer defoltlarini tenglash
   variables.css   Figma tokenlari (:root o'zgaruvchilari)
   base.css        body tipografiyasi + .container (1200px)
-  ui.css          qayta ishlatiladigan: .product-card, .product-grid, .qty,
+  ui.css          qayta ishlatiladigan: .card, .product-grid, .qty,
                   .btn-glass, holat xabarlari, ANIMATSIYALAR
   pages/          har sahifaning o'ziga xos stili
 js/

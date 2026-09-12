@@ -5,7 +5,7 @@
    Struktura: tepa qism (4 ustun) -> bo'linish chizig'i -> past qism.
    ============================================================ */
 
-.site-footer__inner {
+.footer-inner {
   max-width: 1280px;              /* Figma: footer frame kengligi */
   margin-inline: auto;
   padding: 56px 40px;            /* Figma: py-56 px-40 */
@@ -17,86 +17,86 @@
 }
 
 /* ---- tepa qism: 4 teng ustun ---- */
-.site-footer__top {
+.footer-top {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;                     /* Figma: ustunlar orasi */
 }
 
-.site-footer__brand {
+.footer-brand {
   display: flex;
   flex-direction: column;
   gap: 32px;                     /* Figma: logo va ijtimoiy tarmoq orasi */
 }
-.site-footer__logo {
+.footer-logo {
   width: 121px;
   height: 19px;
 }
-.site-footer__social {
+.footer-social {
   display: flex;
   gap: 16px;                     /* Figma: ikonlar orasi */
 }
-.site-footer__social img {
+.footer-social img {
   width: 16px;
   height: 16px;
 }
 
 /* ---- link ustunlari ---- */
-.site-footer__col {
+.footer-col {
   display: flex;
   flex-direction: column;
   gap: 32px;                     /* Figma: sarlavha va ro'yxat orasi */
 }
-.site-footer__heading {
+.footer-heading {
   color: var(--color-text-muted); /* #999 */
   text-transform: uppercase;
 }
-.site-footer__col ul {
+.footer-col ul {
   display: flex;
   flex-direction: column;
   gap: 16px;                     /* Figma: havolalar orasi */
 }
 /* Barcha footer havolalari bir xil ishlaydi: hover'da tagchiziq. */
-.site-footer__col a:hover,
-.site-footer__legal a:hover {
+.footer-col a:hover,
+.footer-legal a:hover {
   text-decoration: underline;
 }
-.site-footer__social a {
+.footer-social a {
   display: inline-flex;
 }
 
 /* ---- bo'linish chizig'i ---- */
-.site-footer__divider {
+.footer-divider {
   height: 1px;
   background: var(--color-line-soft);
 }
 
 /* ---- past qism ---- */
-.site-footer__bottom {
+.footer-bottom {
   display: flex;
   justify-content: space-between;
   color: var(--color-text-muted); /* #999 */
 }
-.site-footer__legal {
+.footer-legal {
   display: flex;
   gap: 16px;
 }
 
 /* ---------- MOBIL (Figma: ustunlar tik, px-24) ---------- */
 @media (max-width: 768px) {
-  .site-footer__inner {
+  .footer-inner {
     padding: 56px 24px;
   }
-  .site-footer__top {
+  .footer-top {
     grid-template-columns: 1fr;
     gap: 32px;
   }
-  .site-footer__bottom {
+  .footer-bottom {
     flex-direction: column;
     gap: 32px;
     align-items: flex-start;
   }
-  .site-footer__legal {
+  .footer-legal {
     flex-wrap: wrap;
   }
 }

@@ -12,12 +12,12 @@
   place-items: center;
   padding: 20px;
 }
-.modal__overlay {
+.modal-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
 }
-.modal__box {
+.modal-box {
   position: relative;
   width: 380px;
   max-width: 100%;
@@ -35,7 +35,7 @@
   from { opacity: 0; transform: translateY(10px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-.modal__overlay {
+.modal-overlay {
   animation: overlay-in 0.3s ease;
 }
 @keyframes overlay-in {
@@ -44,26 +44,26 @@
 }
 /* Figma: yirik qalin sarlavha, ostida kulrang izoh — ikkalasi bir-biriga
    yaqin (shuning uchun umumiy 24px oraliqni bu juftlik uchun kamaytiramiz). */
-.modal__title {
+.modal-title {
   font-weight: 700;
   font-size: 32px;
   line-height: 1.2;
   color: var(--black);
 }
-.modal__body {
+.modal-body {
   color: rgba(0, 0, 0, 0.5);
   font-size: 16px;
 }
-.modal__title + .modal__body {
+.modal-title + .modal-body {
   margin-top: -16px;
 }
-.modal__label {
+.modal-label {
   display: block;
   margin-bottom: 8px;
   color: rgba(0, 0, 0, 0.6);
   font-size: 14px;
 }
-.modal__textarea {
+.modal-textarea {
   width: 100%;
   min-height: 96px;
   resize: vertical;
@@ -73,12 +73,12 @@
   font: inherit;
   font-size: 14px;
 }
-.modal__textarea:focus {
+.modal-textarea:focus {
   outline: none;
   border-color: var(--black);
 }
 /* Figma: to'liq kenglikdagi qora tugma — burchaklari to'g'ri, yumaloq emas. */
-.modal__btn {
+.modal-btn {
   height: 56px;
   border: 0;
   border-radius: 0;

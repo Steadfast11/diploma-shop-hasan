@@ -35,17 +35,17 @@ export function esc(value) {
    p: { _id, title, price, image } — BACKENDDAN keladi. */
 export function productCardHTML(p) {
   const image = p.image
-    ? `<img class="product-card__image img-fallback" src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy" />`
-    : `<div class="product-card__image"></div>`; // rasm yo'q -> bo'sh kulrang
+    ? `<img class="card-image img-fallback" src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy" />`
+    : `<div class="card-image"></div>`; // rasm yo'q -> bo'sh kulrang
   return `
-    <article class="product-card">
-      <a class="product-card__link" href="/pages/product.html?id=${encodeURIComponent(p._id)}">
-        <div class="product-card__media">
+    <article class="card">
+      <a class="card-link" href="/pages/product.html?id=${encodeURIComponent(p._id)}">
+        <div class="card-media">
           ${image}
         </div>
-        <div class="product-card__info">
-          <p class="product-card__title">${esc(p.title)}</p>
-          <p class="product-card__price">${money(p.price)}</p>
+        <div class="card-info">
+          <p class="card-title">${esc(p.title)}</p>
+          <p class="card-price">${money(p.price)}</p>
         </div>
       </a>
     </article>`;
@@ -57,10 +57,10 @@ export function skeletonCardsHTML(n = 4) {
   return Array.from(
     { length: n },
     () => `
-    <div class="product-card skeleton" aria-hidden="true">
-      <div class="product-card__image"></div>
-      <div class="product-card__info">
-        <span class="skeleton__line"></span>
+    <div class="card skeleton" aria-hidden="true">
+      <div class="card-image"></div>
+      <div class="card-info">
+        <span class="skeleton-line"></span>
       </div>
     </div>`
   ).join("");
@@ -69,7 +69,7 @@ export function skeletonCardsHTML(n = 4) {
 // Konteynerga xato xabarini chizish (API yiqilganda)
 export function showError(container, message) {
   if (container) {
-    container.innerHTML = `<p class="state-message state-message--error">${esc(message)}</p>`;
+    container.innerHTML = `<p class="state-message state-message-error">${esc(message)}</p>`;
   }
 }
 
@@ -94,7 +94,7 @@ export function toast(message, type = "") {
     document.body.appendChild(box);
   }
   box.setAttribute("role", type === "error" ? "alert" : "status");
-  box.className = "toast" + (type ? " toast--" + type : "");
+  box.className = "toast" + (type ? " toast-" + type : "");
   box.textContent = message;
   box.classList.add("is-shown");
   clearTimeout(toastTimer);
@@ -271,11 +271,11 @@ export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }
   // ham yuboriladi (brauzerning o'z xatti-harakati), tugmani bosish bilan
   // ham — ikkalasi ham bitta "submit" hodisasiga tushadi.
   el.innerHTML = `
-    <div class="modal__overlay" data-close></div>
-    <form class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <p class="modal__title" id="modal-title">${esc(title)}</p>
-      <div class="modal__body">${bodyHTML}</div>
-      <button class="modal__btn" type="submit" data-confirm>${esc(buttonText)}</button>
+    <div class="modal-overlay" data-close></div>
+    <form class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <p class="modal-title" id="modal-title">${esc(title)}</p>
+      <div class="modal-body">${bodyHTML}</div>
+      <button class="modal-btn" type="submit" data-confirm>${esc(buttonText)}</button>
     </form>`;
   el.addEventListener("click", (e) => {
     if (e.target.closest("[data-close]")) closeModal();
@@ -290,7 +290,7 @@ export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }
   el.querySelector("textarea")?.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      el.querySelector(".modal__box").requestSubmit();
+      el.querySelector(".modal-box").requestSubmit();
     }
   });
   document.addEventListener("keydown", onModalKeydown);

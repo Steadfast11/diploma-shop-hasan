@@ -84,7 +84,7 @@ Umumiy: **har sahifa skripti bir xil 4 bosqich** —
      (too short / too long / invalid country code ...).
 2. Qachon: har maydon `blur` da tekshiriladi; xato bo'lsa `input` da qayta baholanadi;
    `submit` da hammasi. Noto'g'ri maydon → `aria-invalid="true"` + `aria-describedby`
-   qilingan `.field__error`. Birinchi noto'g'ri maydonga `focus`.
+   qilingan `.field-error`. Birinchi noto'g'ri maydonga `focus`.
 3. Valid bo'lmasa API'ga so'rov YUBORILMAYDI. `submit` tugmasi so'rov paytida `disabled`.
 4. Telefon E.164 ko'rinishda yuboriladi (`iti.getNumber()` → `+998901234567`).
    Server `+ ( ) -` va bo'shliqni o'zi tashlaydi (docs/api-reference.md).

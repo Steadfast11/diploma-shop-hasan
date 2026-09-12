@@ -40,7 +40,7 @@ Doskada "nega bunday?" degan savolga tayyor javob.
 
 ### Mahsulot kartochkasi — UNIVERSAL, faqat backend maydonlari
 - **Sabab:** maketдаги eski narx / chegirma / "-20%" — dizayner to'ldiruvi, real emas.
-- Bitta `.product-card` andozasi: `image`, `title`, `price` — nima backendда bo'lsa, shu chiziladi.
+- Bitta `.card` andozasi: `image`, `title`, `price` — nima backendда bo'lsa, shu chiziladi.
   Soxta eski narx yo'q, soxta chegirma yo'q.
 
 ### Savat "Order Summary" — Discount doim 0
@@ -127,7 +127,7 @@ Doskada "nega bunday?" degan savolga tayyor javob.
    ko'rinmaydi. ("Favorites" bo'limi keyinchalik butunlay olib
    tashlandi — Figma'da yo'q edi va API'da wishlist endpoint yo'q.) ("Language" bo'limi keyinchalik butunlay
    olib tashlandi — pastdagi "Sayt tili" qaroriga qarang.)
-   `@media (max-width: 768px) { .profile > *:not(.profile__head) { display: none } }`
+   `@media (max-width: 768px) { .profile > *:not(.profile-head) { display: none } }`
    Qoida ataylab "head dan BOSHQA hammasi" deb yozilgan: keyin yangi
    bo'lim qo'shilsa ham telefonda o'z-o'zidan yashirin bo'ladi.
    768px — saytdagi "telefon" chegarasi (header shu yerda burger'ga o'tadi).
@@ -148,8 +148,8 @@ Qoida: har bir animatsiya faqat "bezak". Ishlamay qolsa sayt to'g'ri
 ko'rinishi SHART. Shuning uchun hamma joyda "xavfsiz yo'nalish" tanlandi.
 
 - **Rasm yumshoq ochilishi** — API rasmi birdan "sakramasin". Kulrang
-  joy-tutgich endi o'rovchi elementda (`.product-card__media`,
-  `.cart-item__media`, `.product__main`), rasmning o'zi `load` bo'lgach
+  joy-tutgich endi o'rovchi elementda (`.card-media`,
+  `.cart-item-media`, `.product-main`), rasmning o'zi `load` bo'lgach
   ochiladi (`components.js` da `load` ushlagichi — mavjud `error`
   ushlagichi bilan bir xil uslub: `capture: true`, chunki ikkalasi ham
   bubble bo'lmaydi).
@@ -226,7 +226,7 @@ zarari ko'p -> qilinmadi.
   asl faylni oladi. Asl fayllar `og:image` va JSON-LD `logo` uchun ham
   kerak — ijtimoiy tarmoq botlari webp'ni hamma joyda qo'llamaydi.
 - **`picture { display: contents }`** (reset.css): `<picture>` o'zi quti
-  yaratmasin, aks holda `.hero__bg img { height: 100% }` buzilardi
+  yaratmasin, aks holda `.hero-bg img { height: 100% }` buzilardi
   (100% "auto" balandlikdan hisoblanib qolardi).
 
 **Boshqa:**
@@ -274,7 +274,7 @@ zarari ko'p -> qilinmadi.
   marta bossа, ikkита buyurtма/izoh yaratilib qolиши mumkin edi.
 
 ### Register — inline validatsiya + telefon uchun kutubxona
-- **Har maydon ostida alohida xato** (`.field__error`), bitta umumiy xato emas.
+- **Har maydon ostida alohida xato** (`.field-error`), bitta umumiy xato emas.
   `blur` da tekshiriladi, tuzatil boshlansa qayta baholanadi, `submit` da hammasi.
   `aria-invalid` + `aria-describedby` — skrinrider ham biladi. Valid bo'lmaguncha
   API'ga so'rov yo'q.

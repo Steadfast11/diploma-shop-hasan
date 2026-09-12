@@ -15,31 +15,31 @@
   gap: 76px;
 }
 
-.profile__head {
+.profile-head {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
-.profile__eyebrow {
+.profile-eyebrow {
   font-size: var(--fs-base);  /* 16px */
   text-transform: uppercase;
 }
-.profile__name {
+.profile-name {
   font-size: var(--fs-h1);    /* 56px */
   text-transform: capitalize;
   margin-top: 16px;
 }
-.profile__phone {
+.profile-phone {
   font-size: var(--fs-base);
   text-transform: uppercase;
   margin-top: 34px;
 }
-.profile__email {
+.profile-email {
   font-size: var(--fs-base);
   text-transform: lowercase;
   margin-top: 18px;
 }
-.profile__logout {
+.profile-logout {
   margin-top: 25px;
   width: 214px;
   height: 48px;
@@ -54,15 +54,15 @@
   cursor: pointer;
 }
 
-.profile__orders {
+.profile-orders {
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
-.profile__orders-title {
+.profile-orders-title {
   font-size: var(--fs-h2);    /* 40px */
 }
-.profile__note {
+.profile-note {
   margin-top: -20px;
   color: var(--color-text-muted);
   font-size: 14px;
@@ -73,7 +73,7 @@
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .profile__name {
+  .profile-name {
     font-size: 40px;
   }
 }
@@ -94,7 +94,7 @@
    menyuga o'tadi), shuning uchun bir xil chegarani ishlatamiz.
    Yashirish faqat CSS'da: ekran kattaysa bo'limlar qaytadi. */
 @media (max-width: 768px) {
-  .profile > *:not(.profile__head) {
+  .profile > *:not(.profile-head) {
     display: none;
   }
 }

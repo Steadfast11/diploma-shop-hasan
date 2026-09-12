@@ -30,10 +30,10 @@ const filter = {
 
 const grid = document.querySelector("[data-products]");
 const categoryList = document.querySelector("[data-category-list]");
-const categoryGroup = categoryList.closest(".filters__group");
+const categoryGroup = categoryList.closest(".filter-group");
 
 /* --- Mobil filter modal --- */
-const filterPanel = document.querySelector(".filters");
+const filterPanel = document.querySelector(".filter");
 const filterOpenBtn = document.querySelector("[data-filter-open]");
 /* Yopish tugmalari ikkita: xira fon va sheet tepasidagi ikonka. */
 const filterCloseBtns = document.querySelectorAll("[data-filter-close]");
@@ -89,10 +89,10 @@ async function loadCategories() {
     categoryList.innerHTML = categories
       .map(
         (c) => `
-      <button class="filters__row" type="button" data-category="${esc(c._id)}"
+      <button class="filter-row" type="button" data-category="${esc(c._id)}"
               aria-pressed="${c._id === filter.category}">
         <span>${esc(c.title)}</span>
-        <img class="filters__chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
+        <img class="filter-chevron" src="/assets/icons/chevron.svg" alt="" width="16" height="16" />
       </button>`
       )
       .join("");
@@ -204,9 +204,9 @@ priceToggle.addEventListener("click", () => {
 });
 
 // slider
-const minInput = document.querySelector(".price-range__input--min");
-const maxInput = document.querySelector(".price-range__input--max");
-const fillEl = document.querySelector(".price-range__fill");
+const minInput = document.querySelector(".price-input-min");
+const maxInput = document.querySelector(".price-input-max");
+const fillEl = document.querySelector(".price-fill");
 const minLabel = document.querySelector("[data-price-min]");
 const maxLabel = document.querySelector("[data-price-max]");
 const sliderMax = Number(minInput.max);
@@ -274,19 +274,19 @@ refreshClearBtn();
 const searchInput = document.querySelector("[data-search]");
 searchInput.addEventListener("input", () => {
   const q = searchInput.value.trim().toLowerCase();
-  const cards = grid.querySelectorAll(".product-card");
+  const cards = grid.querySelectorAll(".card");
   let visible = 0;
   cards.forEach((card) => {
-    const title = card.querySelector(".product-card__title")?.textContent.toLowerCase() || "";
+    const title = card.querySelector(".card-title")?.textContent.toLowerCase() || "";
     const match = !q || title.includes(q);
     card.hidden = !match;
     if (match) visible++;
   });
-  let empty = grid.querySelector(".state-message--search");
+  let empty = grid.querySelector(".state-message-search");
   if (visible === 0 && cards.length) {
     if (!empty) {
       empty = document.createElement("p");
-      empty.className = "state-message state-message--search";
+      empty.className = "state-message state-message-search";
       empty.textContent = "Nothing found";
       grid.appendChild(empty);
     }
