@@ -51,7 +51,6 @@ js/
   ui.js           помощники: money, esc, productCardHTML, openModal
   pages/          стартовый скрипт для каждого HTML-файла
 assets/         icons / images / favicon.svg
-docs/           plan, decisions, data-flow, qa-bank, api-reference, figma-nodes
 ```
 
 ## Деплой (Netlify)
@@ -64,9 +63,3 @@ docs/           plan, decisions, data-flow, qa-bank, api-reference, figma-nodes
 4. Deploy
 
 Или: `npx netlify deploy --prod --dir=.`
-
-## Материал для защиты
-
-`docs/qa-bank.md` — ожидаемые вопросы-ответы.
-`docs/data-flow.md` — поток каждого действия.
-`docs/decisions.md` — почему написано именно так.
