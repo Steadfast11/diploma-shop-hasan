@@ -1,10 +1,10 @@
 /* ============================================================
-   pages/home.js — "home" sahifasi
+   pages/home.js — страница "home"
      1) header/footer
-     2) API'dan: bestsellers (4) + categories + newest (12)
-     3) har bo'limni o'z gridiga chizish
+     2) из API: bestsellers (4) + categories + newest (12)
+     3) отрисовать каждый раздел в свой grid
 
-   Har bo'lim mustaqil yuklanadi: biri yiqilsa qolgani ishlayveradi.
+   Каждый раздел загружается независимо: если один упадёт, остальные продолжат работать.
    ============================================================ */
 
 import { initLayout } from "../components.js";
@@ -20,8 +20,8 @@ import {
 
 initLayout();
 
-/* Kategoriya kartochkasi — FAQAT bosh sahifada ("Shop by category").
-   c: { _id, title, image } — backenddan. */
+/* Карточка категории — ТОЛЬКО на главной странице ("Shop by category").
+   c: { _id, title, image } — с бэкенда. */
 function categoryCardHTML(c) {
   const bg = c.image
     ? `<img class="img-fallback" src="${esc(c.image)}" alt="" loading="lazy" />`
@@ -33,21 +33,21 @@ function categoryCardHTML(c) {
     </a>`;
 }
 
-// Bir bo'limni yuklab, gridga chizadigan umumiy yordamchi.
-//   selector    : grid elementi
-//   loader      : () => Promise  (api chaqiruvi)
-//   pick        : javobdan massiv olish (masalan d => d.products)
-//   render      : bitta element -> HTML
+// Общий помощник: загружает один раздел и отрисовывает его в grid.
+//   selector    : элемент grid
+//   loader      : () => Promise  (вызов api)
+//   pick        : получить массив из ответа (например d => d.products)
+//   render      : один элемент -> HTML
 async function loadSection(selector, loader, pick, render, emptyText, skeletonCount = 4) {
   const box = document.querySelector(selector);
   if (!box) return;
   box.innerHTML = skeletonCardsHTML(skeletonCount);
-  box.setAttribute("aria-busy", "true"); // skrinrider: "yuklanmoqda"
+  box.setAttribute("aria-busy", "true"); // для скринридера: "загружается"
   try {
     const list = pick(await loader());
     if (!list.length) return showEmpty(box, emptyText);
     box.innerHTML = list.map(render).join("");
-    revealCards(box); // kartochkalar birin-ketin chiqadi
+    revealCards(box); // карточки появляются друг за другом
   } catch (e) {
     showError(box, e.message);
   } finally {

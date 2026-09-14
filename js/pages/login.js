@@ -1,8 +1,8 @@
 /* ============================================================
-   pages/login.js — Kirish
+   pages/login.js — Вход
      1) header/footer
-     2) forma yuborilganda auth.doLogin
-     3) muvaffaqiyatda: mehmon savatini akkauntga ko'chirish -> ?next yoki bosh sahifa
+     2) при отправке формы — auth.doLogin
+     3) при успехе: перенос гостевой корзины в аккаунт -> ?next или главная страница
    ============================================================ */
 
 import { initLayout } from "../components.js";
@@ -34,7 +34,7 @@ form.addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
   try {
     await doLogin({ email, password });
-    await mergeGuestCartIntoAccount(); // mehmon savatidagilar serverga ko'chadi
+    await mergeGuestCartIntoAccount(); // товары из гостевой корзины переносятся на сервер
     location.href = nextUrl;
   } catch (err) {
     showError(err.status === 401 ? "Incorrect email or password" : err.message);

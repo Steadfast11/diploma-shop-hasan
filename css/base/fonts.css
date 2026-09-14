@@ -1,25 +1,26 @@
 /* ============================================================
-   fonts.css — Inter shrifti LOYIHA ICHIDA (o'z serverimizda)
+   fonts.css — шрифт Inter ВНУТРИ ПРОЕКТА (на своём сервере)
 
-   Nega Google Fonts'dan olib tashladik:
-     - tashqi so'rov (DNS + TLS ulanish) yo'qoladi -> sahifa tezroq ochiladi
-     - Google'ga bog'liqlik yo'q (offline yoki bloklangan joyda ham ishlaydi)
-     - CSP qattiqroq: fonts.googleapis.com / fonts.gstatic.com kerak emas
+   Почему убрали от Google Fonts:
+     - исчезает внешний запрос (DNS + TLS соединение) -> страница открывается быстрее
+     - нет зависимости от Google (работает и офлайн, и в заблокированных местах)
+     - CSP строже: fonts.googleapis.com / fonts.gstatic.com не нужны
 
-   FAQAT woff2: barcha zamonaviy brauzerlar qo'llaydi va eng ixcham format
-   (brotli siqilgan). Eski .ttf/.woff fayllar shart emas.
+   ТОЛЬКО woff2: поддерживается всеми современными браузерами и самый
+   компактный формат (сжатие brotli). Старые файлы .ttf/.woff не нужны.
 
-   BITTA FAYL, HAMMA OG'IRLIK: Inter — "variable font", ya'ni 100–900
-   oralig'idagi har qanday qalinlik bitta fayl ichida. Shuning uchun
-   `font-weight: 100 900` deb ORALIQ beramiz (400/500/600 uchun uchta
-   alohida fayl kerak emas — ular baribir ayni bir fayl edi).
+   ОДИН ФАЙЛ, ВСЕ НАСЫЩЕННОСТИ: Inter — "variable font", то есть любая
+   насыщенность в диапазоне 100–900 находится в одном файле. Поэтому
+   указываем ДИАПАЗОН `font-weight: 100 900` (три отдельных файла для
+   400/500/600 не нужны — это всё равно был бы один и тот же файл).
 
-   `unicode-range` — brauzer sahifadagi matnga QARAB faqat kerakli bo'lakni
-   yuklaydi. Inglizcha sahifada faqat "latin" tushadi; kirill bo'lagi esa
-   API'dan ruscha mahsulot nomi kelsagina yuklanadi.
+   `unicode-range` — браузер загружает только нужный блок В ЗАВИСИМОСТИ
+   от текста на странице. На англоязычной странице подгружается только
+   "latin"; кириллический блок загрузится, только если из API придёт
+   название товара на русском.
 
-   `font-display: swap` — shrift yuklanguncha matn tizim shriftida ko'rinib
-   turadi (bo'sh joy emas -> foydalanuvchi kutmaydi).
+   `font-display: swap` — пока шрифт не загрузился, текст отображается
+   системным шрифтом (не пустое место -> пользователь не ждёт).
    ============================================================ */
 
 /* latin */

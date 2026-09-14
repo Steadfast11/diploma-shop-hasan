@@ -1,16 +1,16 @@
 /* ============================================================
-   reveal.js — scroll-reveal (element ko'rinishga kirganda paydo bo'ladi)
-   IntersectionObserver: brauzer elementning ekranda ko'rinishini
-   kuzatadi. Ko'ringanda .is-visible klassini qo'shamiz (CSS qolganini
-   qiladi — ui.css'dagi [data-reveal] qoidalari).
+   reveal.js — scroll-reveal (элемент появляется, когда попадает в область видимости)
+   IntersectionObserver: браузер следит за видимостью элемента на
+   экране. Когда виден, добавляем класс .is-visible (остальное делает
+   CSS — правила [data-reveal] в ui.css).
 
-   Belgilash:
-     <section data-reveal>            -> butun blok paydo bo'ladi
-     <div class="grid" data-reveal-stagger> -> bolalari birin-ketin
+   Разметка:
+     <section data-reveal>            -> появляется весь блок
+     <div class="grid" data-reveal-stagger> -> дочерние элементы друг за другом
    ============================================================ */
 
-// Ko'rinishga kirdi -> .is-visible qo'shamiz (CSS qolganini qiladi),
-// kuzatishni to'xtatamiz (bir marta).
+// Попал в область видимости -> добавляем .is-visible (остальное делает CSS),
+// прекращаем наблюдение (один раз).
 function onIntersect(entries, observer) {
   for (const entry of entries) {
     if (!entry.isIntersecting) continue;
@@ -20,13 +20,13 @@ function onIntersect(entries, observer) {
 }
 
 export function initReveal(root = document) {
-  // allaqachon ko'rsatilganlarni tashlab ketamiz (qayta chaqirilsa xavfsiz)
+  // пропускаем уже показанные (безопасно при повторном вызове)
   const targets = [...root.querySelectorAll("[data-reveal], [data-reveal-stagger]")].filter(
     (t) => !t.classList.contains("is-visible")
   );
   if (!targets.length) return;
 
-  // brauzer eski bo'lsa yoki reduced-motion — hammasini darrov ko'rsatamiz
+  // старый браузер или reduced-motion — показываем всё сразу
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce || !("IntersectionObserver" in window)) {
     targets.forEach((t) => t.classList.add("is-visible"));
@@ -39,8 +39,8 @@ export function initReveal(root = document) {
   });
   targets.forEach((t) => observer.observe(t));
 
-  // XAVFSIZLIK TO'RI: agar biror sabab bilan observer ishlamasa
-  // (eski brauzer, fon tab va h.k.) — kontent abadiy yashirin qolmasin.
+  // СТРАХОВОЧНАЯ СЕТКА: если по какой-то причине observer не сработает
+  // (старый браузер, фоновая вкладка и т.д.) — контент не должен остаться скрытым навсегда.
   setTimeout(() => {
     targets.forEach((t) => t.classList.add("is-visible"));
   }, 1500);

@@ -16,8 +16,8 @@
   <meta name="theme-color" content="#000000" />
   <meta name="robots" content="index, follow" />
 
-  <!-- Structured data (JSON-LD) — statik HTML'da, JS kerak emas (qidiruv
-       tizimlari kod ishlatmasdan ham o'qiy oladi). -->
+  <!-- Структурированные данные (JSON-LD) — в статичном HTML, JS не нужен
+       (поисковые системы могут прочитать и без выполнения кода). -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -37,21 +37,21 @@
   }
   </script>
 
-  <!-- Hero rasmi — sahifadagi eng katta element (Google "LCP" deb o'lchaydi).
-       Oldindan (CSS'dan ham avval) yuklashni boshlaymiz -> sayt tezroq ochiladi. -->
+  <!-- Изображение hero — самый крупный элемент на странице (Google называет это "LCP").
+       Начинаем загружать заранее (ещё до CSS) -> сайт открывается быстрее. -->
   <link rel="preload" as="image" href="/assets/images/hero.webp" fetchpriority="high" />
 
-  <!-- API — barcha ma'lumot shu yerdan keladi. Ulanishni oldindan
-       ochib qo'yamiz (DNS + TLS), shunda birinchi so'rov tezroq ketadi. -->
+  <!-- API — отсюда приходят все данные. Устанавливаем соединение заранее
+       (DNS + TLS), чтобы первый запрос прошёл быстрее. -->
   <link rel="preconnect" href="https://api.wepro.uz" crossorigin />
 
-  <!-- Inter shrifti LOYIHA ICHIDA (css/base/fonts.css). Sahifadagi matn lotin
-       bo'lgani uchun brauzer faqat "latin" bo'lagini yuklaydi. -->
+  <!-- Шрифт Inter ВНУТРИ ПРОЕКТА (css/base/fonts.css). Текст на странице
+       латиница, поэтому браузер загружает только блок "latin". -->
   <link rel="preload" as="font" type="font/woff2"
         href="/assets/fonts/inter-latin.woff2" crossorigin />
   <link rel="stylesheet" href="css/base/fonts.css" />
-  <!-- Umumiy stillar. Har sahifada AYNAN shu tartibda ulanadi:
-       reset -> variables -> base -> ui -> (shu sahifaning stili) -->
+  <!-- Общие стили. На каждой странице подключаются В ТОЧНО ТАКОМ порядке:
+       reset -> variables -> base -> ui -> (стиль этой страницы) -->
   <link rel="stylesheet" href="css/base/reset.css" />
   <link rel="stylesheet" href="css/base/variables.css" />
   <link rel="stylesheet" href="css/base/base.css" />
@@ -70,15 +70,15 @@
       <p><strong>WEPRO</strong> needs JavaScript enabled to load the shop (products, cart and account come from a live API). Please enable JavaScript, or visit <a href="index.html">the homepage</a>.</p>
     </div>
   </noscript>
-  <!-- Header shu bo'sh div ichiga js/components.js orqali qo'yiladi -->
+  <!-- Header вставляется в этот пустой div через js/components.js -->
   <div id="header" data-component="header"></div>
 
   <main id="main">
-    <!-- HERO — butun kenglik (shuning uchun .container'dan tashqarida) -->
+    <!-- HERO — на всю ширину (поэтому вне .container) -->
     <section class="hero">
       <div class="hero-bg" aria-hidden="true">
-        <!-- webp 79% yengil (205 KB -> 43 KB). <picture>: webp'ni
-             qo'llamaydigan eski brauzer jpg ni oladi. -->
+        <!-- webp на 79% легче (205 КБ -> 43 КБ). <picture>: старый браузер,
+             не поддерживающий webp, получит jpg. -->
         <picture>
           <source srcset="/assets/images/hero.webp" type="image/webp" />
           <img src="/assets/images/hero.jpg" alt="" width="1920" height="1207"
@@ -96,11 +96,11 @@
       </div>
     </section>
 
-    <!-- Seksiyalar — 1200px konteyner ichida -->
+    <!-- Секции — внутри контейнера 1200px -->
     <div class="container home-sections">
       <section class="section" data-reveal>
         <h2 class="section-title" data-split>Best sellers</h2>
-        <!-- kartochkalarni js/pages/home.js API'dan chizadi -->
+        <!-- карточки отрисовывает js/pages/home.js из API -->
         <div class="product-grid" data-bestsellers data-reveal-stagger></div>
       </section>
 
@@ -116,10 +116,10 @@
     </div>
   </main>
 
-  <!-- Footer ham js/components.js orqali qo'yiladi -->
+  <!-- Footer тоже вставляется через js/components.js -->
   <div id="footer" data-component="footer"></div>
 
-  <!-- type="module": fayllar bir-birini import/export qila oladi -->
+  <!-- type="module": файлы могут делать import/export друг у друга -->
   <script type="module" src="js/pages/home.js"></script>
 </body>
 </html>

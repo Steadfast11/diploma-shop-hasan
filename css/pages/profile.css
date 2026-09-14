@@ -1,9 +1,9 @@
 /* ============================================================
-   pages/profile.css — Profile ("My Profile" + "My orders" + "Favorites")
-   Figma: 1200px centered. Top: profile info (16px eyebrow, 56px name,
-   16px phone/email, "Log out" button). Below: "My orders" grid, no price
-   (matches Figma exactly). The "Favorites" section is ours —
-   same visual pattern so they don't stand out.
+   pages/profile.css — Профиль ("My Profile" + "My orders" + "Favorites")
+   Figma: по центру, 1200px. Сверху: информация профиля (16px eyebrow, 56px имя,
+   16px телефон/email, кнопка "Log out"). Ниже: сетка "My orders", без цены
+   (в точности как в Figma). Раздел "Favorites" добавлен нами —
+   тот же визуальный паттерн, чтобы не выделялся.
    ============================================================ */
 
 .profile {
@@ -83,16 +83,16 @@
   }
 }
 
-/* Figma (yangilangan): TELEFON versiyasida profil sahifasida faqat
-   akkaunt bloki (ism / telefon / email / "Log out") qoladi.
-   "My orders" va "Favorites" bo'limlari ko'rinmaydi.
-   Header va footer bunga kirmaydi — ular <main> dan tashqarida.
+/* Figma (обновлено): в ТЕЛЕФОННОЙ версии на странице профиля остаётся
+   только блок аккаунта (имя / телефон / email / "Log out").
+   Разделы "My orders" и "Favorites" не показываются.
+   Header и footer это не затрагивает — они вне <main>.
 
-   Qoidani "head dan BOSHQA hammasi" deb yozamiz: keyin yangi bo'lim
-   qo'shilsa ham telefonda o'z-o'zidan yashirin bo'ladi.
-   768px — saytdagi "telefon" chegarasi (shu kenglikda header ham burger
-   menyuga o'tadi), shuning uchun bir xil chegarani ishlatamiz.
-   Yashirish faqat CSS'da: ekran kattaysa bo'limlar qaytadi. */
+   Правило пишем как "всё, КРОМЕ head": если позже добавится новый
+   раздел, на телефоне он скроется сам собой.
+   768px — граница "телефона" на сайте (при этой ширине header тоже
+   переходит на бургер-меню), поэтому используем ту же границу.
+   Скрытие только в CSS: на большом экране разделы возвращаются. */
 @media (max-width: 768px) {
   .profile > *:not(.profile-head) {
     display: none;

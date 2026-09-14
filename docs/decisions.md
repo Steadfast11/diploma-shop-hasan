@@ -1,304 +1,302 @@
-# Qaror jurnali (nega shunday yozdik)
+# Журнал решений (почему написано именно так)
 
-Har muhim qaror shu yerda: **qaror -> sabab -> muqobil va nega yo'q**.
-Doskada "nega bunday?" degan savolga tayyor javob.
+Каждое важное решение здесь: **решение -> причина -> альтернатива и почему нет**.
+Готовый ответ на вопрос "почему так?" на защите.
 
-## Umumiy tuzilish
+## Общая структура
 
-### Framework ishlatmadik (toza HTML/CSS/JS)
-- **Sabab:** ТЗ talabi; va pixel-perfect uchun CSS'ni to'liq nazorat qilish kerak.
-- **Muqobil:** React/Vue — kerak emas, sayt kichik, SEO va oddiylik muhim.
+### Не использовали фреймворк (чистый HTML/CSS/JS)
+- **Причина:** требование ТЗ; и для pixel-perfect нужен полный контроль над CSS.
+- **Альтернатива:** React/Vue — не нужны, сайт небольшой, важны SEO и простота.
 
-### Ko'p sahifali (MPA), SPA emas
-- **Sabab:** har sahifa alohida `.html` — oddiy, router yozish shart emas,
-  Netlify'da to'g'ridan-to'g'ri ishlaydi.
-- **Muqobil:** bitta `index.html` + JS router — ortiqcha murakkablik.
+### Многостраничный (MPA), не SPA
+- **Причина:** каждая страница отдельный `.html` — просто, не нужно писать роутер,
+  на Netlify работает напрямую.
+- **Альтернатива:** один `index.html` + JS-роутер — лишняя сложность.
 
-### Header/Footer — `components/` + JS injeksiya
-- **Sabab:** ТЗ shuni talab qiladi. 7 sahifada header'ni takrorlasak: ko'p kod,
-  bittasini tuzatib qolganini unutish -> buglar.
-- **Qanday:** har sahifada bo'sh `<div id="header">`, `components.js` uni to'ldiradi.
-- **Muqobil:** HTML `import` / SSR — vanilla'da yo'q; iframe — stil va navigatsiya muammosi.
+### Header/Footer — `components/` + инъекция через JS
+- **Причина:** так требует ТЗ. Если повторить header на 7 страницах: много кода,
+  забудешь исправить где-то одну -> баги.
+- **Как:** на каждой странице пустой `<div id="header">`, `components.js` его заполняет.
+- **Альтернатива:** HTML `import` / SSR — в vanilla нет; iframe — проблемы со стилями и навигацией.
 
-### `js/` = modullar, `js/pages/` = har sahifaning bosh skripti
-- **Sabab:** bir xil pattern. Sahifa skripti faqat "ulaydi", mantiq modullarda.
-- Bitta sahifani tushunsang — hammasi bir xil.
+### `js/` = модули, `js/pages/` = стартовый скрипт каждой страницы
+- **Причина:** единый паттерн. Скрипт страницы только "соединяет", логика в модулях.
+- Поймёшь одну страницу — поймёшь все.
 
-### `api.js` — yagona fetch nuqtasi
-- **Sabab:** token qo'shish, xatoni ushlash, base URL — bir joyda. Endpoint o'zgarsa bitta joy.
-- **Muqobil:** har sahifada `fetch` — takror kod, xato ishlovi tarqoq.
+### `api.js` — единственная точка fetch
+- **Причина:** добавление токена, отлов ошибки, base URL — в одном месте. Если изменится эндпоинт — одно место.
+- **Альтернатива:** `fetch` на каждой странице — повторяющийся код, обработка ошибок разбросана.
 
-### CSS bir necha faylga bo'lingan (reset/variables/base/ui/pages)
-- **Sabab:** "product sahifasi stili qayerda?" -> darrov topiladi. Yuklanish tartibi aniq.
-- **Muqobil:** bitta `style.css` — kattalashib ketadi, konfliktlar.
+### CSS разбит на несколько файлов (reset/variables/base/ui/pages)
+- **Причина:** "где стиль страницы product?" -> находится сразу. Порядок загрузки понятен.
+- **Альтернатива:** один `style.css` — разрастается, конфликты.
 
-## Maket ↔ API qarorlari
+## Решения по несоответствиям макет ↔ API
 
-### Kirish — EMAIL bilan (telefon emas)
-- **Sabab:** o'qituvchi shunday dedi; API `POST /login` faqat `{email, password}` qabul qiladi.
-- Maketдаги "Phone" input o'rniga "Email" input. Register'да ikkalasi ham bor.
+### Вход — по EMAIL (не по телефону)
+- **Причина:** так сказал преподаватель; API `POST /login` принимает только `{email, password}`.
+- Вместо input "Phone" в макете — input "Email". В Register есть оба.
 
-### Mahsulot kartochkasi — UNIVERSAL, faqat backend maydonlari
-- **Sabab:** maketдаги eski narx / chegirma / "-20%" — dizayner to'ldiruvi, real emas.
-- Bitta `.card` andozasi: `image`, `title`, `price` — nima backendда bo'lsa, shu chiziladi.
-  Soxta eski narx yo'q, soxta chegirma yo'q.
+### Карточка товара — УНИВЕРСАЛЬНАЯ, только поля бэкенда
+- **Причина:** старая цена / скидка / "-20%" в макете — заполнение дизайнера, нереальны.
+- Один шаблон `.card`: `image`, `title`, `price` — что есть на бэкенде, то и отрисовывается.
+  Фейковой старой цены нет, фейковой скидки нет.
 
-### Savat "Order Summary" — Discount doim 0
-- **Sabab:** API savatида chegirma tushunchasi yo'q (`{items, total}`).
-- Karta strukturasi maketдаgiday: `Subtotal` / `Discount (~0%)` / `Total`.
-  `Subtotal = Total = ` API `total`. `Discount = 0` (bo'sh savat maketида ham "~0%" ko'rsatilgan).
-- Muqobil: chegirma qatorini olib tashlash — maketдан chetlashish, shart emas.
+### "Order Summary" корзины — Discount всегда 0
+- **Причина:** в корзине API нет понятия скидки (`{items, total}`).
+- Структура карточки как в макете: `Subtotal` / `Discount (~0%)` / `Total`.
+  `Subtotal = Total = ` API `total`. `Discount = 0` (в макете и пустая корзина показывает "~0%").
+- Альтернатива: убрать строку скидки — отход от макета, не обязательно.
 
-## Qurilish davomidagi qarorlar
+## Решения в процессе разработки
 
 ### `.container` — `width: min(100% - 2*gutter, 1200px)`
-- **Sabab:** katta ekranda AYNAN 1200px (Figma), kichik ekranda `100% - 48px`
-  (ikki chetda 24px). `min()` "ko'pi bilan" ma'nosini beradi -> gorizontal skroll yo'q.
-- **Muqobil:** `max-width + padding` — desktop'da 1200px o'rniga 1160px chiqadi (padding ichkarida).
+- **Причина:** на большом экране РОВНО 1200px (Figma), на маленьком `100% - 48px`
+  (по 24px с каждой стороны). `min()` даёт смысл "не более" -> горизонтального скролла нет.
+- **Альтернатива:** `max-width + padding` — на десктопе вместо 1200px получится 1160px (padding внутри).
 
-### Katalog filtri — reload YO'Q, faqat "Apply Filter" da ishlaydi
-- **Sabab:** kategoriya bosilganda yoki slider surilganда sahifa qayta
-  yuklanishi foydalanuvchiga yoqmadi (sakrash, skroll yo'qoladi).
-- **Qanday:** kategoriya bosish / slider — faqat "kutilayotgan" tanlovni
-  belgilaydi (vizual: `aria-pressed`, chevron pastga buriladi). "Apply Filter"
-  bosilganda: `filter` holati yangilanadi -> `loadProducts()` mahsulotlarni
-  qayta oladi (grid almashadi) -> `history.replaceState` bilan URL ham
-  yangilanadi (reload'siz) -> `?category=...&minPrice=...` havolani ulashса bo'ladi.
-- **Price sarlavhasi** — bosilganda slider paneli ochilib/yopiladi (`aria-expanded`).
-- **Muqobil (eski):** har o'zgarishda `location.search = ...` -> reload. Sodda edi,
-  lekin UX yomon. Yangi variant biroz ko'proq kod, lekin bitta sahifada qoladi.
+### Фильтр каталога — reload НЕТ, работает только по "Apply Filter"
+- **Причина:** перезагрузка страницы при клике по категории или перетаскивании слайдера
+  не нравилась пользователю (скачок, теряется скролл).
+- **Как:** клик по категории / слайдер — только задают "ожидающий" выбор
+  (визуально: `aria-pressed`, chevron поворачивается вниз). При нажатии "Apply Filter":
+  состояние `filter` обновляется -> `loadProducts()` заново запрашивает товары
+  (grid обновляется) -> через `history.replaceState` обновляется и URL
+  (без reload) -> ссылкой `?category=...&minPrice=...` можно поделиться.
+- **Заголовок Price** — при клике открывается/закрывается панель слайдера (`aria-expanded`).
+- **Альтернатива (старая):** при каждом изменении `location.search = ...` -> reload. Было просто,
+  но UX плохой. Новый вариант чуть больше кода, но остаётся на одной странице.
 
-### `api.js` — yagona `fetch` nuqtasi, `request()` yordamchisi
-- base URL, `Authorization: Bearer`, xato -> `throw` bir joyda.
-- Chaqiruvchi joy `try/catch` bilan ushlaydi. 401 -> token tozalanadi.
+### `api.js` — единственная точка `fetch`, помощник `request()`
+- base URL, `Authorization: Bearer`, ошибка -> `throw` в одном месте.
+- Вызывающий код ловит через `try/catch`. 401 -> токен очищается.
 
-### Xato -> `throw` (return emas)
-- **Sabab:** muvaffaqiyatli javob va xato ikki xil "yo'l". `throw` bilan chaqiruvchi
-  `try { ok } catch { xato }` deb yozadi — `if (result.error)` tekshiruvi kerak emas.
+### Ошибка -> `throw` (не return)
+- **Причина:** успешный ответ и ошибка — два разных "пути". С `throw` вызывающий код
+  пишет `try { ok } catch { ошибка }` — не нужна проверка `if (result.error)`.
 
-### Savat: mehmon (localStorage) / kirgan (server) — `cart-store.js` yashiradi
-- Sahifa "qaysi holat?" demайdi. Login paytida mehmon savati serverga ko'chiriladi
+### Корзина: гость (localStorage) / вошёл (сервер) — скрывает `cart-store.js`
+- Страница не спрашивает "какое сейчас состояние?". При входе гостевая корзина переносится на сервер
   (`mergeGuestCartIntoAccount`).
-- Ko'chirishda tarmoq/server xatosi bo'lgan mahsulotlar o'chirilmaydi: ular mahalliy
-  savatda qoladi va foydalanuvchiga ogohlantirish ko'rsatiladi.
-- **Chegirma:** API savatida chegirma yo'q -> "Order Summary" da `Subtotal = Total`,
+- Товары, у которых при переносе была ошибка сети/сервера, не удаляются: они остаются в локальной
+  корзине, пользователю показывается предупреждение.
+- **Скидка:** в корзине API скидки нет -> в "Order Summary" `Subtotal = Total`,
   `Discount (~0%) = 0`.
 
-### Ba'zi sahifalar SF Pro Display shriftida (Figma shunday)
-- Katalog filtri, savat "Order Summary", mahsulot sahifasi mazmuni, kirish/profil
-  tugmalari — Figma'da SF Pro. `--font-system` (`-apple-system`) Mac'da aynan SF Pro'ni beradi.
-- Qolgan hammasi Inter. (Dizaynerning UI-kit aralashmasi.)
+### Некоторые страницы на шрифте SF Pro Display (так в Figma)
+- Фильтр каталога, "Order Summary" корзины, содержимое страницы товара, кнопки входа/профиля
+  — в Figma SF Pro. `--font-system` (`-apple-system`) на Mac даёт именно SF Pro.
+- Всё остальное — Inter. (Смешение UI-kit дизайнера.)
 
-### Kirish — telefon o'rniga EMAIL
-- O'qituvchi shunday dedi; API `POST /login` faqat `{email, password}`.
+### Вход — EMAIL вместо телефона
+- Так сказал преподаватель; API `POST /login` принимает только `{email, password}`.
 
-### Mahsulot kartochkasi UNIVERSAL — faqat backend maydonlari
-- `image, title, price` — nima kelsa shu. Soxta eski narx / "-20%" / "New" belgilari
-  (Figma'da bor) — chizilmaydi, chunki API'da bunday maydon yo'q.
+### Карточка товара УНИВЕРСАЛЬНАЯ — только поля бэкенда
+- `image, title, price` — что приходит, то и есть. Фейковая старая цена / "-20%" / метка "New"
+  (есть в Figma) — не отрисовываются, потому что в API такого поля нет.
 
-### Animatsiya: 2 qatlam — GSAP ("wow") + CSS reveal (zaxira)
-- **GSAP + ScrollTrigger + Lenis** (`js/vendor/` da, CDN'siz — Netlify'da ham,
-  offline ham ishlaydi, ~128KB). `js/effects/motion.js`:
-  - Lenis yumshoq skroll
-  - hero sarlavhasi so'zlarga bo'linib maska ortidan ko'tariladi (`gsap.fromTo`,
-    `gsap.from` EMAS — `from` element'ni "from" holatida qoldirib ketardi)
-  - hero foni skroll bilan parallaks (scrub)
-  - `[data-reveal]` / `[data-reveal-stagger]` bloklari ScrollTrigger bilan pastdan chiqadi
-    (grid BOLALARINI alohida emas — ular API'dan keyin keladi, poyga bo'lardi)
-  - `main` sahifa ochilishida pastdan paydo bo'ladi
-- **Zaxira (`js/effects/reveal.js`):** GSAP yo'q yoki `prefers-reduced-motion` bo'lsa —
-  IntersectionObserver + CSS. Bu ham 1.5s xavfsizlik to'ri bilan.
-- motion.js'da ham 2s xavfsizlik: ekranda ko'rinib, hali yashirin bloklarni majburan ochadi.
-- `.has-motion` klassi: GSAP faol bo'lganda CSS reveal qoidalarini o'chiradi (ikki xil animatsiya to'qnashmasin).
+### Анимация: 2 слоя — GSAP ("wow") + CSS reveal (запасной вариант)
+- **GSAP + ScrollTrigger + Lenis** (в `js/vendor/`, без CDN — работает и на Netlify,
+  и офлайн, ~128КБ). `js/effects/motion.js`:
+  - плавный скролл Lenis
+  - заголовок hero разбивается на слова и поднимается из-за маски (`gsap.fromTo`,
+    НЕ `gsap.from` — `from` оставлял бы элемент в состоянии "from")
+  - фон hero — параллакс со скроллом (scrub)
+  - блоки `[data-reveal]` / `[data-reveal-stagger]` выезжают снизу через ScrollTrigger
+    (не ДОЧЕРНИЕ элементы grid по отдельности — они приходят после API, была бы гонка)
+  - `main` плавно появляется снизу при открытии страницы
+- **Запасной вариант (`js/effects/reveal.js`):** если нет GSAP или включён `prefers-reduced-motion` —
+  IntersectionObserver + CSS. Тоже со страховочной сеткой на 1.5с.
+- В motion.js тоже страховка на 2с: принудительно показывает блоки, которые видны на экране, но ещё скрыты.
+- Класс `.has-motion`: когда GSAP активен, отключает правила CSS reveal (чтобы два вида анимации не сталкивались).
 
-### O'qituvchi Figma'ni yangiladi (2026-09-02) — 5 ta o'zgarish
-1. **Kategoriya sahifasi olib tashlandi.** `pages/category.html`,
-   `js/pages/category.js`, `css/pages/category.css` o'chirildi.
-   Bosh sahifadagi "Shop by category" kartochkalari endi katalogga,
-   o'sha kategoriya tanlangan holda ketadi:
-   `/pages/catalog.html?category=<id>`. Katalog `?category=` ni
-   allaqachon o'qiydi -> qo'shimcha kod kerak bo'lmadi va "har bir
-   ko'rinadigan control ishlasin" qoidasi buzilmadi.
-2. **Login va Register sahifalarida footer yo'q.** `<div id="footer">`
-   va endi keraksiz `footer.css` havolasi olib tashlandi.
-   `components.js` footer div'ini topmasa jimgina to'xtaydi — xato yo'q.
-3. **Profil: TELEFON versiyasida faqat akkaunt bloki qoladi.**
-   Ism / telefon / email / "Log out" — shu. "My orders" bo'limi
-   ko'rinmaydi. ("Favorites" bo'limi keyinchalik butunlay olib
-   tashlandi — Figma'da yo'q edi va API'da wishlist endpoint yo'q.) ("Language" bo'limi keyinchalik butunlay
-   olib tashlandi — pastdagi "Sayt tili" qaroriga qarang.)
+### Преподаватель обновил Figma (2026-09-02) — 5 изменений
+1. **Страница категории убрана.** Удалены `pages/category.html`,
+   `js/pages/category.js`, `css/pages/category.css`.
+   Карточки "Shop by category" на главной странице теперь ведут в каталог
+   с уже выбранной категорией:
+   `/pages/catalog.html?category=<id>`. Каталог уже читает `?category=` ->
+   дополнительный код не понадобился, и правило "каждый видимый
+   контрол должен работать" не нарушено.
+2. **На страницах Login и Register нет footer.** Убраны `<div id="footer">`
+   и теперь ненужная ссылка на `footer.css`.
+   Если `components.js` не находит div footer, он молча останавливается — ошибки нет.
+3. **Профиль: в ТЕЛЕФОННОЙ версии остаётся только блок аккаунта.**
+   Имя / телефон / email / "Log out" — и всё. Раздел "My orders"
+   не виден. (Раздел "Favorites" позже убран полностью — в Figma его
+   не было, и в API нет эндпоинта wishlist.) (Раздел "Language" позже
+   тоже убран полностью — см. решение "Язык сайта" ниже.)
    `@media (max-width: 768px) { .profile > *:not(.profile-head) { display: none } }`
-   Qoida ataylab "head dan BOSHQA hammasi" deb yozilgan: keyin yangi
-   bo'lim qo'shilsa ham telefonda o'z-o'zidan yashirin bo'ladi.
-   768px — saytdagi "telefon" chegarasi (header shu yerda burger'ga o'tadi).
-   Yashirish faqat CSS'da: ekran kattalashsa bo'limlar qaytadan ko'rinadi.
-   Ma'lumot baribir olinadi (bitta so'rov) — shunda ekran burilganda
-   qayta so'rov kerak bo'lmaydi.
-4. **Narx filtri 0–100$** (avval 0–500$). Slider `max` va tutqichlarning
-   boshlang'ich qiymati ($0 / $100 — to'liq oraliq), "Clear filters" ham
-   shu qiymatlarga qaytadi.
-5. **Mahsulot sahifasi butunlay SF Pro Display** (header/footer'dan
-   tashqari). Shrift bitta joyda — `<main class="product">` da beriladi,
-   ichidagi hamma element (sarlavha, matn, tugma) meros oladi.
-   Ilgari har qoidada alohida yozilgan `font-family` takrorlari olib
-   tashlandi. Header/footer `<main>` dan tashqarida -> ularga tegmaydi.
+   Правило специально написано как "всё, КРОМЕ head": если потом добавится новый
+   раздел, на телефоне он скроется сам собой.
+   768px — граница "телефона" на сайте (здесь же header переходит на бургер).
+   Скрытие только в CSS: если экран станет больше, разделы снова видны.
+   Данные всё равно запрашиваются (один запрос) — так при повороте экрана
+   не нужен повторный запрос.
+4. **Фильтр цены 0–100$** (раньше 0–500$). `max` слайдера и начальные значения
+   ползунков ($0 / $100 — полный диапазон), "Clear filters" тоже
+   возвращает к этим значениям.
+5. **Страница товара целиком на SF Pro Display** (кроме header/footer).
+   Шрифт задан в одном месте — на `<main class="product">`,
+   всё внутри (заголовок, текст, кнопка) наследует.
+   Убраны прежние повторы `font-family`, которые раньше писались в каждом правиле отдельно.
+   Header/footer вне `<main>` -> их это не затрагивает.
 
-### Qo'shimcha animatsiyalar — dizaynga TEGMASDAN
-Qoida: har bir animatsiya faqat "bezak". Ishlamay qolsa sayt to'g'ri
-ko'rinishi SHART. Shuning uchun hamma joyda "xavfsiz yo'nalish" tanlandi.
+### Дополнительные анимации — БЕЗ изменения дизайна
+Правило: каждая анимация — только "украшение". Если она не сработает, сайт ОБЯЗАН
+выглядеть правильно. Поэтому везде выбрано "безопасное направление".
 
-- **Rasm yumshoq ochilishi** — API rasmi birdan "sakramasin". Kulrang
-  joy-tutgich endi o'rovchi elementda (`.card-media`,
-  `.cart-item-media`, `.product-main`), rasmning o'zi `load` bo'lgach
-  ochiladi (`components.js` da `load` ushlagichi — mavjud `error`
-  ushlagichi bilan bir xil uslub: `capture: true`, chunki ikkalasi ham
-  bubble bo'lmaydi).
-  **Nega `transition` emas, `animation`:** `transition` bilan asosiy holat
-  `opacity: 0` bo'lardi — animatsiya ishlamay qolsa rasm KO'RINMAY qolardi.
-  `animation` da esa asosiy `opacity` — 1, fade faqat ustidan qo'shiladi.
-- **Kartochkalar birin-ketin** (`ui.js` -> `revealCards`) — API javob
-  bergach grid bolalari 0.06s farq bilan chiqadi. Ekrandan tashqaridagi
-  grid uchun ishlamaydi (uni `[data-reveal-stagger]` skroll bilan chiqaradi).
-  Shu funksiya `ScrollTrigger.refresh()` ham qiladi: kontent API'dan keyin
-  qo'shilgani uchun skroll o'lchovlari eskirib qolardi.
-- **Bo'lim sarlavhalari** (`[data-split]`) — hero'dagi AYNAN o'sha so'z-maska
-  effekti, lekin skroll bilan. Matni JS bilan almashadigan sarlavhalarga
-  qo'yilmadi (`splitWords` `innerHTML` ni qayta yozadi -> ichidagi
-  `<span data-review-count>` yo'qolardi).
-- **`.m-word` da `padding-bottom`/manfiy `margin-bottom`** — `overflow: hidden`
-  pastga tushuvchi harflarni (g, y, p) kesmasin. Tashqi o'lcham o'zgarmaydi.
-- **Savat**: `+`/`−` da butun ro'yxat QAYTA CHIZILMAYDI — faqat o'sha
-  qatordagi son va "Order Summary" (raqam `countUp` bilan sanab o'tadi).
-  O'chirishda qator avval yumshoq so'nadi (0.28s), keyin ro'yxat yangilanadi.
-  **`transition` asosiy `.cart-item` qoidasida**: agar u `.is-removing` ichida
-  bo'lsa, klass qo'shilganda transition va yangi qiymat bir vaqtda paydo
-  bo'ladi va brauzer animatsiya qilmaydi.
-- **"Bag"ga uchish** (`flyToBag`) — "Add to cart" da rasm nusxasi header'ga
-  uchadi. Vaqtinchalik `position: fixed` element, 0.8s dan keyin o'chadi.
-- **Yurakcha "pop"** — faqat QO'SHILGANDA (sahifa ochilganda emas, aks holda
-  profil sahifasidagi hamma yurakcha birdan sakrardi).
-- **Register**: noto'g'ri maydon yengil silkinadi, xato matni yuqoridan ochiladi.
-- Hammasi `prefers-reduced-motion: reduce` da o'chadi; GSAP bo'lmasa
-  `revealCards`/`flyToBag` shunchaki hech narsa qilmaydi.
+- **Плавное появление изображения** — изображение из API не должно "выскакивать" резко. Серый
+  placeholder теперь на обёрточном элементе (`.card-media`,
+  `.cart-item-media`, `.product-main`), само изображение появляется после `load`
+  (в `components.js` обработчик `load` — тот же приём, что и у существующего `error`:
+  `capture: true`, потому что оба события не всплывают).
+  **Почему не `transition`, а `animation`:** с `transition` основным состоянием был бы
+  `opacity: 0` — если анимация не сработает, изображение осталось бы НЕВИДИМЫМ.
+  С `animation` основной `opacity` — 1, fade добавляется только поверх.
+- **Карточки друг за другом** (`ui.js` -> `revealCards`) — после ответа API дочерние
+  элементы grid появляются с разницей 0.06с. Не работает для сетки за пределами
+  экрана (её показывает `[data-reveal-stagger]` при скролле).
+  Эта же функция вызывает `ScrollTrigger.refresh()`: так как контент добавлен после API,
+  замеры скролла устарели бы.
+- **Заголовки секций** (`[data-split]`) — ТОЧНО такой же эффект словесной маски, как у hero,
+  но со скроллом. Не применён к заголовкам, чей текст меняется через JS
+  (`splitWords` перезаписывает `innerHTML` -> исчезли бы вложенные
+  элементы, например `<span data-review-count>`).
+- **`padding-bottom`/отрицательный `margin-bottom` у `.m-word`** — чтобы `overflow: hidden`
+  не обрезал буквы со свисающими хвостами (g, y, p). Внешний размер не меняется.
+- **Корзина**: при `+`/`−` весь список НЕ ПЕРЕРИСОВЫВАЕТСЯ — обновляется только
+  число в этой строке и "Order Summary" (число отсчитывается через `countUp`).
+  При удалении строка сначала плавно гаснет (0.28с), затем список обновляется.
+  **`transition` в основном правиле `.cart-item`**: если бы он был внутри `.is-removing`,
+  то при добавлении класса transition и новое значение появились бы одновременно
+  и браузер не стал бы анимировать.
+- **Полёт в "Bag"** (`flyToBag`) — при "Add to cart" копия изображения летит к header.
+  Временный элемент `position: fixed`, исчезает через 0.8с.
+- **"Pop" сердечка** — только при ДОБАВЛЕНИИ (не при открытии страницы, иначе на
+  странице профиля все сердечки подскочили бы сразу).
+- **Register**: неверное поле слегка трясётся, текст ошибки плавно выезжает сверху.
+- Всё отключается при `prefers-reduced-motion: reduce`; если нет GSAP,
+  `revealCards`/`flyToBag` просто ничего не делают.
 
-### Ko'rinmaydigan tezlik (animatsiya emas, lekin "silliq his")
-- **Havolani oldindan yuklash** (`wirePrefetch`) — sichqoncha havola ustiga
-  kelganda `<link rel="prefetch">` qo'shiladi. Har manzil bir marta;
-  `?id=...` tashlab yuboriladi (HTML fayl bitta). Tashqi havolalar va
-  `target` li havolalar tegilmaydi.
-- **Hero rasmiga `preload` + `fetchpriority="high"`** — Google "LCP" deb
-  o'lchaydigan eng katta element shu; oldindan yuklash SEO ballini oshiradi.
-- **`aria-busy`** — grid yuklanayotganda skrinrider "yuklanmoqda" deb biladi.
+### Незаметная скорость (не анимация, но "ощущение плавности")
+- **Предзагрузка ссылки** (`wirePrefetch`) — при наведении мыши на ссылку
+  добавляется `<link rel="prefetch">`. Каждый адрес один раз;
+  `?id=...` отбрасывается (HTML-файл один). Внешние ссылки и ссылки с
+  `target` не затрагиваются.
+- **`preload` + `fetchpriority="high"` для изображения hero** — это самый крупный
+  элемент, который Google измеряет как "LCP"; предзагрузка повышает балл SEO.
+- **`aria-busy`** — пока grid загружается, скринридер понимает, что "загрузка".
 
-### Rad etilgan: sahifalar orasida cross-fade (View Transitions)
-Chiroyli bo'lardi, lekin bizdagi scroll-reveal bilan to'qnashadi: yangi
-sahifa "surat"i olinayotganda bloklar hali `opacity: 0` da bo'lib, oq
-yaltirash beradi. JS bilan havolani ushlab qolish esa `Ctrl+click`,
-"orqaga" tugmasi va bfcache'ni buzish xavfini tug'diradi. Foydasidan
-zarari ko'p -> qilinmadi.
+### Отклонено: cross-fade между страницами (View Transitions)
+Было бы красиво, но сталкивается с нашим scroll-reveal: пока делается "снимок"
+новой страницы, блоки ещё в состоянии `opacity: 0`, получается белая
+вспышка. Перехват ссылки через JS тоже несёт риск сломать `Ctrl+click`,
+кнопку "назад" и bfcache. Вреда больше, чем пользы -> не сделано.
 
-### Optimizatsiya: shrift woff2 (o'zimizda), rasm webp
-**Shrift — Google Fonts o'rniga LOYIHA ICHIDA** (`css/base/fonts.css` +
+### Оптимизация: шрифт woff2 (у себя), изображения webp
+**Шрифт — ВНУТРИ ПРОЕКТА вместо Google Fonts** (`css/base/fonts.css` +
 `assets/fonts/*.woff2`):
-- Nega: tashqi so'rov (DNS + TLS ulanish) yo'qoladi; Google'ga bog'liqlik
-  yo'q; CSP qattiqlashadi (`font-src 'self'`, `style-src` dan
-  `fonts.googleapis.com` olib tashlandi).
-- **Faqat woff2** — barcha zamonaviy brauzerlar qo'llaydi, eng ixcham
-  format. `.ttf`/`.woff` zaxira nusxalar shart emas.
-- **Bitta fayl, hamma qalinlik:** Inter — "variable font". Google 400/500/600
-  uchun uchta URL beradi, lekin ular AYNI BIR FAYL (md5 bilan tekshirildi).
-  Shuning uchun `font-weight: 100 900` deb oraliq yozdik: 12 fayl o'rniga 4 ta.
-- **`unicode-range`:** brauzer sahifadagi matnga qarab faqat kerakli bo'lakni
-  yuklaydi. Inglizcha sahifada `latin` (47 KB) tushadi; eng katta
-  `latin-ext` (83 KB) UMUMAN yuklanmaydi. Kirill (18 KB) esa API'dan
-  ruscha matn kelsa ishlatiladi (API xato xabarlari ruscha, mahsulot
-  nomlari ham bo'lishi mumkin) — shuning uchun uni saqlab qoldik.
-- Greek va vietnamese bo'laklari olinmadi — bizga kerak emas, kerak
-  bo'lganda brauzer tizim shriftiga tushadi.
-- `font-display: swap` — shrift yuklanguncha matn tizim shriftida ko'rinadi.
-- Bosh sahifada `latin` bo'lagi `<link rel="preload">` bilan oldindan
-  so'raladi (CSS o'qilishini kutmaydi).
+- Почему: исчезает внешний запрос (DNS + TLS соединение); нет зависимости
+  от Google; CSP становится строже (`font-src 'self'`, из `style-src`
+  убран `fonts.googleapis.com`).
+- **Только woff2** — поддерживается всеми современными браузерами, самый компактный
+  формат. Резервные `.ttf`/`.woff` не нужны.
+- **Один файл, все насыщенности:** Inter — "variable font". Google для 400/500/600
+  даёт три URL, но это ОДИН И ТОТ ЖЕ ФАЙЛ (проверено по md5).
+  Поэтому указали диапазон `font-weight: 100 900`: 4 файла вместо 12.
+- **`unicode-range`:** браузер загружает только нужный блок в зависимости от текста
+  на странице. На англоязычной странице подгружается `latin` (47 КБ); самый крупный
+  `latin-ext` (83 КБ) ВООБЩЕ не загружается. Кириллица (18 КБ) используется,
+  если из API приходит текст на русском (сообщения об ошибках API на русском,
+  названия товаров тоже могут быть) — поэтому её оставили.
+- Блоки Greek и vietnamese убраны — они не нужны, если понадобятся, браузер
+  перейдёт на системный шрифт.
+- `font-display: swap` — пока шрифт не загрузился, текст отображается системным шрифтом.
+- На главной странице блок `latin` заранее запрашивается через `<link rel="preload">`
+  (не дожидается чтения CSS).
 
-**Rasm — webp (asl fayl zaxirada):**
-- `hero.jpg` 205 KB -> `hero.webp` 43 KB (**-79%**)
-- `logo.png` 26 KB -> `logo.webp` 6 KB (**-76%**, shaffoflik saqlandi)
-- `<picture>` ishlatiladi: webp'ni qo'llamaydigan brauzer `<img>` dagi
-  asl faylni oladi. Asl fayllar `og:image` va JSON-LD `logo` uchun ham
-  kerak — ijtimoiy tarmoq botlari webp'ni hamma joyda qo'llamaydi.
-- **`picture { display: contents }`** (reset.css): `<picture>` o'zi quti
-  yaratmasin, aks holda `.hero-bg img { height: 100% }` buzilardi
-  (100% "auto" balandlikdan hisoblanib qolardi).
+**Изображения — webp (оригинал в резерве):**
+- `hero.jpg` 205 КБ -> `hero.webp` 43 КБ (**-79%**)
+- `logo.png` 26 КБ -> `logo.webp` 6 КБ (**-76%**, прозрачность сохранена)
+- Используется `<picture>`: браузер, не поддерживающий webp, получает
+  оригинальный файл из `<img>`. Оригиналы нужны и для `og:image`, и для
+  `logo` в JSON-LD — боты соцсетей не везде поддерживают webp.
+- **`picture { display: contents }`** (reset.css): `<picture>` сама не должна
+  создавать блок, иначе сломалось бы `.hero-bg img { height: 100% }`
+  (100% считались бы от высоты "auto").
 
-**Boshqa:**
-- `<link rel="preconnect" href="https://api.wepro.uz">` — barcha ma'lumot
-  shu yerdan keladi, ulanish oldindan ochiladi.
-- Hero `<img>` ga `width`/`height` berildi -> joy oldindan band qilinadi,
-  sahifa "sakramaydi" (CLS = 0).
-- `/assets/*` (rasm, ikonka, shrift) va `/js/vendor/*` — bir yillik kesh.
+**Другое:**
+- `<link rel="preconnect" href="https://api.wepro.uz">` — отсюда приходят
+  все данные, соединение открывается заранее.
+- Hero `<img>` получил `width`/`height` -> место резервируется заранее,
+  страница не "прыгает" (CLS = 0).
+- `/assets/*` (изображения, иконки, шрифты) и `/js/vendor/*` — кеш на год.
 
-### Dev server: `serve` + `serve.json` (`cleanUrls: false`)
-- `cleanUrls: false` — URL'dan `.html` va `?query` olib tashlanmasin
-  (Netlify ham `.html` ni saqlaydi, statik sayt).
-- `components.js` `/components/x.html?v=1` — kesh-buzish.
+### Dev-сервер: `serve` + `serve.json` (`cleanUrls: false`)
+- `cleanUrls: false` — из URL не должны убираться `.html` и `?query`
+  (Netlify тоже сохраняет `.html`, статичный сайт).
+- `components.js` `/components/x.html?v=1` — сброс кеша.
 
-### `esc()` — backend matnini HTML'ga xavfsiz qo'yish
-- Mahsulot nomi / izoh backenddan keladi. `< > & " '` belgilari MATN bo'lib
-  chizilsin, HTML bo'lib emas (XSS himoya).
+### `esc()` — безопасная вставка текста бэкенда в HTML
+- Название товара / отзыв приходят с бэкенда. Символы `< > & " '` должны
+  отрисовываться как ТЕКСТ, а не как HTML (защита от XSS).
 
-### Sayt tili — faqat INGLIZCHA (tarjima tizimi YO'Q)
-- Barcha foydalanuvchiga ko'rinadigan matn (label, xato, toast, sarlavha) —
-  inglizcha. `<html lang="en">`. Kod izohlari o'zbekcha qoladi — ular Hasan
-  uchun, sayt kontenti emas.
-- **Google Translate widgeti OLIB TASHLANDI** (o'qituvchi so'radi).
-  Nima o'chdi: `js/translate.js`, har sahifadagi yashirin
-  `#google_translate_element` div va skript, profil sahifasidagi
-  "Language" bo'limi, `css/ui.css` dagi widget stillari.
-- **Foydasi:** endi tashqi (vendor qilib bo'lmaydigan, jonli) xizmatga
-  bog'liqlik yo'q. Yagona tashqi manba — Google Fonts (Inter shrifti).
-  CSP ancha qattiqlashdi: `script-src 'self'` (endi `'unsafe-inline'` ham,
-  `translate.google.com` ham kerak emas), `frame-src 'none'`,
-  `connect-src` da faqat bizning API.
-- **Muqobil:** har matnni qo'lda 190+ tilga tarjima qilish — imkonsiz;
-  server tomonda tarjima — bizda backend yo'q. Shuning uchun sayt
-  bir tilli (inglizcha) qoldi.
+### Язык сайта — только АНГЛИЙСКИЙ (системы перевода НЕТ)
+- Весь видимый пользователю текст (label, ошибка, toast, заголовок) —
+  на английском. `<html lang="en">`. Комментарии в коде остаются на узбекском — они
+  для Хасана, а не контент сайта.
+- **Виджет Google Translate УБРАН** (попросил преподаватель).
+  Что удалено: `js/translate.js`, скрытый на каждой странице div
+  `#google_translate_element` и скрипт, раздел "Language" на странице профиля,
+  стили виджета в `css/ui.css`.
+- **Польза:** теперь нет зависимости от внешнего (немогущего быть vendor'ом, живого)
+  сервиса. Единственный внешний источник — Google Fonts (шрифт Inter).
+  CSP стал заметно строже: `script-src 'self'` (теперь не нужны ни `'unsafe-inline'`,
+  ни `translate.google.com`), `frame-src 'none'`,
+  в `connect-src` только наш API.
+- **Альтернатива:** вручную переводить каждый текст на 190+ языков — невозможно;
+  перевод на стороне сервера — у нас нет бэкенда для этого. Поэтому сайт
+  остался одноязычным (английским).
 
-### Buzilgan rasm -> toza kulrang quti (broken-icon emas)
-- API'дан kelgan `image` URL 404 bo'lsa (yoki bo'sh), brauzer "buzilgan
-  rasm" ikonkасини ko'rsatади. `.img-fallback` klassi + `error` hodisаси
-  (document darajasида, `capture: true` — bu hodisa bubble bo'lмайди) —
-  `<img>` ni bir xil klasslи `<div>` ga almаштиради (fon rangi qoladi).
+### Сломанное изображение -> чистый серый блок (не broken-icon)
+- Если URL `image` из API вернул 404 (или пуст), браузер показывает иконку
+  "сломанного изображения". Класс `.img-fallback` + событие `error`
+  (на уровне document, `capture: true` — это событие не всплывает) —
+  заменяет `<img>` на `<div>` с тем же классом (остаётся цвет фона).
 
-### Ikki marta bosilса — ikkита amal bo'lмасин
-- "Add to cart", "Go to checkout", izoh "Send" — so'rov ketaётганда
-  tugma `disabled` bo'lади. Sabab: sekin internetда foydalanuvchi ikki
-  marta bossа, ikkита buyurtма/izoh yaratilib qolиши mumkin edi.
+### Двойной клик — не должен приводить к двойному действию
+- "Add to cart", "Go to checkout", "Send" отзыва — пока запрос выполняется,
+  кнопка `disabled`. Причина: на медленном интернете, если пользователь кликнет
+  дважды, мог бы создаться двойной заказ/отзыв.
 
-### Register — inline validatsiya + telefon uchun kutubxona
-- **Har maydon ostida alohida xato** (`.field-error`), bitta umumiy xato emas.
-  `blur` da tekshiriladi, tuzatil boshlansa qayta baholanadi, `submit` da hammasi.
-  `aria-invalid` + `aria-describedby` — skrinrider ham biladi. Valid bo'lmaguncha
-  API'ga so'rov yo'q.
-- **Tekshiruv mantig'i alohida sodda funksiyalarда** (`js/core/validation.js`) — chalkash
-  katta `submit` callback emas. Doskада bitta funksiyани ko'rsatib tushuntirса bo'ladi.
-- **Nega barcha davlat regexlari qo'lda yozilmagan:** har davlatning telefon
-  uzunligi/formati har xil (190+ davlat). Ularni qo'lда regex bilan yozish — xato
-  va tez eskirish manbai. `intl-tel-input@29` (libphonenumber ma'lumotlari ustида)
-  buni biz uchun qiladi: `isValidNumber()` har davlat uzunligини tekshiradi.
-  `isValidNumberPrecise()` ISHLATILMADI — rasmiy docs uni tez eskirishi mumkin deydi.
-- **Kutubxona loyiha ичида** (`js/vendor/intl-tel-input/`: `intlTelInput.mjs`,
-  `utils.js`, `css/`, `img/flags*.webp`). CDN yo'q → mavjud CSP (`script-src 'self'`)
-  o'zgармаyди, offline ham ishlaydi. `node_modules` deployга tayanmaydi
-  (`package.json` + `package-lock.json` saqlanган, faqat kelib chiqish uchun).
-- **Sozlama:** `initialCountry:"uz"` (default O'zbekiston), `separateDialCode:true`
-  (`+998` flag yonида), `strictMode:true` (xato belgi kiритишга yo'l qo'ymaydi),
-  `countrySearch:true` (dropdown'да barcha davlat). O'zbekiston milliy qismi —
-  maks 9 raqam, `XX-XXX-XX-XX` (o'z formatimiz); boshqa davlатда kutubxona formati.
-  API'ga E.164 (`+998901234567`).
-- **Email:** faqat kuchli FORMAT tekshiruvи. Pochta qутиси haqiqатан bor-yo'qлигини
-  frontend bilmaydi — buni faqat backend verification link aniqлаyди. DNS/«email
-  checker» API qo'shилмади. Server 409 (email band) → xato Email maydonига bog'lанади.
+### Register — встроенная валидация + библиотека для телефона
+- **Отдельная ошибка под каждым полем** (`.field-error`), а не одна общая ошибка.
+  Проверяется при `blur`, перепроверяется при начале исправления, при `submit` — всё.
+  `aria-invalid` + `aria-describedby` — понимает и скринридер. Пока не валидно,
+  запроса к API нет.
+- **Логика проверки в отдельных простых функциях** (`js/core/validation.js`) — не запутанный
+  большой callback `submit`. На доске можно показать и объяснить одну функцию.
+- **Почему не все регулярки для стран написаны вручную:** у каждой страны своя
+  длина/формат телефона (190+ стран). Писать их вручную regex — источник ошибок
+  и быстрого устаревания. `intl-tel-input@29` (на основе данных libphonenumber)
+  делает это за нас: `isValidNumber()` проверяет длину для каждой страны.
+  `isValidNumberPrecise()` НЕ ИСПОЛЬЗОВАН — в официальной документации сказано, что он может быстро устареть.
+- **Библиотека внутри проекта** (`js/vendor/intl-tel-input/`: `intlTelInput.mjs`,
+  `utils.js`, `css/`, `img/flags*.webp`). Без CDN → существующий CSP (`script-src 'self'`)
+  не меняется, работает и офлайн. `node_modules` не нужен для деплоя
+  (`package.json` + `package-lock.json` сохранены только для происхождения).
+- **Настройка:** `initialCountry:"uz"` (по умолчанию Узбекистан), `separateDialCode:true`
+  (`+998` рядом с флагом), `strictMode:true` (не даёт вводить неверный символ),
+  `countrySearch:true` (в выпадающем списке все страны). Национальная часть Узбекистана —
+  максимум 9 цифр, `XX-XXX-XX-XX` (свой формат); для других стран — формат библиотеки.
+  В API отправляется E.164 (`+998901234567`).
+- **Email:** только строгая проверка ФОРМАТА. Существует ли почтовый ящик на самом деле,
+  фронтенд не знает — это может определить только письмо-подтверждение от бэкенда. DNS/«email
+  checker» API не добавлен. Если сервер вернул 409 (email занят) → ошибка привязывается к полю Email.
 
-### API javob shakllari (kutilmagan)
-- `/products/:id` -> `{ product: {...} }` (ichida `comments` ham)
-- `/cart` va o'zgartirishlar -> `{ message, cart: {...} }` (api.js ichini ochib beradi)
+### Формы ответов API (неожиданные)
+- `/products/:id` -> `{ product: {...} }` (внутри есть и `comments`)
+- `/cart` и изменения -> `{ message, cart: {...} }` (api.js раскрывает содержимое)
 - `/orders` (POST) -> `{ message, order: {...} }`

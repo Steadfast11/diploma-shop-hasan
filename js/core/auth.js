@@ -1,7 +1,7 @@
 /* ============================================================
-   auth.js — "kim kirgan" holatini boshqaradi.
-   api.js so'rov yuboradi; auth.js natijani (token + profil) saqlaydi
-   va "hozir kirilganmi?" degan savolga javob beradi.
+   auth.js — управляет состоянием "кто вошёл".
+   api.js отправляет запрос; auth.js сохраняет результат (токен + профиль)
+   и отвечает на вопрос "сейчас есть вход?".
    ============================================================ */
 
 import * as api from "./api.js";
@@ -10,8 +10,8 @@ import { getToken, setToken, clearToken, getUser, setUser, clearUser } from "./s
 export const isLoggedIn = () => Boolean(getToken());
 export const currentUser = () => getUser();
 
-// `next` faqat shu sayt ichidagi yo'l bo'lsin. `//example.com` ham tashqi
-// manzil hisoblanadi, shuning uchun ikkita slash bilan boshlanishi mumkin emas.
+// `next` должен быть путём только внутри этого сайта. `//example.com` тоже
+// считается внешним адресом, поэтому не может начинаться с двух слэшей.
 export function safeNext(value, fallback = "/index.html") {
   if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) {
     return fallback;
@@ -24,7 +24,7 @@ export function safeNext(value, fallback = "/index.html") {
   }
 }
 
-// Kirish: token + profilni saqlaymiz
+// Вход: сохраняем токен + профиль
 export async function doLogin(credentials) {
   const { token, user } = await api.login(credentials);
   setToken(token);
@@ -32,7 +32,7 @@ export async function doLogin(credentials) {
   return user;
 }
 
-// Ro'yxatdan o'tish: API darrov token qaytaradi -> saqlaymiz
+// Регистрация: API сразу возвращает токен -> сохраняем
 export async function doRegister(data) {
   const { token, user } = await api.register(data);
   setToken(token);
@@ -40,19 +40,19 @@ export async function doRegister(data) {
   return user;
 }
 
-// Chiqish: serverga xabar beramiz (xato bo'lsa ham) va mahalliy tozalaymiz
+// Выход: сообщаем серверу (даже если будет ошибка) и очищаем локально
 export async function doLogout() {
   try {
     await api.logout();
   } catch {
-    /* token allaqachon yaroqsiz bo'lishi mumkin — muhim emas */
+    /* токен мог уже стать недействительным — не важно */
   }
   clearToken();
   clearUser();
 }
 
-// Himoyalangan sahifada (savat checkout, profil) chaqiriladi.
-// Kirilmagan bo'lsa login sahifasiga yuboradi va false qaytaradi.
+// Вызывается на защищённой странице (checkout корзины, профиль).
+// Если входа нет — перенаправляет на страницу логина и возвращает false.
 export function requireAuth() {
   if (isLoggedIn()) return true;
   const back = encodeURIComponent(location.pathname + location.search);

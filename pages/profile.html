@@ -16,12 +16,12 @@
   <meta name="theme-color" content="#000000" />
   <meta name="robots" content="noindex, nofollow" />
 
-  <!-- API — barcha ma'lumot shu yerdan keladi. Ulanishni oldindan
-       ochib qo'yamiz (DNS + TLS), shunda birinchi so'rov tezroq ketadi. -->
+  <!-- API — отсюда приходят все данные. Устанавливаем соединение заранее
+       (DNS + TLS), чтобы первый запрос прошёл быстрее. -->
   <link rel="preconnect" href="https://api.wepro.uz" crossorigin />
 
-  <!-- Inter shrifti LOYIHA ICHIDA (css/base/fonts.css). Sahifadagi matn lotin
-       bo'lgani uchun brauzer faqat "latin" bo'lagini yuklaydi. -->
+  <!-- Шрифт Inter ВНУТРИ ПРОЕКТА (css/base/fonts.css). Текст на странице
+       латиница, поэтому браузер загружает только блок "latin". -->
   <link rel="preload" as="font" type="font/woff2"
         href="/assets/fonts/inter-latin.woff2" crossorigin />
   <link rel="stylesheet" href="../css/base/fonts.css" />
@@ -48,9 +48,9 @@
   <main id="main" class="profile">
     <div class="profile-head" data-profile-head data-reveal></div>
 
-    <!-- Figma (yangilangan): telefonda bu bo'lim ham, pastdagilar ham
-         ko'rinmaydi — faqat yuqoridagi akkaunt bloki qoladi.
-         Yashirish CSS'da: css/pages/profile.css -->
+    <!-- Figma (обновлено): на телефоне этот раздел и всё, что ниже,
+         не показываются — остаётся только блок аккаунта сверху.
+         Скрытие в CSS: css/pages/profile.css -->
     <section class="profile-orders" data-reveal>
       <h2 class="profile-orders-title" data-split>My orders</h2>
       <div class="product-grid" data-orders></div>

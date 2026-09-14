@@ -1,9 +1,9 @@
 /* ============================================================
-   config.js — loyiha sozlamalari BITTA joyda.
-   API hujjati: https://api.wepro.uz/sandbox-shop
+   config.js — настройки проекта в ОДНОМ месте.
+   Документация API: https://api.wepro.uz/sandbox-shop
    ============================================================ */
 
 export const API_BASE = "https://api.wepro.uz/sandbox-shop";
 
-// Katalogda bir sahifada nechta mahsulot (API default ham 12)
+// Сколько товаров на одной странице каталога (в API по умолчанию тоже 12)
 export const PAGE_SIZE = 12;

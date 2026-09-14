@@ -1,14 +1,14 @@
 /* ============================================================
-   pages/auth.css — Kirish (Log In) va Ro'yxatdan o'tish (Register)
-   Figma: 425px kenglikdagi forma, markazda. Sarlavha Inter Medium 40px.
-   Maydon: label (SF Pro 18px) + input (1px qora ramka, radius 4, h49).
-   Tugma: qora, radius 4 (bu yerda yumaloq EMAS), SF Pro Semibold 18px.
+   pages/auth.css — Вход (Log In) и Регистрация (Register)
+   Figma: форма шириной 425px, по центру. Заголовок Inter Medium 40px.
+   Поле: label (SF Pro 18px) + input (чёрная рамка 1px, radius 4, h49).
+   Кнопка: чёрная, radius 4 (здесь НЕ скруглённая), SF Pro Semibold 18px.
    ============================================================ */
 
 .auth {
   width: min(100% - 2 * var(--gutter), 425px);
   margin-inline: auto;
-  padding-block: 41px 76px;   /* Figma: sarlavha header'dan 41px past */
+  padding-block: 41px 76px;   /* Figma: заголовок на 41px ниже header */
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -28,7 +28,7 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;                   /* Figma: maydon guruhlari orasi */
+  gap: 16px;                   /* Figma: расстояние между группами полей */
 }
 
 .field {
@@ -66,14 +66,14 @@
   font-size: 14px;
 }
 
-/* Har maydon ostidagi alohida xato matni (inline validatsiya). */
+/* Отдельный текст ошибки под каждым полем (встроенная валидация). */
 .field-error {
   color: var(--color-danger);
   font-family: var(--font-system);
   letter-spacing: normal;
   font-size: 13px;
   line-height: 1.35;
-  /* birdan "chiqib" qolmasin — yuqoridan yumshoq ochiladi */
+  /* не должен появляться резко — плавно выезжает сверху */
   animation: field-error-in 0.25s var(--ease-soft);
 }
 @keyframes field-error-in {
@@ -81,8 +81,8 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Submit bosilganda birinchi noto'g'ri maydon yengil silkinadi
-   (JS "is-shake" klassini qo'yadi va animatsiya tugagach olib tashlaydi). */
+/* При отправке первое неверное поле слегка трясётся
+   (JS добавляет класс "is-shake" и убирает его после завершения анимации). */
 .field-input.is-shake {
   animation: field-shake 0.4s ease;
 }
@@ -91,7 +91,7 @@
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
 }
-/* Noto'g'ri maydon — qizil ramka (aria-invalid skrinrider uchun ham). */
+/* Неверное поле — красная рамка (aria-invalid также для скринридера). */
 .field-input[aria-invalid="true"] {
   border-color: var(--color-danger);
 }
@@ -99,7 +99,7 @@
   box-shadow: 0 0 0 2px rgba(255, 51, 51, 0.25);
 }
 
-/* --- intl-tel-input: mavjud .field-input / dizayn uslubiga moslash --- */
+/* --- intl-tel-input: подгонка под существующий стиль .field-input / дизайн --- */
 .field .iti {
   display: block;
   width: 100%;
@@ -124,7 +124,7 @@
   border-top-color: #6d6d6d;
 }
 
-/* --- Davlat ro'yxati (popup) — chiroyliroq --- */
+/* --- Список стран (popup) — покрасивее --- */
 .iti__country-container {
   padding: 0;
 }
@@ -136,12 +136,12 @@
   padding: 6px;
   overflow-y: auto;
 }
-/* kutubxonaning o'z qoidasi (.iti--inline-country-selector .iti__country-list)
-   max-height'ни 185px qilib qo'yadi -> bir xil kuchli selektor bilan qayta yozamiz */
+/* собственное правило библиотеки (.iti--inline-country-selector .iti__country-list)
+   задаёт max-height 185px -> переопределяем селектором той же силы */
 .iti--inline-country-selector .iti__country-list {
   max-height: 300px;
 }
-/* Desktop: menyu uzunroq ochilsin */
+/* Десктоп: меню открывается длиннее */
 @media (min-width: 700px) {
   .iti--inline-country-selector .iti__country-list {
     max-height: 460px;
@@ -154,7 +154,7 @@
   height: 40px;
   border: 1px solid var(--color-line-soft);
   border-radius: 6px;
-  padding-inline: 34px 12px;   /* chapда qidiruv ikonkаси uchun joy */
+  padding-inline: 34px 12px;   /* место слева под иконку поиска */
   font-family: var(--font-system);
   font-size: 15px;
 }
@@ -172,7 +172,7 @@
 .iti__country .iti__dial-code {
   color: #6d6d6d;
 }
-/* sichqoncha/klaviatura bilan turgan qator — yumshoq kulrang (qora "quti" emas) */
+/* строка, на которой мышь/клавиатура — мягкий серый (не чёрный "блок") */
 .iti__country.iti__highlight {
   background: #f2f2f2;
   color: var(--black);
@@ -184,7 +184,7 @@
   font-size: 14px;
 }
 
-/* Mobil: kutubxona o'zi to'liq ekran popup ochadi; qidiruv/qatorlar kattaroq. */
+/* Мобильная версия: библиотека сама открывает popup на весь экран; поиск/строки крупнее. */
 @media (max-width: 480px) {
   .iti__country-list {
     border-radius: 0;
@@ -200,7 +200,7 @@
   height: 48px;
   margin-top: 16px;
   border: 0;
-  border-radius: 4px;         /* Figma: login tugmasi yumaloq emas */
+  border-radius: 4px;         /* Figma: кнопка логина не скруглённая */
   background: var(--black);
   color: var(--white);
   font-family: var(--font-system);

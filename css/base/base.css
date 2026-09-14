@@ -1,14 +1,14 @@
 /* ============================================================
-   base.css — butun sayt bo'ylab umumiy asos
-   - body: shrift / rang / fon + Figma tipografiya qoidalari
-   - sarlavhalar: reset.css ularni "inherit" qilgan, shu yerda
-     Figma o'lchamlariga qaytaramiz
-   - .container: kontentni markazda, kengligi 1200px
+   base.css — общая основа для всего сайта
+   - body: шрифт / цвет / фон + правила типографики Figma
+   - заголовки: reset.css сделал их "inherit", здесь
+     возвращаем размеры из Figma
+   - .container: контент по центру, ширина 1200px
    ============================================================ */
 
 body {
   font-family: var(--font-family);
-  font-weight: var(--fw-medium);       /* Figma: butun loyiha Medium */
+  font-weight: var(--fw-medium);       /* Figma: весь проект Medium */
   font-size: var(--fs-base);           /* 16px */
   line-height: var(--line-height);     /* Figma: 1 */
   letter-spacing: var(--letter-spacing); /* Figma: -0.06em */
@@ -17,8 +17,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Sarlavhalar — Figma "Heading 1 / 2".
-   Faqat o'lcham beramiz; weight/spacing/line-height body'dan meros. */
+/* Заголовки — Figma "Heading 1 / 2".
+   Задаём только размер; weight/spacing/line-height наследуются от body. */
 h1 {
   font-size: var(--fs-h1);   /* 56px */
 }
@@ -26,12 +26,12 @@ h2 {
   font-size: var(--fs-h2);   /* 40px */
 }
 
-/* .container — ТЗ + Figma: ichki kontent 1200px, markazda.
+/* .container — ТЗ + Figma: внутренний контент 1200px, по центру.
    width: min(100% - 2*gutter, 1200px)
-   - katta ekranda  -> aniq 1200px (Figma shunday: 1920px'da chetdan 360px)
-   - kichik ekranda -> 100% minus ikki chetda 20px bo'shliq
-   Nega `width` (bu yerda `max-width` emas): min() allaqachon "ko'pi bilan"
-   ma'nosini beradi, gorizontal skroll chiqmaydi. */
+   - на большом экране  -> ровно 1200px (так в Figma: при 1920px отступ от края 360px)
+   - на маленьком экране -> 100% минус по 20px с каждой стороны
+   Почему `width` (а не `max-width`): min() уже даёт смысл "не более",
+   горизонтального скролла не будет. */
 .container {
   width: min(100% - 2 * var(--gutter), var(--container));
   margin-inline: auto;

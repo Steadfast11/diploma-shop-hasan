@@ -1,11 +1,11 @@
 /* ============================================================
-   pages/cart.js — Savatcha ("Your bag")
+   pages/cart.js — Корзина ("Your bag")
      1) header/footer
-     2) cart-store'dan savat (mehmon = localStorage, kirgan = server)
-     3) miqdor +/- , o'chirish, "Go to checkout"
+     2) корзина из cart-store (гость = localStorage, вошёл = сервер)
+     3) количество +/-, удаление, "Go to checkout"
 
-   Chegirma qarori (docs/decisions.md): API savatida chegirma yo'q ->
-   Subtotal = Total = server total, Discount = 0.
+   Решение по скидке (docs/decisions.md): в корзине API скидки нет ->
+   Subtotal = Total = total с сервера, Discount = 0.
    ============================================================ */
 
 import { initLayout } from "../components.js";
@@ -20,7 +20,7 @@ const mainEl = document.querySelector("[data-cart-main]");
 const summaryEl = document.querySelector("[data-cart-summary]");
 
 function itemHTML(it) {
-  // rasm va nom -> mahsulot sahifasiga havola
+  // изображение и название -> ссылка на страницу товара
   const href = `/pages/product.html?id=${encodeURIComponent(it.productId)}`;
   const image = it.image
     ? `<img class="cart-item-image img-fallback" src="${esc(it.image)}" alt="${esc(it.title)}" />`
@@ -71,20 +71,20 @@ async function render() {
   }
 }
 
-// Kichik kutish — animatsiya tugashini kutish uchun (setTimeout va'da shaklida).
+// Небольшая пауза — чтобы дождаться завершения анимации (в виде setTimeout-промиса).
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/* "Order Summary" dagi Subtotal va Total ni yangi jamiga SANAB o'tkazadi
-   (butun kartani qayta chizmaymiz -> raqam sakramaydi). */
+/* "Отсчитывает" Subtotal и Total в "Order Summary" до новой суммы
+   (не перерисовываем всю карточку -> число не скачет). */
 function updateSummary(total) {
-  // Subtotal ham, Total ham API'ning `total` iga teng (docs/decisions.md:
-  // API savatida chegirma yo'q). "Discount" qatori doim 0 -> tegmaymiz.
+  // И Subtotal, и Total равны `total` из API (docs/decisions.md:
+  // в корзине API скидки нет). Строка "Discount" всегда 0 -> её не трогаем.
   summaryEl
     .querySelectorAll(".summary-row:not(.summary-row-discount) span:last-child")
     .forEach((cell) => countUp(cell, total, money));
 }
 
-/* --- hodisalar (delegatsiya) --- */
+/* --- события (делегирование) --- */
 mainEl.addEventListener("click", async (e) => {
   const row = e.target.closest(".cart-item");
   if (!row) return;
@@ -92,28 +92,28 @@ mainEl.addEventListener("click", async (e) => {
   const qtyEl = row.querySelector(".qty-value");
   const qty = Number(qtyEl.textContent);
 
-  /* O'CHIRISH: qator avval yumshoq so'nadi, keyin ro'yxat qayta chiziladi. */
+  /* УДАЛЕНИЕ: строка сначала плавно гаснет, затем список перерисовывается. */
   if (e.target.closest("[data-remove]")) {
     row.classList.add("is-removing");
     try {
       await cartStore.removeItem(id);
-      await wait(280); // so'nish animatsiyasi tugasin
+      await wait(280); // дождаться завершения анимации затухания
       await render();
     } catch (err) {
-      row.classList.remove("is-removing"); // xato -> qator joyida qoladi
+      row.classList.remove("is-removing"); // ошибка -> строка остаётся на месте
       toast(friendlyError(err), "error");
     }
     return;
   }
 
-  /* MIQDOR: butun ro'yxatni qayta chizmaymiz — faqat shu qatordagi son
-     va "Order Summary" yangilanadi (ro'yxat "yaltirab" ketmaydi). */
+  /* КОЛИЧЕСТВО: весь список не перерисовываем — обновляется только
+     число в этой строке и "Order Summary" (список не "мигает"). */
   const dec = e.target.closest("[data-dec]");
   const inc = e.target.closest("[data-inc]");
   if (!dec && !inc) return;
   const next = inc ? qty + 1 : qty - 1;
 
-  // 1 dan pastga tushsa — bu aslida o'chirish, demak to'liq qayta chizamiz
+  // если стало меньше 1 — это фактически удаление, значит перерисовываем полностью
   if (next < 1) {
     row.classList.add("is-removing");
     try {
@@ -128,18 +128,18 @@ mainEl.addEventListener("click", async (e) => {
   }
 
   const buttons = row.querySelectorAll(".qty-btn");
-  buttons.forEach((b) => (b.disabled = true)); // tez-tez bosilib ketmasin
+  buttons.forEach((b) => (b.disabled = true)); // чтобы не кликали слишком часто
   try {
     await cartStore.setQty(id, next);
     const { items, total } = await cartStore.getCart();
-    // server miqdorni cheklashi mumkin (maks 20) -> haqiqiy qiymatni olamiz
+    // сервер может ограничить количество (макс. 20) -> берём реальное значение
     const fresh = items.find((it) => it.productId === id);
     qtyEl.textContent = String(fresh ? fresh.qty : next);
     playOnce(qtyEl, "is-changed");
     updateSummary(total);
   } catch (err) {
     toast(friendlyError(err), "error");
-    await render(); // holat chalkashmasin — haqiqiy savatni qayta chizamiz
+    await render(); // чтобы не было путаницы в состоянии — перерисовываем реальную корзину
   } finally {
     buttons.forEach((b) => (b.disabled = false));
   }
@@ -148,18 +148,18 @@ mainEl.addEventListener("click", async (e) => {
 summaryEl.addEventListener("click", async (e) => {
   if (!e.target.closest("[data-checkout]")) return;
 
-  // mehmon -> avval kirish (savat login'dan keyin serverga ko'chiriladi)
+  // гость -> сначала вход (корзина переносится на сервер после логина)
   if (!isLoggedIn()) {
     location.href =
       "/pages/login.html?next=" + encodeURIComponent("/pages/cart.html");
     return;
   }
   const checkoutBtn = e.target.closest("[data-checkout]");
-  checkoutBtn.disabled = true; // ikkita buyurtma ketmasin
+  checkoutBtn.disabled = true; // чтобы не ушло два заказа
   try {
-    await api.createOrder(); // butun savatdan buyurtma
-    cartStore.refresh(); // server savatni o'zi tozaladi -> header sonini yangilaymiz
-    await render(); // savat endi bo'sh -> ro'yxatni ("No products...") qayta chizamiz
+    await api.createOrder(); // заказ из всей корзины
+    cartStore.refresh(); // сервер сам очистил корзину -> обновляем число в шапке
+    await render(); // корзина теперь пуста -> перерисовываем список ("No products...")
     openModal({
       title: "Order placed!",
       bodyHTML: "<p>Your order was placed successfully.</p>",

@@ -1,21 +1,21 @@
 /* ============================================================
-   api.js — SERVER bilan gaplashadigan YAGONA fayl.
-   Qoida: fetch() faqat shu yerda. Sahifa skriptlari bu fayldagi
-   funksiyalarni chaqiradi, o'zi fetch qilmaydi. Shunda:
-     - base URL bitta joyda
-     - token bitta joyda qo'shiladi
-     - xato bitta joyda ushlanadi (chaqiruvchi try/catch qiladi)
-   API hujjati: docs/api-reference.md
+   api.js — ЕДИНСТВЕННЫЙ файл, который общается с СЕРВЕРОМ.
+   Правило: fetch() только здесь. Скрипты страниц вызывают
+   функции из этого файла, сами fetch не делают. Благодаря этому:
+     - base URL в одном месте
+     - токен добавляется в одном месте
+     - ошибка ловится в одном месте (вызывающий делает try/catch)
+   Документация API: docs/api-reference.md
    ============================================================ */
 
 import { API_BASE } from "./config.js";
 import { getToken, clearToken } from "./storage.js";
 
-/* Ichki yordamchi — HAR so'rov shu orqali o'tadi.
-   path  : "/products" kabi (API_BASE oldiga qo'shiladi)
-   method: "GET" (default), "POST", "PATCH", "DELETE"
-   body  : obyekt bo'lsa JSON'ga aylantiriladi
-   auth  : true bo'lsa Authorization: Bearer <token> qo'shiladi */
+/* Внутренний помощник — через него проходит КАЖДЫЙ запрос.
+   path  : например "/products" (добавляется после API_BASE)
+   method: "GET" (по умолчанию), "POST", "PATCH", "DELETE"
+   body  : если объект, преобразуется в JSON
+   auth  : если true, добавляется Authorization: Bearer <token> */
 async function request(path, { method = "GET", body, auth = false } = {}) {
   const headers = {};
   if (body !== undefined) headers["Content-Type"] = "application/json";
@@ -30,13 +30,13 @@ async function request(path, { method = "GET", body, auth = false } = {}) {
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
-  // API hamma javobni JSON qaytaradi (xato ham: { message: "..." })
+  // API всегда возвращает JSON (даже ошибку: { message: "..." })
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    // 401: token muddati tugagan yoki logout qilingan -> mahalliy tozalaymiz
+    // 401: токен истёк или был выполнен logout -> очищаем локально
     if (res.status === 401 && auth) clearToken();
-    // xatoni "otamiz" -> chaqiruvchi joyda try/catch bilan ushlanadi
+    // "пробрасываем" ошибку -> вызывающий код ловит её через try/catch
     const err = new Error(data.message || `Xatolik (${res.status})`);
     err.status = res.status;
     throw err;
@@ -50,7 +50,7 @@ export const login = (payload) => request("/login", { method: "POST", body: payl
 export const logout = () => request("/logout", { method: "POST", auth: true });
 export const getMe = () => request("/me", { auth: true });
 
-/* ---------- Katalog (token kerak emas, docs 5.2) ---------- */
+/* ---------- Каталог (токен не нужен, docs 5.2) ---------- */
 export function getProducts({ category, minPrice, maxPrice, page, limit } = {}) {
   const qs = new URLSearchParams();
   if (category) qs.set("category", category);
@@ -67,9 +67,9 @@ export const getProduct = (id) => request(`/products/${id}`);
 export const getCategories = () => request("/categories");
 export const getCategoryProducts = (id) => request(`/categories/${id}/products`);
 
-/* ---------- Savat (token, docs 5.3) ----------
-   API javobi { message, cart: { items, total } } shaklida keladi —
-   ichidagi { items, total } ni qaytaramiz (chaqiruvchi joy sodda bo'lsin). */
+/* ---------- Корзина (токен, docs 5.3) ----------
+   Ответ API приходит в виде { message, cart: { items, total } } —
+   возвращаем то, что внутри { items, total } (чтобы вызывающему было проще). */
 const unwrapCart = (r) => r.cart ?? r;
 export const getCart = () => request("/cart", { auth: true }).then(unwrapCart);
 export const addToCart = (productId, qty = 1) =>
@@ -80,11 +80,11 @@ export const removeCartItem = (productId) =>
   request(`/cart/${productId}`, { method: "DELETE", auth: true }).then(unwrapCart);
 export const clearCart = () => request("/cart", { method: "DELETE", auth: true }).then(unwrapCart);
 
-/* ---------- Buyurtma (token, docs 5.4) ---------- */
+/* ---------- Заказ (токен, docs 5.4) ---------- */
 export const createOrder = () => request("/orders", { method: "POST", auth: true });
 export const getOrders = () => request("/orders", { auth: true });
 
-/* ---------- Izoh (token, docs 5.5) ---------- */
+/* ---------- Комментарий (токен, docs 5.5) ---------- */
 export const addComment = (productId, text) =>
   request(`/products/${productId}/comments`, { method: "POST", auth: true, body: { text } });
 export const deleteComment = (productId, commentId) =>

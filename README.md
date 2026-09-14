@@ -1,73 +1,73 @@
 # Diploma Shop — WEPRO / Skin—Clinic
 
-Sandbox Shop API uchun onlayn do'kon frontendi. **Toza HTML / CSS / JavaScript** —
-framework yo'q. Dizayn: Figma maketi (pixel-perfect). Backend: `https://api.wepro.uz/sandbox-shop`.
+Фронтенд онлайн-магазина для Sandbox Shop API. **Чистый HTML / CSS / JavaScript** —
+без фреймворка. Дизайн: макет Figma (pixel-perfect). Бэкенд: `https://api.wepro.uz/sandbox-shop`.
 
-## Ishga tushirish (dev)
+## Запуск (dev)
 
-`fetch()` (header/footer va API) `file://` da ishlamaydi — kichik server kerak:
+`fetch()` (header/footer и API) не работает через `file://` — нужен небольшой сервер:
 
 ```bash
 npm run dev
-# yoki:
+# или:
 npx serve -l 5173 .
-# yoki:
+# или:
 python3 -m http.server 5173
 ```
 
-Brauzerда: `http://localhost:5173`
+В браузере: `http://localhost:5173`
 
-> `serve.json` da `cleanUrls: false` — URL'дан `.html` va `?query` olib tashlanмаsин.
+> В `serve.json` стоит `cleanUrls: false` — чтобы из URL не убирались `.html` и `?query`.
 
-## Sahifalar
+## Страницы
 
-| Fayl | Nima |
+| Файл | Что это |
 |------|------|
-| `index.html` | Bosh sahifa (hero + Best sellers + Shop by category + Featured products) |
-| `pages/catalog.html` | "All products" + filtr paneli (kategoriya + narx slideri) |
-| `pages/product.html` | Mahsulot (`?id=`): galereya, narx, qty, Add to cart, izohlar |
-| `pages/cart.html` | Savatcha + Order Summary + checkout |
-| `pages/login.html` / `register.html` | Kirish (email) / Ro'yxatdan o'tish |
-| `pages/profile.html` | Profil + "My orders" (kirish talab qiladi) |
+| `index.html` | Главная страница (hero + Best sellers + Shop by category + Featured products) |
+| `pages/catalog.html` | "All products" + панель фильтра (категория + слайдер цены) |
+| `pages/product.html` | Товар (`?id=`): галерея, цена, qty, Add to cart, отзывы |
+| `pages/cart.html` | Корзина + Order Summary + checkout |
+| `pages/login.html` / `register.html` | Вход (email) / Регистрация |
+| `pages/profile.html` | Профиль + "My orders" (требует входа) |
 
-## Papka tuzilishi
+## Структура папок
 
 ```
-components/     header, footer, modal — HTML + CSS. JS orqali sahifaga qo'yiladi.
+components/     header, footer, modal — HTML + CSS. Вставляются в страницу через JS.
 css/
-  reset.css       brauzer defoltlarini tenglash
-  variables.css   Figma tokenlari (:root o'zgaruvchilari)
-  base.css        body tipografiyasi + .container (1200px)
-  ui.css          qayta ishlatiladigan: .card, .product-grid, .qty,
-                  .btn-glass, holat xabarlari, ANIMATSIYALAR
-  pages/          har sahifaning o'ziga xos stili
+  reset.css       выравнивание стандартных стилей браузера
+  variables.css   токены Figma (переменные :root)
+  base.css        типографика body + .container (1200px)
+  ui.css          переиспользуемое: .card, .product-grid, .qty,
+                  .btn-glass, сообщения о состоянии, АНИМАЦИИ
+  pages/          свой стиль для каждой страницы
 js/
-  config.js       API manzili
-  api.js          SERVER bilan gaplashadigan yagona fayl (barcha fetch)
-  storage.js      localStorage qobig'i (token, mehmon savati)
-  auth.js         "kim kirgan" holati (doLogin/doRegister/doLogout/requireAuth)
-  cart-store.js   savat mantig'i (mehmon = localStorage, kirgan = server)
-  components.js   header/footer'ni sahifaga joylash + header holati
+  config.js       адрес API
+  api.js          единственный файл, общающийся с СЕРВЕРОМ (все fetch)
+  storage.js      обёртка над localStorage (токен, гостевая корзина)
+  auth.js         состояние "кто вошёл" (doLogin/doRegister/doLogout/requireAuth)
+  cart-store.js   логика корзины (гость = localStorage, вошёл = сервер)
+  components.js   вставляет header/footer в страницу + состояние header
   reveal.js       scroll-reveal (IntersectionObserver)
-  ui.js           yordamchilar: money, esc, productCardHTML, openModal
-  pages/          har HTML faylning bosh skripti
+  ui.js           помощники: money, esc, productCardHTML, openModal
+  pages/          стартовый скрипт для каждого HTML-файла
 assets/         icons / images / favicon.svg
 docs/           plan, decisions, data-flow, qa-bank, api-reference, figma-nodes
 ```
 
-## Deploy (Netlify)
+## Деплой (Netlify)
 
-Statik sayt — build bosqichi yo'q.
+Статичный сайт — этапа сборки нет.
 
-1. GitHub'ga push (`git push`)
-2. Netlify → "Add new site" → "Import from Git" → reponi tanlang
-3. Build command: bo'sh; Publish directory: `.`  (`netlify.toml` da yozilgan)
+1. Push в GitHub (`git push`)
+2. Netlify → "Add new site" → "Import from Git" → выбрать репозиторий
+3. Build command: пусто; Publish directory: `.`  (указано в `netlify.toml`)
 4. Deploy
 
-Yoki: `npx netlify deploy --prod --dir=.`
+Или: `npx netlify deploy --prod --dir=.`
 
-## Himoya materiali
+## Материал для защиты
 
-`docs/qa-bank.md` — kutiladigan savol-javoblar.
-`docs/data-flow.md` — har amalning oqimi.
-`docs/decisions.md` — nega shunday yozildi.
+`docs/qa-bank.md` — ожидаемые вопросы-ответы.
+`docs/data-flow.md` — поток каждого действия.
+`docs/decisions.md` — почему написано именно так.

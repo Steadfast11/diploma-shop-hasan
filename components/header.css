@@ -1,8 +1,8 @@
 /* ============================================================
-   header.css — FAQAT header komponenti.
-   Desktop: oq fon, 1px qora ostki chiziq, 69px, chetdan 60px.
-   Chap menyu | logo (markaz) | o'ng menyu.
-   Mobil (<768px): burger | logo | akkaunt; Home/Products burger ichida.
+   header.css — стиль ТОЛЬКО компонента header.
+   Десктоп: белый фон, чёрная линия снизу 1px, 69px, отступ от края 60px.
+   Левое меню | логотип (по центру) | правое меню.
+   Мобильная версия (<768px): бургер | логотип | аккаунт; Home/Products внутри бургера.
    ============================================================ */
 
 .header {
@@ -50,8 +50,8 @@
   object-fit: contain;
 }
 
-/* Avval faqat ko'k belgi ko'rinadi. Link markazdan kengaygani uchun
-   belgi chapga siljiydi va uning o'ngidan WEPRO yozuvi ochiladi. */
+/* Сначала виден только синий значок. Так как ссылка расширяется от центра,
+   значок сдвигается влево, и справа от него раскрывается надпись WEPRO. */
 @keyframes logo-intro {
   0% {
     width: var(--logo-icon-width);
@@ -85,7 +85,7 @@
   }
 }
 
-/* Logo ochilgach bir marta nozik yorug'lik o'tadi. */
+/* После раскрытия логотипа один раз проходит лёгкий блик. */
 .header-logo::after {
   content: "";
   position: absolute;
@@ -105,7 +105,7 @@
   100% { left: 115%; opacity: 0; }
 }
 
-/* Intro paytida header menyulari logo ortidan ketma-ket chiqadi. */
+/* Во время intro меню header появляются одно за другим после логотипа. */
 .header-intro .header-nav {
   animation: header-item-in 0.5s var(--ease-soft, ease) 1.36s both;
 }
@@ -117,7 +117,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* burger — desktopda yashirin */
+/* бургер — скрыт на десктопе */
 .header-burger {
   display: none;
   padding: 0;
@@ -131,11 +131,11 @@
   height: 24px;
 }
 
-/* ---------- MOBIL ---------- */
+/* ---------- МОБИЛЬНАЯ ВЕРСИЯ ---------- */
 @media (max-width: 768px) {
   .header-inner {
     grid-template-columns: auto 1fr auto;
-    height: 66px;                     /* Figma mobil */
+    height: 66px;                     /* Figma мобильная */
     padding-inline: 24px;
     column-gap: 16px;
   }
@@ -157,7 +157,7 @@
     gap: 16px;
   }
 
-  /* Home/Products — header ostidan ochiladigan panel */
+  /* Home/Products — панель, открывающаяся снизу от header */
   .header-nav {
     position: absolute;
     top: 100%;

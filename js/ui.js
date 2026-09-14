@@ -1,25 +1,25 @@
 /* ============================================================
-   ui.js — takrorlanadigan mayda JS yordamchilar.
-   Maqsad: sahifa skriptlari qisqa va o'qishli bo'lsin.
+   ui.js — мелкие повторяющиеся JS-помощники.
+   Цель: скрипты страниц должны быть короткими и читаемыми.
    ============================================================ */
 
 
-// Narx: 19.99 -> "$19.99"
+// Цена: 19.99 -> "$19.99"
 export const money = (n) => "$" + Number(n).toFixed(2);
 
-// Telefon: "998901234500" -> "+998 90 123 45 00" (API faqat raqam saqlaydi).
+// Телефон: "998901234500" -> "+998 90 123 45 00" (API хранит только цифры).
 export function formatPhone(digits) {
   const d = String(digits ?? "").replace(/\D/g, "");
   if (d.length < 9) return digits || "";
-  const cc = d.slice(0, d.length - 9); // masalan "998"
+  const cc = d.slice(0, d.length - 9); // например "998"
   const rest = d.slice(-9); // "901234500"
   const parts = [rest.slice(0, 2), rest.slice(2, 5), rest.slice(5, 7), rest.slice(7, 9)];
   return `+${cc} ${parts.join(" ")}`.trim();
 }
 
-// HTML'ga xavfsiz qo'yish uchun matnni "tozalash".
-// Nega: mahsulot nomi/izoh backenddan keladi. Ichida <script> yoki
-// < > belgilari bo'lsa, ular MATN bo'lib chizilsin, HTML bo'lib emas.
+// "Очистка" текста для безопасной вставки в HTML.
+// Почему: название товара/комментарий приходят с бэкенда. Если внутри
+// есть <script> или символы < >, они должны отрисовываться как ТЕКСТ, а не как HTML.
 export function esc(value) {
   return String(value ?? "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;",
@@ -30,13 +30,13 @@ export function esc(value) {
   }[c]));
 }
 
-/* Mahsulot kartochkasi (HTML matn).
-   Bosh sahifa, katalog, kategoriya, profil — hammasi shuni ishlatadi.
-   p: { _id, title, price, image } — BACKENDDAN keladi. */
+/* Карточка товара (HTML-текст).
+   Главная страница, каталог, категория, профиль — всё это использует её.
+   p: { _id, title, price, image } — приходит С БЭКЕНДА. */
 export function productCardHTML(p) {
   const image = p.image
     ? `<img class="card-image img-fallback" src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy" />`
-    : `<div class="card-image"></div>`; // rasm yo'q -> bo'sh kulrang
+    : `<div class="card-image"></div>`; // нет изображения -> пустой серый блок
   return `
     <article class="card">
       <a class="card-link" href="/pages/product.html?id=${encodeURIComponent(p._id)}">
@@ -51,8 +51,8 @@ export function productCardHTML(p) {
     </article>`;
 }
 
-// N ta "skelet" kartochka (yuklanayotganda ko'rsatiladi — "Loading…" matni
-// o'rniga). Faqat kulrang, pulsatsiya qiladigan qutilar.
+// N штук "скелетных" карточек (показываются во время загрузки — вместо
+// текста "Loading…"). Просто серые, пульсирующие блоки.
 export function skeletonCardsHTML(n = 4) {
   return Array.from(
     { length: n },
@@ -66,23 +66,23 @@ export function skeletonCardsHTML(n = 4) {
   ).join("");
 }
 
-// Konteynerga xato xabarini chizish (API yiqilganda)
+// Отрисовать сообщение об ошибке в контейнере (когда API упал)
 export function showError(container, message) {
   if (container) {
     container.innerHTML = `<p class="state-message state-message-error">${esc(message)}</p>`;
   }
 }
 
-// Konteynerga "bo'sh" xabarini chizish (natija yo'q)
+// Отрисовать сообщение "пусто" в контейнере (нет результатов)
 export function showEmpty(container, message) {
   if (container) {
     container.innerHTML = `<p class="state-message">${esc(message)}</p>`;
   }
 }
 
-/* ---------- Toast (mayda bildirishnoma) ----------
-   alert() o'rniga: ekran pastida chiqib, o'zi yo'qoladi.
-   type: "" (oddiy) yoki "error" (qizil). */
+/* ---------- Toast (небольшое уведомление) ----------
+   Вместо alert(): появляется внизу экрана и само исчезает.
+   type: "" (обычный) или "error" (красный). */
 let toastTimer;
 export function toast(message, type = "") {
   let box = document.querySelector(".toast");
@@ -101,21 +101,21 @@ export function toast(message, type = "") {
   toastTimer = setTimeout(() => box.classList.remove("is-shown"), 3200);
 }
 
-/* ---------- Animatsiya yordamchilari ----------
-   Uchalasi ham "bezak": ishlamay qolsa sayt baribir to'g'ri ko'rinadi. */
+/* ---------- Помощники анимации ----------
+   Все три — просто "украшение": если не сработают, сайт всё равно будет выглядеть правильно. */
 
-// Foydalanuvchi tizimda "kam harakat" rejimini yoqqanmi?
+// Включён ли у пользователя в системе режим "меньше движения"?
 const reducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* Bir martalik animatsiya klassini qo'yadi va tugagach olib tashlaydi
-   (shunda keyingi safar qaytadan ishlaydi).
+/* Добавляет класс одноразовой анимации и убирает его после завершения
+   (чтобы в следующий раз она снова сработала).
 
-   MUHIM: sahifa fonda (boshqa tabda) bo'lsa brauzer animatsiyani
-   to'xtatib turadi va element o'zining 0% holatida qotib qoladi —
-   bizning animatsiyalarimiz esa `opacity: 0` dan boshlanadi, ya'ni
-   element KO'RINMAY qolardi. Shuning uchun fonda umuman qo'ymaymiz:
-   foydalanuvchi baribir qaramayapti, kontent esa ko'rinib turadi. */
+   ВАЖНО: если страница в фоне (в другой вкладке), браузер
+   приостанавливает анимацию, и элемент застревает в своём состоянии 0% —
+   а наши анимации начинаются с `opacity: 0`, то есть
+   элемент остался бы НЕВИДИМЫМ. Поэтому в фоне мы вообще её не запускаем:
+   пользователь всё равно не смотрит, а контент при этом виден. */
 export function playOnce(el, className) {
   if (!el || document.hidden) return;
   el.classList.add(className);
@@ -124,27 +124,27 @@ export function playOnce(el, className) {
   });
 }
 
-/* Yangi chizilgan kartochkalarni birin-ketin (stagger) chiqaradi.
-   from — nechanchi boladan boshlash ("Load more" da faqat YANGILARI).
-   GSAP yo'q yoki kam-harakat rejimi bo'lsa — hech narsa qilmaydi,
-   kartochkalar shundoq ham ko'rinib turadi. */
+/* Показывает новые отрисованные карточки друг за другом (stagger).
+   from — с какого индекса начинать (при "Load more" — только НОВЫЕ).
+   Если нет GSAP или включён режим сниженного движения — ничего не делает,
+   карточки и так видны. */
 export function revealCards(container, from = 0) {
   if (!container) return;
   const { gsap, ScrollTrigger } = window;
-  // Kontent qo'shilgach sahifa balandligi o'zgardi -> skroll o'lchovlari
-  // eskirmasin (aks holda pastdagi bloklar kech/erta ochiladi).
+  // После добавления контента высота страницы изменилась -> замеры скролла
+  // не должны устареть (иначе нижние блоки откроются поздно/рано).
   ScrollTrigger?.refresh();
   if (!gsap || reducedMotion()) return;
 
-  // Sahifa fonda (boshqa tabda) bo'lsa brauzer animatsiyani to'xtatib
-  // turadi -> kartochkalar YASHIRIN holda qotib qolardi. Bunday paytda
-  // umuman animatsiya qilmaymiz: ular shundoq ham ko'rinib turadi.
+  // Если страница в фоне (в другой вкладке), браузер приостанавливает
+  // анимацию -> карточки застряли бы в СКРЫТОМ виде. В этом случае
+  // анимацию вообще не делаем: они и так видны.
   if (document.hidden) return;
 
   const cards = [...container.children].slice(from);
   if (!cards.length) return;
-  // Ekrandan tashqaridagi to'liq grid uchun kerak emas — uni
-  // [data-reveal-stagger] skroll bilan o'zi chiqaradi.
+  // Не нужно для полной сетки за пределами экрана — её сам покажет
+  // [data-reveal-stagger] при скролле.
   const box = container.getBoundingClientRect();
   if (from === 0 && (box.top > window.innerHeight || box.bottom < 0)) return;
 
@@ -157,20 +157,20 @@ export function revealCards(container, from = 0) {
       duration: 0.8,
       ease: "power2.out",
       stagger: 0.06,
-      clearProps: "all", // tugagach inline stillar qolmasin
+      clearProps: "all", // чтобы после завершения не оставались инлайн-стили
     }
   );
 
-  // Xavfsizlik to'ri (motion.js dagi kabi): animatsiya negadir tugamay
-  // qolsa, kartochkalarni majburan ko'rsatamiz — kontent hech qachon
-  // ko'rinmay qolib ketmasin.
+  // Страховочная сетка (как в motion.js): если анимация почему-то не
+  // завершилась, принудительно показываем карточки — контент никогда
+  // не должен остаться невидимым.
   setTimeout(() => {
     if (tween.progress() < 1) gsap.set(cards, { clearProps: "all" });
   }, 2500);
 }
 
-/* Raqamni eski qiymatdan yangisiga "sanab" o'tkazadi ($120 -> $145).
-   format — sonni matnga aylantiruvchi funksiya (masalan money). */
+/* "Отсчитывает" число от старого значения к новому ($120 -> $145).
+   format — функция, превращающая число в текст (например money). */
 export function countUp(el, to, format = String, duration = 600) {
   if (!el) return;
   const from = Number(String(el.textContent).replace(/[^\d.-]/g, "")) || 0;
@@ -181,22 +181,22 @@ export function countUp(el, to, format = String, duration = 600) {
   const start = performance.now();
   function step(now) {
     const t = Math.min(1, (now - start) / duration);
-    const eased = 1 - Math.pow(1 - t, 3); // yumshoq to'xtash
+    const eased = 1 - Math.pow(1 - t, 3); // плавная остановка
     el.textContent = format(from + (to - from) * eased);
     if (t < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
 
-/* "Add to cart" bosilganda mahsulot rasmining nusxasi header'dagi
-   "Bag (N)" tomon uchadi. Vaqtinchalik element — tugagach o'zi o'chadi. */
+/* При нажатии "Add to cart" копия изображения товара летит к
+   "Bag (N)" в шапке. Временный элемент — сам исчезает после завершения. */
 export function flyToBag(sourceImg) {
   const target = document.querySelector("[data-cart-count]");
   if (!sourceImg || !target || reducedMotion()) return;
 
   const from = sourceImg.getBoundingClientRect();
   const to = target.getBoundingClientRect();
-  if (!from.width) return; // rasm hali yuklanmagan
+  if (!from.width) return; // изображение ещё не загружено
 
   const ghost = document.createElement("img");
   ghost.src = sourceImg.currentSrc || sourceImg.src;
@@ -208,11 +208,11 @@ export function flyToBag(sourceImg) {
   ghost.style.height = from.height + "px";
   document.body.appendChild(ghost);
 
-  // markazdan markazga siljish
+  // смещение от центра к центру
   const dx = to.left + to.width / 2 - (from.left + from.width / 2);
   const dy = to.top + to.height / 2 - (from.top + from.height / 2);
-  // Ikki marta rAF: brauzer avval boshlang'ich holatni chizsin,
-  // keyin o'zgarish transition bo'lib ko'rinadi.
+  // Два раза rAF: сначала браузер отрисовывает начальное состояние,
+  // потом изменение видно как transition.
   requestAnimationFrame(() =>
     requestAnimationFrame(() => {
       ghost.style.transform = `translate(${dx}px, ${dy}px) scale(0.08)`;
@@ -222,7 +222,7 @@ export function flyToBag(sourceImg) {
   setTimeout(() => ghost.remove(), 800);
 }
 
-/* API xatosini foydalanuvchiga tushunarli qilib beradi (API matni ruscha). */
+/* Превращает ошибку API в понятный для пользователя текст (текст API — по-русски). */
 export function friendlyError(err) {
   const byStatus = {
     401: "Session expired — please log in again",
@@ -234,8 +234,8 @@ export function friendlyError(err) {
   return byStatus[err?.status] || err?.message || "Something went wrong";
 }
 
-/* ---------- Modal oyna (izoh yozish / "Thank you") ----------
-   openModal o'z DOM'ini yaratadi (komponent fayl kerak emas).
+/* ---------- Модальное окно (написание отзыва / "Thank you") ----------
+   openModal сам создаёт свой DOM (отдельный файл компонента не нужен).
    opts: { title, bodyHTML, buttonText, onConfirm(modalEl) } */
 let returnFocus = null;
 function onModalKeydown(e) {
@@ -267,9 +267,9 @@ export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }
   returnFocus = document.activeElement;
   const el = document.createElement("div");
   el.className = "modal";
-  // Karta = <form>, tugma = type="submit". Shu tufayli oyna Enter bilan
-  // ham yuboriladi (brauzerning o'z xatti-harakati), tugmani bosish bilan
-  // ham — ikkalasi ham bitta "submit" hodisasiga tushadi.
+  // Карточка = <form>, кнопка = type="submit". Благодаря этому окно
+  // отправляется и по Enter (стандартное поведение браузера), и по
+  // нажатию кнопки — оба случая приводят к одному событию "submit".
   el.innerHTML = `
     <div class="modal-overlay" data-close></div>
     <form class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -281,12 +281,12 @@ export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }
     if (e.target.closest("[data-close]")) closeModal();
   });
   el.addEventListener("submit", (e) => {
-    e.preventDefault(); // sahifa qayta yuklanmasin
+    e.preventDefault(); // чтобы страница не перезагрузилась
     onConfirm ? onConfirm(el) : closeModal();
   });
-  // <textarea> ichida Enter odatda yangi qator qo'shadi va formani
-  // yubormaydi. Bizga Enter = "yuborish" kerak, yangi qator esa
-  // Shift+Enter bilan qoladi.
+  // Внутри <textarea> Enter обычно добавляет новую строку и не
+  // отправляет форму. Нам нужно, чтобы Enter = "отправить", а новая
+  // строка оставалась на Shift+Enter.
   el.querySelector("textarea")?.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -294,7 +294,7 @@ export function openModal({ title, bodyHTML = "", buttonText = "OK", onConfirm }
     }
   });
   document.addEventListener("keydown", onModalKeydown);
-  document.body.style.overflow = "hidden"; // orqa fon skroll qilinmasin
+  document.body.style.overflow = "hidden"; // чтобы фон не скроллился
   document.body.appendChild(el);
   (el.querySelector("textarea, input, select") || el.querySelector("[data-confirm]"))?.focus();
   return el;

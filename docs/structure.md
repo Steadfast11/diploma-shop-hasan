@@ -1,59 +1,59 @@
-# Loyiha tuzilmasi — qaysi fayl nima uchun
+# Структура проекта — какой файл для чего
 
-Asosiy g'oya: **kodni "kim yozgan" va "nima qiladi" bo'yicha ajratish.**
-Papka nomini o'qish bilan ichida nima borligi ma'lum bo'lishi kerak.
+Основная идея: **разделять код по тому, "кто написал" и "что делает".**
+По названию папки должно быть понятно, что внутри.
 
 ```
 diploma-shop/
-├── index.html          bosh sahifa (yagona ildizdagi sahifa)
-├── 404.html            topilmadi sahifasi
-├── pages/              qolgan sahifalar: catalog, product, cart, login, register, profile
-├── components/         har sahifada TAKRORLANADIGAN bo'laklar (html + css yonma-yon)
+├── index.html          главная страница (единственная страница в корне)
+├── 404.html            страница "не найдено"
+├── pages/              остальные страницы: catalog, product, cart, login, register, profile
+├── components/         блоки, ПОВТОРЯЮЩИЕСЯ на каждой странице (html + css рядом)
 │   ├── header.html/.css
 │   ├── footer.html/.css
 │   └── modal.html/.css
 ├── css/
-│   ├── base/           BUTUN saytga tegishli poydevor
-│   │   ├── reset.css       brauzer standart uslublarini nolga tushiradi
-│   │   ├── variables.css   ranglar, shriftlar, o'lchamlar (--color-*, --fs-*)
-│   │   ├── fonts.css       Inter shriftini loyiha ichidan ulaydi
-│   │   └── base.css        umumiy matn/havola uslublari
-│   ├── ui.css          KO'P JOYDA ishlatiladigan bo'laklar: kartochka, qty, skeleton, toast
-│   └── pages/          har sahifaga bittadan: home, catalog, product, cart, auth, profile
+│   ├── base/           фундамент для ВСЕГО сайта
+│   │   ├── reset.css       обнуляет стандартные стили браузера
+│   │   ├── variables.css   цвета, шрифты, размеры (--color-*, --fs-*)
+│   │   ├── fonts.css       подключает шрифт Inter внутри проекта
+│   │   └── base.css        общие стили текста/ссылок
+│   ├── ui.css          блоки, используемые В МНОГИХ местах: карточка, qty, skeleton, toast
+│   └── pages/          по одному на каждую страницу: home, catalog, product, cart, auth, profile
 ├── js/
-│   ├── core/           SAYT MIYASI — ma'lumot bilan ishlash (ko'rinishga aloqasi yo'q)
-│   │   ├── config.js       API manzili, sahifa o'lchami kabi sozlamalar
-│   │   ├── api.js          serverga so'rovlar (fetch) — bitta joyda
-│   │   ├── storage.js      localStorage kalitlari (token, mehmon savati)
-│   │   ├── auth.js         kirish / chiqish / "kim kirgan?"
-│   │   ├── cart-store.js   savat holati (mehmon = localStorage, akkaunt = server)
-│   │   └── validation.js   forma tekshiruvlari (ism, email, parol)
-│   ├── ui.js           ko'rinish yordamchilari: money(), esc(), kartochka HTML, modal
-│   ├── components.js   header/footer'ni sahifaga qo'yadi, burger, savat raqami
-│   ├── pages/          har sahifaga bittadan skript (home.js, catalog.js, ...)
-│   ├── effects/        BEZAK va qo'shimchalar — sayt busiz ham to'liq ishlaydi
-│   │   ├── motion.js       GSAP animatsiyalari (hero, scroll reveal)
-│   │   ├── reveal.js       GSAP bo'lmasa ishlaydigan sodda zaxira
-│   │   └── phone-input.js  telefon maydoni (davlat kodi bilan)
-│   └── vendor/         MENING KODIM EMAS — tayyor kutubxonalar
+│   ├── core/           МОЗГ САЙТА — работа с данными (не связано с отображением)
+│   │   ├── config.js       настройки вроде адреса API, размера страницы
+│   │   ├── api.js          запросы на сервер (fetch) — в одном месте
+│   │   ├── storage.js      ключи localStorage (токен, гостевая корзина)
+│   │   ├── auth.js         вход / выход / "кто вошёл?"
+│   │   ├── cart-store.js   состояние корзины (гость = localStorage, аккаунт = сервер)
+│   │   └── validation.js   проверки формы (имя, email, пароль)
+│   ├── ui.js           помощники отображения: money(), esc(), HTML карточки, модал
+│   ├── components.js   вставляет header/footer в страницу, бургер, число корзины
+│   ├── pages/          по одному скрипту на страницу (home.js, catalog.js, ...)
+│   ├── effects/        УКРАШЕНИЯ и дополнения — сайт полностью работает и без них
+│   │   ├── motion.js       анимации GSAP (hero, scroll reveal)
+│   │   ├── reveal.js       простой запасной вариант, если нет GSAP
+│   │   └── phone-input.js  поле телефона (с кодом страны)
+│   └── vendor/         НЕ МОЙ КОД — готовые библиотеки
 │       ├── gsap.min.js, ScrollTrigger.min.js, lenis.min.js
 │       └── intl-tel-input/
-├── assets/             fonts / icons / images + favicon
-└── docs/               loyiha hujjatlari (himoyaga tayyorgarlik shu yerda)
+├── assets/             шрифты / иконки / изображения + favicon
+└── docs/               документация проекта (подготовка к защите — здесь)
 ```
 
-## Qaysi papkani qachon ochaman
+## Какую папку открывать в каком случае
 
-| Savol | Papka |
+| Вопрос | Папка |
 |---|---|
-| "Serverdan ma'lumot qanday keladi?" | `js/core/api.js` |
-| "Bu rang qayerdan?" | `css/base/variables.css` |
-| "Bu sahifadagi tugma nega bunday?" | `css/pages/<sahifa>.css` |
-| "Bu animatsiya qayerda?" | `js/effects/motion.js` |
-| "Bu kodni men yozganman?" | `js/vendor/` dan tashqari hammasi — ha |
+| "Как данные приходят с сервера?" | `js/core/api.js` |
+| "Откуда этот цвет?" | `css/base/variables.css` |
+| "Почему кнопка на этой странице такая?" | `css/pages/<страница>.css` |
+| "Где эта анимация?" | `js/effects/motion.js` |
+| "Этот код написан мной?" | всё, кроме `js/vendor/` — да |
 
-## `vendor/` haqida
+## О `vendor/`
 
-`js/vendor/` ichidagi fayllar tayyor kutubxonalar (GSAP, Lenis, intl-tel-input).
-Ular loyiha ichida saqlanadi — CDN'ga bog'liq emas, internetsiz ham ishlaydi.
-Bu fayllar **tahrirlanmaydi**; ularni faqat ishlatamiz.
+Файлы внутри `js/vendor/` — готовые библиотеки (GSAP, Lenis, intl-tel-input).
+Они хранятся внутри проекта — не зависят от CDN, работают и без интернета.
+Эти файлы **не редактируются**; мы их только используем.

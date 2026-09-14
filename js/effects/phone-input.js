@@ -1,17 +1,17 @@
 /* ============================================================
-   phone-input.js — telefon maydoni (barcha davlatlar)
+   phone-input.js — поле телефона (все страны)
 
-   NEGA kutubxona?  Har davlatning telefon uzunligi/formati har xil.
-   Ularni qo'lda yuzlab regex bilan yozish -> xato va eskirish manbai.
-   `intl-tel-input` (libphonenumber ma'lumotlari ustida) buni biz uchun qiladi.
+   ЗАЧЕМ библиотека? У каждой страны своя длина/формат телефона.
+   Прописывать это вручную сотнями regex — источник ошибок и устаревания.
+   `intl-tel-input` (на основе данных libphonenumber) делает это за нас.
 
-   Kutubxona LOYIHA ICHIDA (js/vendor/intl-tel-input/) — CDN yo'q, CSP toza.
-   `utils.js` (uzunlik/format ma'lumotlari) faqat kerak bo'lганда yuklanadi.
+   Библиотека ВНУТРИ ПРОЕКТА (js/vendor/intl-tel-input/) — без CDN, CSP чистый.
+   `utils.js` (данные о длине/формате) загружается только когда нужен.
    ============================================================ */
 
 import intlTelInput from "/js/vendor/intl-tel-input/intlTelInput.mjs";
 
-// Kutubxonaning xato kodlari -> inglizcha sabab.
+// Коды ошибок библиотеки -> причина на английском.
 const ERROR_TEXT = {
   INVALID_COUNTRY_CODE: "Invalid country code",
   TOO_SHORT: "Phone number is too short",
@@ -20,48 +20,48 @@ const ERROR_TEXT = {
   INVALID_LENGTH: "Invalid phone number length",
 };
 
-// O'zbekiston milliy qismini XX-XXX-XX-XX ko'rinishida chizadi (maks 9 raqam).
+// Отрисовывает национальную часть Узбекистана в виде XX-XXX-XX-XX (макс. 9 цифр).
 function formatUz(digits) {
   const d = digits.replace(/\D/g, "").slice(0, 9);
   const parts = [d.slice(0, 2), d.slice(2, 5), d.slice(5, 7), d.slice(7, 9)];
   return parts.filter(Boolean).join("-");
 }
 
-// input — <input type="tel">. onInteract — foydalanuvchi qiymatni o'zgartirsa
-// chaqiriladi (xato holatini "tuzatishni boshladi" deb yangilash uchun).
+// input — <input type="tel">. onInteract — вызывается, когда пользователь
+// меняет значение (чтобы обновить состояние "начал исправлять" ошибку).
 export function createPhoneInput(input, onInteract) {
   const iti = intlTelInput(input, {
-    initialCountry: "uz",          // default O'zbekiston
-    separateDialCode: true,        // "+998" flagning yonida ko'rinsin
-    strictMode: true,              // ortiqcha/xato belgi kiritishga yo'l qo'ymaydi
-    countrySearch: true,           // dropdown'da qidiruv (barcha davlatlar ro'yxati)
-    // uzunlik/format ma'lumotlari — lokal fayldan, faqat kerak bo'lганда:
+    initialCountry: "uz",          // по умолчанию Узбекистан
+    separateDialCode: true,        // "+998" отображается рядом с флагом
+    strictMode: true,              // не даёт вводить лишние/неверные символы
+    countrySearch: true,           // поиск в выпадающем списке (список всех стран)
+    // данные о длине/формате — из локального файла, только при необходимости:
     loadUtils: () => import("/js/vendor/intl-tel-input/utils.js"),
   });
 
-  // Kutubxona nusxasini input'ga ilib qo'yamiz — brauzer konsolidan
-  // tekshirish uchun qulay (majburiy emas, lekin zararsiz).
+  // Прикрепляем экземпляр библиотеки к input — удобно для проверки
+  // из консоли браузера (не обязательно, но безвредно).
   input.iti = iti;
 
   const isUz = () => iti.getSelectedCountry()?.iso2 === "uz";
 
-  // O'zbekiston uchun o'z formatimiz; boshqa davlatда kutubxona o'zi format qiladi.
+  // Для Узбекистана — свой формат; для остальных стран форматирует сама библиотека.
   input.addEventListener("input", () => {
     if (isUz()) input.value = formatUz(input.value);
     if (typeof onInteract === "function") onInteract();
   });
 
-  // Davlat ro'yxati ochilганда — sahifa orqa fondan siljimasin.
-  // overflow:hidden qo'yгач skrollbar yo'qolib sahifa "sakrайди" —
-  // shu kenglikni padding bilan qoplaymiz.
+  // Когда открывается список стран — фон страницы не должен сдвигаться.
+  // После overflow:hidden исчезает скроллбар и страница "прыгает" —
+  // компенсируем эту ширину через padding.
   const lockScroll = () => {
     const barWidth = window.innerWidth - document.documentElement.clientWidth;
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
     if (barWidth > 0) document.body.style.paddingRight = barWidth + "px";
-    window.__lenis?.stop(); // yumshoq skroll (Lenis) ham to'xtasin
-    // Lenis g'ildirak hodisasini "yeб qo'yadi" — davlat ro'yxati ichida
-    // skroll ishlashi uchun uni bu elementда e'tiborsiz qoldiramiz.
+    window.__lenis?.stop(); // плавный скролл (Lenis) тоже должен остановиться
+    // Lenis "перехватывает" событие колеса мыши — чтобы скролл внутри
+    // списка стран работал, игнорируем его на этом элементе.
     document
       .querySelector(".iti__country-list")
       ?.setAttribute("data-lenis-prevent", "");
@@ -75,28 +75,28 @@ export function createPhoneInput(input, onInteract) {
   input.addEventListener("open:countryselector", lockScroll);
   input.addEventListener("close:countryselector", unlockScroll);
 
-  // Davlat almашса — format va tekshiruv qaytadan.
+  // Смена страны — формат и проверка заново.
   input.addEventListener("countrychange", () => {
     if (isUz()) input.value = formatUz(input.value);
     if (typeof onInteract === "function") onInteract();
   });
 
   return {
-    // Kutubxona to'liq tayyor bo'lganда (utils ham yuklangач) resolve bo'ladi.
+    // Становится resolve, когда библиотека полностью готова (после загрузки utils тоже).
     ready: iti.promise,
 
-    // API'ga yuboriladigan qiymat: E.164 (masalan +998901234567).
-    // Server "+", bo'shliq, "()" va "-" ni o'zi tashlab yuboradi (docs/api-reference.md).
+    // Значение, отправляемое в API: E.164 (например +998901234567).
+    // Сервер сам отбрасывает "+", пробелы, "()" и "-" (docs/api-reference.md).
     getE164() {
       return iti.getNumber();
     },
 
-    // "" -> joyida; aks holda inglizcha xato matni.
+    // "" -> всё в порядке; иначе текст ошибки на английском.
     validate() {
       const raw = input.value.trim();
       if (!raw) return "Enter your phone number";
-      // utils hali yuklanmagan bo'lsa isValidNumber() null qaytaradi ->
-      // bu holатда tekshiruvni submit paytiga qoldiramiz (ready'ni kutamiz).
+      // Если utils ещё не загружен, isValidNumber() вернёт null ->
+      // в этом случае откладываем проверку до отправки формы (ждём ready).
       const ok = iti.isValidNumber();
       if (ok === null) return "";
       if (ok) return "";

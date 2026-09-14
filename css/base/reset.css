@@ -1,8 +1,8 @@
 /* ============================================================
-   reset.css — brauzerlarning standart stillarini tenglashtirish
-   Nega kerak: Chrome/Safari/Firefox default margin/padding'lari
-   har xil. Pixel-perfect uchun avval hammasini nolga keltiramiz.
-   TODO (birga yozamiz): box-sizing, margin 0, img block, ... 
+   reset.css — выравнивание стандартных стилей браузеров
+   Зачем нужен: у Chrome/Safari/Firefox разные значения margin/padding
+   по умолчанию. Для pixel-perfect сначала обнуляем всё.
+   TODO (напишем вместе): box-sizing, margin 0, img block, ...
    ============================================================ */
 *,
 *::before,
@@ -28,11 +28,11 @@ svg {
    max-width: 100%;
 }
 
-/* <picture> — faqat "o'ram", o'zi quti yaratmasin.
-   display: contents bilan u layoutdan butunlay chiqib ketadi va ichidagi
-   <img> xuddi to'g'ridan-to'g'ri ota-elementda turgandek joylashadi.
-   Shu sabab webp uchun <picture> qo'shganimizda mavjud CSS (masalan
-   .hero-bg img { height: 100% }) o'zgarishsiz ishlayveradi. */
+/* <picture> — только "обёртка", сама не создаёт блок.
+   С display: contents она полностью выпадает из потока layout, и
+   вложенный <img> располагается так, будто стоит прямо в родительском элементе.
+   Поэтому при добавлении <picture> для webp существующий CSS (например
+   .hero-bg img { height: 100% }) продолжает работать без изменений. */
 picture {
    display: contents;
 }
@@ -45,7 +45,7 @@ select {
    color: inherit;
 }
 
-/* Havolalar: standart ko'k rang va tag chiziq yo'q — stilni o'zimiz beramiz. */
+/* Ссылки: без стандартного синего цвета и подчёркивания — стиль задаём сами. */
 a {
    color: inherit;
    text-decoration: none;

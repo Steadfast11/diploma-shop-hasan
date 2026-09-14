@@ -1,62 +1,62 @@
-# Class nomlari — lug'at
+# Имена классов — словарь
 
-## Qoida (uchta, boshqa qoida yo'q)
+## Правило (три, других правил нет)
 
-1. **`blok-qism`** — bitta chiziqcha. `__` va `--` umuman ishlatilmaydi.
-   Birinchi so'z — qaysi blokda, ikkinchisi — o'sha blokning qaysi bo'lagi.
-   `header-inner` = header ichidagi o'rovchi. `card-price` = kartochkadagi narx.
-2. **Variant uchun ham chiziqcha:** `summary-row` → `summary-row-total`,
+1. **`блок-часть`** — одно тире. `__` и `--` не используются вообще.
+   Первое слово — какой блок, второе — какая часть этого блока.
+   `header-inner` = обёртка внутри header. `card-price` = цена в карточке.
+2. **Для варианта тоже тире:** `summary-row` → `summary-row-total`,
    `price-input` → `price-input-min`.
-3. **Holat har doim `is-` bilan:** `is-open`, `is-visible`, `is-removing`,
-   `is-loaded`, `is-changed`. Holat — vaqtincha, JS qo'yadi va oladi.
+3. **Состояние всегда с `is-`:** `is-open`, `is-visible`, `is-removing`,
+   `is-loaded`, `is-changed`. Состояние — временное, JS добавляет и убирает.
 
-Shu tufayli bitta class'ni o'qib, uni qaysi faylda qidirishni bilasan:
+Благодаря этому, прочитав один класс, сразу понятно, в каком файле его искать:
 `filter-*` → `css/pages/catalog.css`, `summary-*` → `css/pages/cart.css`.
 
-## Bloklar — qaysi prefiks qayerda
+## Блоки — какой префикс где
 
-| Prefiks | Nima | Fayl |
+| Префикс | Что | Файл |
 |---|---|---|
-| `header-*` | yuqoridagi panel (logo, menyu, savat) | `components/header.css` |
-| `footer-*` | pastdagi panel (havolalar, ijtimoiy tarmoq) | `components/footer.css` |
-| `modal-*` | qalqib chiquvchi oyna (izoh yozish, "Thank you!") | `components/modal.css` |
-| `hero-*` | bosh sahifadagi katta rasm va sarlavha | `css/pages/home.css` |
-| `section-*` | bosh sahifadagi bo'lim sarlavhasi | `css/pages/home.css` |
-| `card-*` | mahsulot kartochkasi (hamma sahifada) | `css/ui.css` |
-| `category-*` | kategoriya kartochkasi | `css/ui.css` |
-| `qty-*` | miqdor tugmasi (− 1 +) | `css/ui.css` |
-| `skeleton-*`, `state-message*`, `toast-*` | yuklanmoqda / bo'sh / xabar | `css/ui.css` |
-| `catalog-*` | katalog sahifasining o'zi (sarlavha, qidiruv, "yana yuklash") | `css/pages/catalog.css` |
-| `filter-*` | chapdagi filtr paneli | `css/pages/catalog.css` |
-| `price-*` | narx oralig'i slayderi | `css/pages/catalog.css` |
-| `product-*` | mahsulot sahifasi (galereya, narx, "Add to cart") | `css/pages/product.css` |
-| `reviews-*` | izohlar bo'limi (sarlavha, to'r, "Write a Review") | `css/pages/product.css` |
-| `review-*` | BITTA izoh kartasi | `css/pages/product.css` |
-| `cart-*` | savat sahifasi; `cart-item-*` — bitta mahsulot qatori | `css/pages/cart.css` |
-| `summary-*` | qora "Order Summary" kartasi | `css/pages/cart.css` |
-| `auth-*`, `field-*` | kirish / ro'yxatdan o'tish formasi | `css/pages/auth.css` |
-| `profile-*` | profil sahifasi | `css/pages/profile.css` |
-| `notfound-*` | 404 sahifasi | `css/ui.css` |
+| `header-*` | верхняя панель (логотип, меню, корзина) | `components/header.css` |
+| `footer-*` | нижняя панель (ссылки, соцсети) | `components/footer.css` |
+| `modal-*` | всплывающее окно (написание отзыва, "Thank you!") | `components/modal.css` |
+| `hero-*` | большое изображение и заголовок на главной странице | `css/pages/home.css` |
+| `section-*` | заголовок раздела на главной странице | `css/pages/home.css` |
+| `card-*` | карточка товара (на всех страницах) | `css/ui.css` |
+| `category-*` | карточка категории | `css/ui.css` |
+| `qty-*` | кнопка количества (− 1 +) | `css/ui.css` |
+| `skeleton-*`, `state-message*`, `toast-*` | загрузка / пусто / сообщение | `css/ui.css` |
+| `catalog-*` | сама страница каталога (заголовок, поиск, "load more") | `css/pages/catalog.css` |
+| `filter-*` | панель фильтра слева | `css/pages/catalog.css` |
+| `price-*` | слайдер диапазона цены | `css/pages/catalog.css` |
+| `product-*` | страница товара (галерея, цена, "Add to cart") | `css/pages/product.css` |
+| `reviews-*` | раздел отзывов (заголовок, сетка, "Write a Review") | `css/pages/product.css` |
+| `review-*` | ОДНА карточка отзыва | `css/pages/product.css` |
+| `cart-*` | страница корзины; `cart-item-*` — строка одного товара | `css/pages/cart.css` |
+| `summary-*` | чёрная карточка "Order Summary" | `css/pages/cart.css` |
+| `auth-*`, `field-*` | форма входа / регистрации | `css/pages/auth.css` |
+| `profile-*` | страница профиля | `css/pages/profile.css` |
+| `notfound-*` | страница 404 | `css/ui.css` |
 
-## Ko'p so'raladiganlari
+## Часто задаваемые
 
-| class | nima qiladi |
+| класс | что делает |
 |---|---|
-| `container` | kontentni 1200px ga cheklaydi va markazga qo'yadi |
-| `card-media` | mahsulot rasmining kulrang qutisi (rasm yuklanmaguncha ham joy turadi) |
-| `filter-col` | filtr panelining "ustuni" — sahifa balandligicha cho'ziladi, panel uning ichida `sticky` |
-| `summary-row-total` | qora kartadagi "Total" qatori |
-| `product-thumb-active` | galereyada hozir tanlangan kichik rasm |
-| `catalog-filter-open` | `<body>` ga qo'yiladi: telefonda filtr oynasi ochiq |
-| `has-motion` | `<html>` ga qo'yiladi: GSAP yuklandi, CSS animatsiyasi kerak emas |
-| `img-fallback` | rasm yuklanmasa kulrang joy qoladi (singan ikonka ko'rinmaydi) |
-| `skip-link` | klaviatura bilan yurganlar uchun "kontentga o't" havolasi |
+| `container` | ограничивает контент 1200px и центрирует |
+| `card-media` | серый блок изображения товара (место остаётся, пока изображение не загружено) |
+| `filter-col` | "колонка" панели фильтра — растягивается на высоту страницы, панель внутри неё `sticky` |
+| `summary-row-total` | строка "Total" на чёрной карточке |
+| `product-thumb-active` | сейчас выбранная миниатюра в галерее |
+| `catalog-filter-open` | добавляется на `<body>`: на телефоне окно фильтра открыто |
+| `has-motion` | добавляется на `<html>`: GSAP загружен, CSS-анимация не нужна |
+| `img-fallback` | если изображение не загрузилось, остаётся серое место (сломанная иконка не видна) |
+| `skip-link` | ссылка "перейти к контенту" для тех, кто работает с клавиатуры |
 
-## Eski → yangi (to'liq ro'yxat)
+## Старое → новое (полный список)
 
-Bu jadval faqat tarix uchun: eski kodda `__` bor edi, hammasi bir marta almashtirildi.
+Эта таблица только для истории: в старом коде был `__`, всё заменено один раз.
 
-| eski | yangi |
+| старое | новое |
 |---|---|
 | `auth__alt` | `auth-alt` |
 | `auth__error` | `auth-error` |

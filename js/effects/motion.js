@@ -1,16 +1,16 @@
 /* ============================================================
-   motion.js — "wow" animatsiyalar (GSAP + ScrollTrigger + Lenis)
-   Kutubxonalar js/vendor/ da, HTML <head> da <script defer> bilan
-   yuklanadi -> window.gsap / window.ScrollTrigger / window.Lenis.
+   motion.js — "wow"-анимации (GSAP + ScrollTrigger + Lenis)
+   Библиотеки лежат в js/vendor/, загружаются в HTML <head> через
+   <script defer> -> window.gsap / window.ScrollTrigger / window.Lenis.
 
-   USLUB: MAKSIMAL SILLIQ. Uzoq davomiylik, yumshoq egri chiziqlar
-   (power2.out / expo.out), kichik siljish. Keskin/tez harakat yo'q.
+   СТИЛЬ: МАКСИМАЛЬНО ПЛАВНО. Долгая длительность, мягкие кривые
+   (power2.out / expo.out), небольшое смещение. Резких/быстрых движений нет.
 
-   Agar kutubxona yo'q yoki prefers-reduced-motion -> false qaytaradi,
-   shunda components.js oddiy CSS reveal (reveal.js) ni ishlatadi.
+   Если библиотеки нет или включён prefers-reduced-motion -> возвращает false,
+   тогда components.js использует обычный CSS reveal (reveal.js).
    ============================================================ */
 
-// Satrni "so'z > ichki span" ga bo'ladi (mask-reveal uchun).
+// Делит строку на "слово > внутренний span" (для эффекта mask-reveal).
 function splitWords(el) {
   const words = el.textContent.trim().split(/\s+/);
   el.innerHTML = words
@@ -24,54 +24,55 @@ export function initMotion() {
   if (reduce || !gsap || !ScrollTrigger || !Lenis) return false;
 
   gsap.registerPlugin(ScrollTrigger);
-  gsap.defaults({ ease: "power2.out" }); // yumshoq to'xtash
+  gsap.defaults({ ease: "power2.out" }); // плавная остановка
   document.documentElement.classList.add("has-motion");
 
-  /* --- XAVFSIZLIK TO'RI ---
-     ATAYLAB ENG BOSHDA ro'yxatdan o'tkazamiz: pastdagi animatsiya kodining
-     birortasi xato bersa ham, to'r baribir qurilgan bo'ladi. (Aks holda
-     to'r aynan u eng kerak bo'lgan holatda ro'yxatdan o'tmay qolardi.)
+  /* --- СТРАХОВОЧНАЯ СЕТКА ---
+     СПЕЦИАЛЬНО регистрируем В САМОМ НАЧАЛЕ: даже если какой-то из
+     блоков анимации ниже выдаст ошибку, сетка всё равно будет построена.
+     (Иначе сетка не успела бы зарегистрироваться именно тогда, когда она
+     нужнее всего.)
 
-     Animatsiya negadir tugamay qolsa, kontent yashirin qolib ketmasin.
-     Eng xavfli hol: sahifa FON TABDA ochilgan bo'lsa — brauzer animatsiya
-     kadrlarini to'xtatib turadi va gsap.from(...) elementni "from"
-     holatida (opacity 0 / visibility hidden) qoldiradi. `main` uchun bu
-     ayniqsa yomon: ichidagi hamma narsa `visibility` ni meros oladi.
+     Если анимация почему-то не завершилась, контент не должен остаться
+     скрытым. Самый опасный случай: страница открыта в ФОНОВОЙ ВКЛАДКЕ —
+     браузер приостанавливает кадры анимации, и gsap.from(...) оставляет
+     элемент в состоянии "from" (opacity 0 / visibility hidden). Для `main`
+     это особенно плохо: всё внутри наследует его `visibility`.
 
-     Shuning uchun: 2s dan keyin VA sahifa har safar ko'rinadigan bo'lganda
-     ekrandagi yashirin qolgan narsalarni majburan ochamiz.
-     Ekrandan tashqaridagilarga tegmaymiz — ular skroll bilan chiqadi. */
+     Поэтому: через 2с И каждый раз, когда страница снова становится
+     видимой, принудительно показываем то, что осталось скрытым на экране.
+     То, что за пределами экрана, не трогаем — оно появится при скролле. */
   const inView = (el) => {
     const r = el.getBoundingClientRect();
     return r.top < window.innerHeight && r.bottom > 0;
   };
 
   function safetyNet() {
-    // 1) main — butun sahifani yashirib qo'yishi mumkin
+    // 1) main — может скрыть собой всю страницу
     const mainEl = document.querySelector("main");
     if (mainEl && getComputedStyle(mainEl).visibility === "hidden") {
       gsap.set(mainEl, { autoAlpha: 1, clearProps: "transform" });
     }
-    // 2) reveal bloklari
+    // 2) блоки reveal
     document.querySelectorAll("[data-reveal], [data-reveal-stagger]").forEach((el) => {
       if (parseFloat(getComputedStyle(el).opacity) === 0 && inView(el)) {
         gsap.set(el, { autoAlpha: 1, y: 0 });
         gsap.set(el.children, { autoAlpha: 1, y: 0 });
       }
     });
-    // 3) so'z-maska (hero + [data-split] sarlavhalar) — so'zlar maska
-    //    ortida "osilib" qolmasin
-    //    MUHIM: ScrollTrigger "top 92%" da ishga tushadi. Shuning uchun
-    //    faqat SHU nuqtadan o'tgan sarlavhalarni tuzatamiz — ekran eng
-    //    chetida turgan, hali navbati kelmagan sarlavhaga tegmaymiz.
+    // 3) словесная маска (hero + заголовки [data-split]) — слова не должны
+    //    "зависнуть" за маской
+    //    ВАЖНО: ScrollTrigger срабатывает на "top 92%". Поэтому
+    //    исправляем только заголовки, прошедшие ЭТУ точку — заголовок,
+    //    стоящий у самого края экрана и ещё не дождавшийся своей очереди, не трогаем.
     document.querySelectorAll("[data-hero-line], [data-split]").forEach((title) => {
       const r = title.getBoundingClientRect();
       if (r.bottom > 0 && r.top < window.innerHeight * 0.92) {
         gsap.set(title.querySelectorAll(".m-word-in"), { yPercent: 0 });
       }
     });
-    // 4) hero tugmasi — u kechikish (delay) bilan chiqadi, shuning uchun
-    //    to'xtab qolish ehtimoli eng yuqori
+    // 4) кнопка hero — она появляется с задержкой (delay), поэтому
+    //    вероятность "застрять" у неё самая высокая
     const btn = document.querySelector(".hero-btn");
     if (btn && inView(btn) && getComputedStyle(btn).visibility === "hidden") {
       gsap.set(btn, { autoAlpha: 1, y: 0 });
@@ -79,39 +80,39 @@ export function initMotion() {
   }
 
   setTimeout(safetyNet, 2000);
-  // Fon tabda ochilgan sahifa ko'rinadigan bo'lganda ham tekshiramiz
-  // (animatsiyalar o'sha payt qayta boshlanadi -> ularga vaqt beramiz).
+  // Проверяем и тогда, когда страница, открытая в фоновой вкладке, снова становится видимой
+  // (анимации в этот момент запускаются заново -> даём им время).
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) setTimeout(safetyNet, 1500);
   });
 
 
-  /* --- Lenis: yumshoq, sekin inersiyali skroll ---
-     FAQAT sichqoncha/g'ildirakli qurilmalarda. Sensorli ekranda Lenis
-     barmoq harakatini o'ziga oladi va uni 1.5 soniyalik animatsiya bilan
-     "quvib" boradi: barmoq surilayotganda sahifa qotib turadi, qo'yib
-     yuborilganda esa birdan sakrab qoladi. Telefon brauzerining o'z
-     skrolli allaqachon silliq — shuning uchun u yerda Lenis'ni yoqmaymiz. */
+  /* --- Lenis: плавный, медленно-инерционный скролл ---
+     ТОЛЬКО на устройствах с мышью/колесом. На сенсорном экране Lenis
+     перехватывает движение пальца и "догоняет" его анимацией за 1.5 секунды:
+     пока палец двигается, страница застывает, а при отпускании
+     резко "прыгает". Собственный скролл мобильного браузера уже
+     плавный — поэтому там Lenis не включаем. */
   const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
   if (!isTouch) {
     const lenis = new Lenis({
-      duration: 1.5,        // uzoqroq -> silliqroq to'xtash
+      duration: 1.5,        // дольше -> плавнее остановка
       smoothWheel: true,
-      wheelMultiplier: 0.9, // g'ildirak biroz "yengil"
+      wheelMultiplier: 0.9, // колесо чуть "легче"
       easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)), // expo.out
     });
-    // Boshqa modullar (masalan telefon davlat ro'yxati) skrollni vaqtincha
-    // to'xtata olsin: window.__lenis?.stop() / .start().
-    // Sensorli ekranda __lenis bo'lmaydi -> chaqiruvlar `?.` bilan yozilgan.
+    // Другие модули (например список стран для телефона) могут временно
+    // остановить скролл: window.__lenis?.stop() / .start().
+    // На сенсорном экране __lenis не будет -> вызовы написаны через `?.`.
     window.__lenis = lenis;
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((time) => lenis.raf(time * 1000));
   }
   gsap.ticker.lagSmoothing(0);
 
-  /* --- Blok reveal: [data-reveal] / [data-reveal-stagger] ko'rinishga kirganda
-     yumshoq pastdan chiqadi. Kichik siljish, uzoq davomiylik. --- */
+  /* --- Reveal блоков: [data-reveal] / [data-reveal-stagger] плавно
+     выезжают снизу при появлении в области видимости. Небольшое смещение, долгая длительность. --- */
   gsap.utils.toArray("[data-reveal], [data-reveal-stagger]").forEach((el) => {
     gsap.fromTo(
       el,
@@ -126,7 +127,7 @@ export function initMotion() {
     );
   });
 
-  /* --- Hero: sarlavha so'zlari maska ortidan SEKIN ko'tariladi --- */
+  /* --- Hero: слова заголовка МЕДЛЕННО поднимаются из-за маски --- */
   const heroLines = document.querySelectorAll("[data-hero-line]");
   if (heroLines.length) {
     heroLines.forEach(splitWords);
@@ -151,10 +152,10 @@ export function initMotion() {
     );
   }
 
-  /* --- Bo'lim sarlavhalari: hero bilan AYNAN bir xil so'z-maska effekti,
-     lekin skroll bilan ko'rinishga kirganda. [data-split] qo'yilgan
-     sarlavhalarda ishlaydi (matni JS bilan almashadiganlarida EMAS —
-     splitWords innerHTML'ni qayta yozadi). --- */
+  /* --- Заголовки секций: ТОЧНО такой же эффект словесной маски, как у hero,
+     но срабатывает при появлении по скроллу. Работает на заголовках с
+     [data-split] (НЕ на тех, чей текст меняется через JS —
+     splitWords перезаписывает innerHTML). --- */
   document.querySelectorAll("[data-split]").forEach((el) => {
     splitWords(el);
     gsap.fromTo(
@@ -170,7 +171,7 @@ export function initMotion() {
     );
   });
 
-  /* --- Hero foni: skroll bilan juda yengil parallaks (scrub 1s "kechikadi") --- */
+  /* --- Фон hero: очень лёгкий параллакс со скроллом (scrub 1с "с отставанием") --- */
   const heroBg = document.querySelector("[data-parallax]");
   if (heroBg) {
     gsap.to(heroBg, {
@@ -180,19 +181,19 @@ export function initMotion() {
         trigger: heroBg.closest(".hero"),
         start: "top top",
         end: "bottom top",
-        scrub: 1, // 1s "quvib yetish" -> silliqroq
+        scrub: 1, // 1с "догонки" -> плавнее
       },
     });
   }
 
-  /* --- Sahifa ochilishi: main juda oz pastdan yumshoq paydo bo'ladi --- */
+  /* --- Открытие страницы: main плавно появляется, слегка снизу --- */
   gsap.from("main", {
     autoAlpha: 0,
     y: 8,
     duration: 0.9,
     ease: "power2.out",
-    // Tugagach transform qolsa, main ichidagi position:fixed modal
-    // viewportga emas, uzun main blokiga nisbatan joylashib qoladi.
+    // Если после завершения останется transform, модальное окно
+    // с position:fixed внутри main привяжется не к viewport, а к длинному блоку main.
     clearProps: "transform",
   });
 

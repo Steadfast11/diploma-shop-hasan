@@ -1,12 +1,12 @@
 /* ============================================================
-   ui.css — qayta ishlatiladigan mayda UI bo'laklari
-   (header/footer'ning O'ZI emas — ular components/ ichida)
-   Bir nechta sahifada uchraydigan narsalar shu yerda.
+   ui.css — переиспользуемые мелкие UI-фрагменты
+   (не САМИ header/footer — они в components/)
+   Здесь то, что встречается на нескольких страницах.
    ============================================================ */
 
-/* ---------- Shisha (glass) tugma ----------
+/* ---------- Стеклянная (glass) кнопка ----------
    Figma: backdrop-blur 26px, radius 8px, padding 24px 48px.
-   Hero'da oq shaffof + qora matn; kategoriya kartasida ochroq + oq matn. */
+   В hero — белая прозрачная + чёрный текст; на карточке категории — светлее + белый текст. */
 .btn-glass {
   display: inline-flex;
   align-items: center;
@@ -15,15 +15,15 @@
   border-radius: var(--radius);
   backdrop-filter: blur(26px);
   -webkit-backdrop-filter: blur(26px);
-  background: rgba(255, 255, 255, 0.46); /* Figma: hero tugmasi foni */
+  background: rgba(255, 255, 255, 0.46); /* Figma: фон кнопки hero */
   color: var(--black);
   cursor: pointer;
 }
 
-/* ---------- Mahsulot kartochkasi ----------
-   Figma: rasm (aspect 282/324, radius 8) + 8px gap + (nom | narx).
-   Nom va narx: 16px, bir qatorda, nom cho'zilib narxni o'ngga suradi.
-   Mazmun (rasm/nom/narx) BACKENDDAN keladi — bu faqat qolip. */
+/* ---------- Карточка товара ----------
+   Figma: изображение (aspect 282/324, radius 8) + 8px gap + (название | цена).
+   Название и цена: 16px, в одну строку, название растягивается и сдвигает цену вправо.
+   Содержимое (изображение/название/цена) приходит С БЭКЕНДА — здесь только каркас. */
 .card {
   position: relative;
   display: flex;
@@ -36,14 +36,14 @@
   gap: 8px;
 }
 .card-media {
-  position: relative; /* sevimlilar tugmasi shu ustiga joylashadi */
+  position: relative; /* поверх этого располагается кнопка избранного */
 }
 .card-image {
   width: 100%;
   aspect-ratio: 282 / 324;
   object-fit: cover;
   border-radius: var(--radius);
-  background: var(--color-surface); /* rasm kelguncha och kulrang */
+  background: var(--color-surface); /* светло-серый фон, пока изображение не загрузилось */
 }
 
 .card-info {
@@ -51,23 +51,23 @@
   gap: 8px;
 }
 .card-title {
-  flex: 1;            /* bo'sh joyni egallaydi -> narxni o'ngga suradi */
+  flex: 1;            /* занимает свободное место -> сдвигает цену вправо */
   min-width: 0;
 }
 .card-price {
   white-space: nowrap;
 }
 
-/* ---------- Mahsulot to'ri (grid) ----------
-   Figma: 4 ustun, ustun oralig'i 24px, qator oralig'i 32px. */
+/* ---------- Сетка товаров (grid) ----------
+   Figma: 4 колонки, отступ между колонками 24px, между строками 32px. */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   column-gap: 24px;
   row-gap: 32px;
 }
-/* Umumiy responsive tayanch (sahifalar o'z ustidan yozishi mumkin).
-   Figma mobil: 1 ustun. */
+/* Общая база для адаптива (страницы могут переопределять поверх).
+   Figma мобильная версия: 1 колонка. */
 @media (max-width: 1024px) {
   .product-grid { grid-template-columns: repeat(3, 1fr); }
 }
@@ -78,9 +78,9 @@
   .product-grid { grid-template-columns: 1fr; }
 }
 
-/* ---------- Miqdor tanlagich (−  N  +) ----------
-   Figma: #f0f0f0 fon, h48, to'liq yumaloq, SF Pro shrift.
-   Savat va mahsulot sahifasida ishlatiladi. */
+/* ---------- Переключатель количества (−  N  +) ----------
+   Figma: фон #f0f0f0, h48, полностью скруглённый, шрифт SF Pro.
+   Используется на странице корзины и товара. */
 .qty {
   display: inline-flex;
   align-items: center;
@@ -112,7 +112,7 @@
   text-align: center;
 }
 
-/* ---------- 404 sahifasi ---------- */
+/* ---------- Страница 404 ---------- */
 .notfound {
   padding-block: 96px;
   display: flex;
@@ -138,7 +138,7 @@
   color: var(--white);
 }
 
-/* Holat xabari (yuklanmoqda / bo'sh / xato) — grid ichida butun qatorni egallaydi */
+/* Сообщение о состоянии (загрузка / пусто / ошибка) — занимает всю строку внутри grid */
 .state-message {
   grid-column: 1 / -1;
   padding: 40px 0;
@@ -149,16 +149,16 @@
 }
 
 /* ============================================================
-   ANIMATSIYALAR
-   - scroll-reveal: element ko'rinishga kirganda paydo bo'ladi
-     (js/effects/reveal.js IntersectionObserver bilan .is-visible qo'yadi)
-   - hover / bosish: mayda javob
-   - prefers-reduced-motion: foydalanuvchi xohlamasa hammasi o'chadi
+   АНИМАЦИИ
+   - scroll-reveal: элемент появляется при попадании в область видимости
+     (js/effects/reveal.js добавляет .is-visible через IntersectionObserver)
+   - hover / нажатие: небольшой отклик
+   - prefers-reduced-motion: если пользователь не хочет анимаций, всё отключается
    ============================================================ */
 
-/* Yumshoq egri chiziq — hamma joyda bir xil "his". */
+/* Плавная кривая — единое "ощущение" везде. */
 :root {
-  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1); /* expo.out ko'rinishi */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1); /* похоже на expo.out */
 }
 
 /* ---------- Toast ---------- */
@@ -188,7 +188,7 @@
   background: var(--color-danger);
 }
 
-/* ---------- Skeleton (yuklanish holati) ---------- */
+/* ---------- Skeleton (состояние загрузки) ---------- */
 .skeleton .card-image {
   animation: skeleton-pulse 1.3s ease-in-out infinite;
 }
@@ -206,8 +206,8 @@
 }
 
 /* ---------- Skip link (a11y) ----------
-   Klaviatura bilan yuruvchi foydalanuvchi header/navigatsiyani qayta-qayta
-   Tab bosib o'tmasin — birinchi Tab'da shu havola ko'rinadi. */
+   Пользователь, работающий с клавиатуры, не должен раз за разом
+   проходить Tab'ом через header/навигацию — при первом Tab появляется эта ссылка. */
 .skip-link {
   position: absolute;
   top: -100px;
@@ -224,7 +224,7 @@
   top: 12px;
 }
 
-/* ---------- Klaviatura fokusi (a11y) ---------- */
+/* ---------- Фокус с клавиатуры (a11y) ---------- */
 :focus-visible {
   outline: 2px solid var(--black);
   outline-offset: 3px;
@@ -244,8 +244,8 @@
   opacity: 1;
   transform: none;
 }
-/* ketma-ket (stagger) — grid bolalari birin-ketin, yumshoq.
-   Kechikish CSS'da (:nth-child) — bolalar JS bilan keyin qo'shilsa ham ishlaydi. */
+/* друг за другом (stagger) — дочерние элементы grid по очереди, плавно.
+   Задержка в CSS (:nth-child) — работает, даже если дочерние элементы добавлены позже через JS. */
 [data-reveal-stagger] > * {
   opacity: 0;
   transform: translateY(14px);
@@ -265,7 +265,7 @@
 [data-reveal-stagger].is-visible > *:nth-child(8) { transition-delay: 560ms; }
 [data-reveal-stagger].is-visible > *:nth-child(n + 9) { transition-delay: 620ms; }
 
-/* mahsulot kartochkasi — rasm ustiga borilganda sekin, ozgina kattalashadi */
+/* карточка товара — при наведении изображение медленно, слегка увеличивается */
 .card-image {
   transition: transform 0.9s var(--ease-soft);
 }
@@ -273,7 +273,7 @@
   transform: scale(1.025);
 }
 
-/* tugmalar — bosilganda juda oz cho'kish, yumshoq qaytish */
+/* кнопки — при нажатии совсем небольшое сжатие, плавный возврат */
 .btn-glass,
 .product-add,
 .reviews-write,
@@ -295,7 +295,7 @@
   transform: scale(0.99);
 }
 
-/* havolalar rangi/hover — yumshoq */
+/* цвет/hover ссылок — плавный */
 a,
 .header-nav a,
 .header-account a,
@@ -309,7 +309,7 @@ a,
   opacity: 0.55;
 }
 
-/* header "Bag (N)" o'zgarganda juda mayda urg'u */
+/* лёгкий акцент при изменении "Bag (N)" в шапке */
 [data-cart-count] {
   display: inline-block;
   transition: transform 0.4s var(--ease-soft);
@@ -319,14 +319,14 @@ a,
 }
 
 /* ---------- GSAP ("wow") ----------
-   motion.js hero sarlavhasini so'zlarga bo'lib, maska ortidan ko'taradi. */
+   motion.js разбивает заголовок hero на слова и поднимает их из-за маски. */
 .m-word {
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
-  /* overflow: hidden pastga tushuvchi harflarni (g, y, p) kesib qo'ymasin:
-     ichkariga joy beramiz, tashqi o'lchamni manfiy margin bilan qaytaramiz
-     -> layout (piksel) o'zgarmaydi. */
+  /* чтобы overflow: hidden не обрезал буквы со свисающими хвостами (g, y, p):
+     добавляем место внутри, а внешний размер компенсируем отрицательным margin
+     -> layout (в пикселях) не меняется. */
   padding-bottom: 0.14em;
   margin-bottom: -0.14em;
 }
@@ -334,8 +334,8 @@ a,
   display: inline-block;
   will-change: transform;
 }
-/* GSAP faol bo'lsa: [data-reveal] ni GSAP animatsiya qiladi;
-   stagger bolalarini yashirmaymiz (GSAP butun gridni chizadi). */
+/* Если GSAP активен: [data-reveal] анимируется через GSAP;
+   дочерние элементы stagger не скрываем (GSAP отрисовывает всю сетку сам). */
 .has-motion [data-reveal] {
   transition: none;
 }
@@ -345,25 +345,25 @@ a,
   transition: none;
 }
 
-/* ---------- Rasm yumshoq ochilishi ----------
-   API'dan kelgan rasm "birdan" paydo bo'lmasin. Kulrang joy-tutgich
-   endi O'ROVCHI elementda, rasmning o'zi esa yuklangach ochiladi ->
-   yuklanish paytidagi ko'rinish AVVALGIDEK (kulrang quti).
-   img-fallback klassini faqat JS qo'yadi -> JS ishlamasa bunday rasm
-   umuman chizilmaydi (ko'rinmay qolib ketish xavfi yo'q). */
+/* ---------- Плавное появление изображения ----------
+   Изображение из API не должно появляться "резко". Серый placeholder
+   теперь на ОБЁРТОЧНОМ элементе, а само изображение появляется после
+   загрузки -> во время загрузки вид ТАКОЙ ЖЕ, как раньше (серый блок).
+   Класс img-fallback добавляет только JS -> если JS не сработал, такое
+   изображение вообще не отрисовывается (риска остаться невидимым нет). */
 .card-media,
 .cart-item-media {
   background: var(--color-surface);
   border-radius: var(--radius);
 }
-/* Hali yuklanmagan rasm ko'rinmaydi — ortida kulrang joy-tutgich turadi. */
+/* Ещё не загруженное изображение невидимо — за ним серый placeholder. */
 img.img-fallback:not(.is-loaded) {
   opacity: 0;
 }
-/* Yuklangach ko'rinadi (yuqoridagi :not(...) qoidasi endi mos kelmaydi).
-   Fade esa ALOHIDA "img-fade" klassi bilan qo'shiladi — uni JS faqat
-   sahifa ekranda bo'lganda qo'yadi. Sabab: fon tabda animatsiya 0% da
-   (opacity: 0) qotib qoladi va rasm ko'rinmay ketardi. */
+/* После загрузки появляется (правило :not(...) выше больше не подходит).
+   Fade добавляется ОТДЕЛЬНЫМ классом "img-fade" — его ставит только JS,
+   когда страница видна на экране. Причина: в фоновой вкладке анимация
+   застряла бы на 0% (opacity: 0), и изображение осталось бы невидимым. */
 img.img-fallback.is-loaded.img-fade {
   animation: img-fade-in 0.6s var(--ease-soft);
 }
@@ -372,7 +372,7 @@ img.img-fallback.is-loaded.img-fade {
   to { opacity: 1; }
 }
 
-/* ---------- Miqdor raqami almashganda yuqoridan siljib keladi ---------- */
+/* ---------- Число количества при смене выезжает сверху ---------- */
 .qty-value.is-changed {
   animation: qty-roll 0.28s var(--ease-soft);
 }
@@ -381,8 +381,8 @@ img.img-fallback.is-loaded.img-fade {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ---------- Kategoriya kartochkasi: mahsulot kartochkasi kabi hover-zoom ----------
-   (.category da `overflow: clip` bor -> rasm chetidan chiqmaydi) */
+/* ---------- Карточка категории: hover-zoom как у карточки товара ----------
+   (у .category есть `overflow: clip` -> изображение не выходит за края) */
 .category img {
   transition: transform 0.9s var(--ease-soft);
 }
@@ -390,8 +390,8 @@ img.img-fallback.is-loaded.img-fade {
   transform: scale(1.05);
 }
 
-/* ---------- "Bag"ga uchuvchi arvoh ("Add to cart") ----------
-   Vaqtinchalik element: 0.7s uchadi va JS uni o'chiradi. */
+/* ---------- Летящий "призрак" в "Bag" ("Add to cart") ----------
+   Временный элемент: летит 0.7с, затем JS его удаляет. */
 .fly-ghost {
   position: fixed;
   z-index: 300;

@@ -1,7 +1,7 @@
 /* ============================================================
-   pages/cart.css — Savatcha ("Your bag")
-   Figma: markazda ~980px; chapda mahsulotlar ro'yxati, o'ngda
-   qora "Order Summary" kartasi (380px). Order Summary SF Pro shriftida.
+   pages/cart.css — Корзина ("Your bag")
+   Figma: по центру ~980px; слева список товаров, справа
+   чёрная карточка "Order Summary" (380px). Order Summary — шрифт SF Pro.
    ============================================================ */
 
 .cart {
@@ -18,13 +18,13 @@
 .cart-main {
   display: flex;
   flex-direction: column;
-  gap: 30px;                 /* sarlavha -> ro'yxat */
+  gap: 30px;                 /* заголовок -> список */
 }
 .cart-title {
   font-size: var(--fs-h2);   /* 40px */
 }
 
-/* bo'sh holat: "No products in your bag" */
+/* пустое состояние: "No products in your bag" */
 .cart-empty {
   background: var(--color-surface);
   border-radius: var(--radius);
@@ -32,22 +32,22 @@
   color: var(--color-text-muted);
 }
 
-/* ---------- Savat pozitsiyasi ---------- */
+/* ---------- Позиция в корзине ---------- */
 .cart-item {
   display: grid;
   grid-template-columns: 176px 1fr auto;
   gap: 20px;
   align-items: start;
-  padding-block: 17px;       /* Figma: qatorlar orasi ~190px pitch (176 + 14) */
+  padding-block: 17px;       /* Figma: шаг между строками ~190px (176 + 14) */
 }
 .cart-item-media {
   display: block;
   width: 176px;
 }
-/* O'chirilayotgan qator birdan yo'qolmasin — yumshoq so'nib chetga siljiydi.
-   MUHIM: `transition` ASOSIY qoidada turishi kerak. Agar u `is-removing`
-   ichida bo'lsa, klass qo'shilganda transition va yangi qiymat bir vaqtda
-   paydo bo'ladi va brauzer animatsiya qilmaydi (birdan o'chib qoladi). */
+/* Удаляемая строка не должна исчезать резко — плавно гаснет и сдвигается в сторону.
+   ВАЖНО: `transition` должен быть в ОСНОВНОМ правиле. Если он окажется
+   внутри `is-removing`, то transition и новое значение появятся
+   одновременно, и браузер не станет анимировать (исчезнет резко). */
 .cart-item {
   transition: opacity 0.28s ease, transform 0.28s var(--ease-soft);
 }
@@ -86,7 +86,7 @@
   width: 24px;
   height: 24px;
 }
-/* Figma trash — qizil */
+/* Корзина в Figma — красная */
 .cart-item-remove img {
   width: 24px;
   height: 24px;
@@ -97,7 +97,7 @@
   align-self: center;
 }
 
-/* ---------- Order Summary (qora karta) ---------- */
+/* ---------- Order Summary (чёрная карточка) ---------- */
 .summary {
   background: var(--black);
   border: 1px solid var(--on-dark-line);
@@ -172,16 +172,16 @@
     width: auto;
   }
 }
-/* Mobil (Figma): rasm chapda kvadrat, o'ngda nom + narx, ularning
-   TAGIDA bitta qator — chapda qizil savat ikonkasi, o'ngda miqdor
-   tugmasi. Order Summary'da esa faqat "Total" qoladi. */
+/* Мобильная версия (Figma): изображение слева квадратом, справа название + цена, ПОД
+   ними одна строка — слева красная иконка корзины, справа кнопка
+   количества. В Order Summary остаётся только "Total". */
 @media (max-width: 480px) {
   .cart-title {
-    font-size: 28px;             /* katalogdagi mobil sarlavha bilan bir xil */
+    font-size: 28px;             /* как мобильный заголовок в каталоге */
   }
 
   .cart-item {
-    position: relative;          /* miqdor tugmasi shu qatorga nisbatan */
+    position: relative;          /* кнопка количества позиционируется относительно этой строки */
     grid-template-columns: 124px 1fr;
     column-gap: 16px;
   }
@@ -193,20 +193,20 @@
     height: 124px;
   }
   .cart-item-info {
-    min-height: 124px;           /* rasm balandligi */
+    min-height: 124px;           /* высота изображения */
   }
-  /* savat ikonkasi pastki qatorga tushadi */
+  /* иконка корзины опускается в нижнюю строку */
   .cart-item-remove {
     margin-top: auto;
   }
-  /* miqdor tugmasi — o'sha pastki qatorning o'ng chekkasida */
+  /* кнопка количества — у правого края той же нижней строки */
   .cart-item .qty {
     position: absolute;
     right: 0;
-    bottom: 17px;                /* .cart-item padding-block bilan bir xil */
+    bottom: 17px;                /* совпадает с .cart-item padding-block */
   }
 
-  /* Figma mobil: faqat Total ko'rsatiladi */
+  /* Figma мобильная версия: показывается только Total */
   .summary-row:not(.summary-row-total),
   .summary-divider {
     display: none;

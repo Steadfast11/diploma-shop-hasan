@@ -1,9 +1,9 @@
 /* ============================================================
-   storage.js — localStorage ustidan yupqa qobiq
-   Nega qobiq:
-     - localStorage faqat MATN saqlaydi -> JSON.parse/stringify shu yerda
-     - to'la yoki bloklangan bo'lsa xato beradi -> try/catch bir joyda
-     - kalit nomlari shu yerda (kod bo'ylab "diploma_shop_token" yozilmasin)
+   storage.js — тонкая обёртка над localStorage
+   Зачем обёртка:
+     - localStorage хранит только ТЕКСТ -> JSON.parse/stringify здесь
+     - если хранилище заполнено или заблокировано, будет ошибка -> try/catch в одном месте
+     - имена ключей здесь (чтобы "diploma_shop_token" не было разбросано по коду)
    ============================================================ */
 
 const KEYS = {
@@ -12,7 +12,7 @@ const KEYS = {
   guestCart: "diploma_shop_guest_cart",
 };
 
-// Ichki: xavfsiz o'qish (xato bo'lsa fallback qaytaradi)
+// Внутреннее: безопасное чтение (при ошибке возвращает fallback)
 function read(key, fallback = null) {
   try {
     const raw = localStorage.getItem(key);
@@ -21,34 +21,34 @@ function read(key, fallback = null) {
     return fallback;
   }
 }
-// Ichki: xavfsiz yozish
+// Внутреннее: безопасная запись
 function write(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch {
-    /* to'la / bloklangan — jimgina o'tamiz */
+    /* заполнено / заблокировано — молча пропускаем */
   }
 }
 function remove(key) {
   try {
     localStorage.removeItem(key);
   } catch {
-    /* e'tiborsiz */
+    /* игнорируем */
   }
 }
 
-/* ---- Token (kirish belgisi) ---- */
+/* ---- Токен (признак входа) ---- */
 export const getToken = () => read(KEYS.token);
 export const setToken = (t) => write(KEYS.token, t);
 export const clearToken = () => remove(KEYS.token);
 
-/* ---- Saqlangan profil ---- */
+/* ---- Сохранённый профиль ---- */
 export const getUser = () => read(KEYS.user);
 export const setUser = (u) => write(KEYS.user, u);
 export const clearUser = () => remove(KEYS.user);
 
-/* ---- Mehmon savati (kirilmagan holatda) ----
-   Format: [{ productId, title, price, image, qty }] */
+/* ---- Гостевая корзина (когда нет входа) ----
+   Формат: [{ productId, title, price, image, qty }] */
 export const getGuestCart = () => read(KEYS.guestCart, []);
 export const setGuestCart = (items) => write(KEYS.guestCart, items);
 export const clearGuestCart = () => remove(KEYS.guestCart);

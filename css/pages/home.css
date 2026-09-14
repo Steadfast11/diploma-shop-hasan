@@ -1,19 +1,19 @@
 /* ============================================================
-   pages/home.css — FAQAT bosh sahifa stili
-   Bloklar: hero -> seksiyalar (Best sellers / Shop by category /
-   Featured products). Kartochka va grid — ui.css'da (qayta ishlatiladi).
+   pages/home.css — стили ТОЛЬКО для главной страницы
+   Блоки: hero -> секции (Best sellers / Shop by category /
+   Featured products). Карточка и grid — в ui.css (переиспользуются).
    ============================================================ */
 
 /* ---------- HERO ----------
-   Figma: balandlik 654px, butun kenglik, header ostida.
-   Fon rasm (cover) + ustidan qora 20% parda. Matn pastga tekislangan. */
+   Figma: высота 654px, на всю ширину, под header.
+   Фоновое изображение (cover) + сверху чёрная плёнка 20%. Текст выровнен по низу. */
 .hero {
   position: relative;
   height: 654px;
   overflow: clip;
   display: flex;
-  align-items: flex-end;      /* matn blok pastda */
-  padding-bottom: 60px;       /* Figma: pastdan ~60px */
+  align-items: flex-end;      /* текстовый блок внизу */
+  padding-bottom: 60px;       /* Figma: снизу ~60px */
   color: var(--white);
 }
 .hero-bg {
@@ -25,51 +25,51 @@
   height: 100%;
   object-fit: cover;
 }
-.hero-bg::after {            /* qora 20% parda */
+.hero-bg::after {            /* чёрная плёнка 20% */
   content: "";
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.2);
 }
 .hero-inner {
-  position: relative;        /* parda ostida qolmasin */
+  position: relative;        /* чтобы не оказался под плёнкой */
 }
 .hero-offer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 24px;                 /* Figma: matn bloki -> tugma */
+  gap: 24px;                 /* Figma: текстовый блок -> кнопка */
   width: 588px;              /* Figma */
   max-width: 100%;
 }
 .hero-text {
   display: flex;
   flex-direction: column;
-  gap: 16px;                 /* Figma: eyebrow -> sarlavha */
+  gap: 16px;                 /* Figma: eyebrow -> заголовок */
 }
 .hero-eyebrow {
   text-transform: uppercase;
 }
-/* .hero-title -> <h1>, o'lchami base.css'dan (56px) */
+/* .hero-title -> <h1>, размер из base.css (56px) */
 
-/* ---------- SEKSIYALAR ----------
-   Figma: seksiyalar orasi ~76px, seksiya ichida sarlavha -> grid 32px. */
+/* ---------- СЕКЦИИ ----------
+   Figma: расстояние между секциями ~76px, внутри секции заголовок -> grid 32px. */
 .home-sections {
   display: flex;
   flex-direction: column;
   gap: 76px;
-  padding-block: 76px;       /* hero'dan va footer'dan oldin */
+  padding-block: 76px;       /* от hero и до footer */
 }
 .section {
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
-/* .section-title -> <h2>, o'lchami base.css'dan (40px) */
+/* .section-title -> <h2>, размер из base.css (40px) */
 
 /* ---------- SHOP BY CATEGORY ----------
-   Figma: 3 ustun, aspect 384/440, radius 8, rasm to'ldiradi,
-   pastda 16px padding ichida shisha tugma (butun kenglikda). */
+   Figma: 3 колонки, aspect 384/440, radius 8, изображение заполняет,
+   внизу padding 16px, внутри стеклянная кнопка (на всю ширину). */
 .category-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -83,7 +83,7 @@
   display: flex;
   align-items: flex-end;
   padding: 16px;
-  background: var(--color-surface); /* rasm (API) kelguncha ko'rinib tursin */
+  background: var(--color-surface); /* видно, пока изображение (из API) не загрузилось */
 }
 .category img {
   position: absolute;
@@ -92,14 +92,14 @@
   height: 100%;
   object-fit: cover;
 }
-.category-btn {          /* .btn-glass ustiga */
-  position: relative;         /* rasm ustida */
+.category-btn {          /* поверх .btn-glass */
+  position: relative;         /* над изображением */
   width: 100%;
-  background: rgba(255, 255, 255, 0.16); /* Figma: kategoriya tugmasi */
+  background: rgba(255, 255, 255, 0.16); /* Figma: кнопка категории */
   color: var(--white);
 }
 
-/* ---------- RESPONSIVE (Figma mobil: 1 ustun, py-56) ---------- */
+/* ---------- RESPONSIVE (Figma мобильная версия: 1 колонка, py-56) ---------- */
 @media (max-width: 900px) {
   .category-grid {
     grid-template-columns: 1fr;
@@ -112,7 +112,7 @@
   }
   .hero-eyebrow,
   .hero-title {
-    /* Figma mobil hero tugmasi: oq matn, ochroq fon */
+    /* Figma мобильная кнопка hero: белый текст, более светлый фон */
   }
   .hero-btn {
     background: rgba(255, 255, 255, 0.16);
@@ -123,4 +123,4 @@
     padding-block: 56px;
   }
 }
-/* Figma mobil hero sarlavhasi ham 56px — o'zgartirmaymiz (pixel-perfect). */
+/* Мобильный заголовок hero в Figma тоже 56px — не меняем (pixel-perfect). */

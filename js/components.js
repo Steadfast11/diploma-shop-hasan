@@ -1,9 +1,9 @@
 /* ============================================================
-   components.js — header/footer'ni sahifaga joylaydi + header holati
-   Har HTML'da bo'sh <div id="header"> va <div id="footer"> turadi.
+   components.js — вставляет header/footer в страницу + состояние header
+   На каждой HTML-странице стоят пустые <div id="header"> и <div id="footer">.
 
-   MUHIM: fetch() ishlashi uchun sayt DEV-SERVERdan ochilishi kerak
-   (file:// da ishlamaydi). README: `npm run dev`.
+   ВАЖНО: чтобы fetch() работал, сайт должен быть открыт через DEV-SERVER
+   (не работает через file://). README: `npm run dev`.
    ============================================================ */
 
 import { isLoggedIn } from "./core/auth.js";
@@ -12,18 +12,18 @@ import { initReveal } from "./effects/reveal.js";
 import { initMotion } from "./effects/motion.js";
 import { toast, playOnce } from "./ui.js";
 
-// Bitta komponentni yuklab, kerakli div ichiga qo'yadi.
+// Загружает один компонент и вставляет его в нужный div.
 async function loadComponent(name, mountId) {
   const mount = document.getElementById(mountId);
-  if (!mount) return; // bu sahifada bunday div yo'q -> jimgina to'xtaymiz
+  if (!mount) return; // на этой странице такого div нет -> молча выходим
 
-  // ?v=1 — kesh-buzish (va ba'zi dev-serverlar ".html" ni olib tashlamasin)
+  // ?v=1 — сброс кеша (и чтобы некоторые dev-серверы не отрезали ".html")
   const res = await fetch(`/components/${name}.html?v=1`);
   const html = await res.text();
   mount.innerHTML = html;
 }
 
-// Header'dagi "Bag (N)" ni joriy savat soniga tenglaydi (+ mayda sakrash).
+// Приравнивает "Bag (N)" в шапке к текущему количеству в корзине (+ лёгкий подскок).
 async function refreshCartCount() {
   const el = document.querySelector("[data-cart-count]");
   if (!el) return;
@@ -35,14 +35,14 @@ async function refreshCartCount() {
   }
 }
 
-// Kirilmagan bo'lsa "Account" havolasi login sahifasiga ketsin.
+// Если пользователь не вошёл, ссылка "Account" должна вести на страницу логина.
 function wireHeaderAuth() {
   if (isLoggedIn()) return;
   const acc = document.querySelector('.header-account a[href$="profile.html"]');
   if (acc) acc.href = "/pages/login.html";
 }
 
-// Mobil burger: Home/Products panelini ochib/yopadi.
+// Мобильный бургер: открывает/закрывает панель Home/Products.
 function wireHeaderMenu() {
   const burger = document.querySelector("[data-burger]");
   if (!burger) return;
@@ -53,8 +53,8 @@ function wireHeaderMenu() {
   });
 }
 
-// Logo intro birinchi kirishda va RELOAD qilinganda ishlaydi.
-// Shu tab ichida boshqa sahifaga oddiy o'tilganda qayta ishlamaydi.
+// Интро логотипа срабатывает при первом входе и при RELOAD.
+// При обычном переходе на другую страницу в этой же вкладке повторно не запускается.
 function initLogoIntro() {
   const logo = document.querySelector(".header-logo");
   const header = logo?.closest(".header");
@@ -64,7 +64,7 @@ function initLogoIntro() {
   try {
     alreadyPlayed = sessionStorage.getItem("diploma_shop_logo_intro") === "1";
   } catch {
-    /* sessionStorage bloklangan bo'lsa har sahifada ko'rinishi mumkin */
+    /* если sessionStorage заблокирован, может показываться на каждой странице */
   }
   const navigation = performance.getEntriesByType("navigation")[0];
   const isReload = navigation?.type === "reload";
@@ -75,13 +75,13 @@ function initLogoIntro() {
   try {
     sessionStorage.setItem("diploma_shop_logo_intro", "1");
   } catch {
-    /* yozib bo'lmasa animatsiyaning o'zi baribir ishlaydi */
+    /* если не удалось записать, сама анимация всё равно сработает */
   }
 }
 
-// Buzilgan rasm (404/xato) -> broken-image ikonka o'rniga toza kulrang
-// quti qoladi. "error" hodisasi bubble bo'lmaydi -> capture=true bilan
-// document darajasida ushlaymiz (har rasmga alohida listener kerak emas).
+// Сломанное изображение (404/ошибка) -> вместо иконки broken-image
+// остаётся чистый серый блок. Событие "error" не всплывает (bubble) -> ловим
+// его на уровне document с capture=true (не нужен отдельный listener на каждую картинку).
 function wireImageFallback() {
   document.addEventListener(
     "error",
@@ -96,12 +96,12 @@ function wireImageFallback() {
   );
 }
 
-// Rasm yuklangach yumshoq ochilsin (birdan "sakrab" chiqmasin).
-// "load" ham "error" kabi bubble bo'lmaydi -> yuqoridagi bilan bir xil
-// uslub: document darajasida capture=true.
+// После загрузки изображение плавно появляется (не выскакивает резко "рывком").
+// "load" тоже не всплывает, как и "error" -> тот же приём:
+// уровень document, capture=true.
 function wireImageFade() {
-  // "is-loaded" — rasmni KO'RSATADI (majburiy).
-  // "img-fade" — faqat bezak; playOnce uni sahifa fonda bo'lsa qo'ymaydi.
+  // "is-loaded" — ПОКАЗЫВАЕТ изображение (обязательно).
+  // "img-fade" — только украшение; playOnce не применяет его, если страница в фоне.
   const show = (img) => {
     img.classList.add("is-loaded");
     playOnce(img, "img-fade");
@@ -117,26 +117,26 @@ function wireImageFade() {
     true
   );
 
-  // Listener ulanguncha keshdan yuklanib bo'lgan rasmlar uchun "supurgi".
-  // Faqat ALLAQACHON yuklangan (complete) rasmlarni ochamiz.
+  // "Подметание" для изображений, уже загруженных из кеша до подключения listener'а.
+  // Открываем только УЖЕ загруженные (complete) изображения.
   const sweep = () =>
     document.querySelectorAll("img.img-fallback:not(.is-loaded)").forEach((img) => {
       if (img.complete) show(img);
     });
   window.addEventListener("load", sweep);
-  setTimeout(sweep, 3000); // xavfsizlik to'ri
+  setTimeout(sweep, 3000); // страховочная сетка
 }
 
-// Sichqoncha havola ustiga kelganda brauzer o'sha sahifani oldindan
-// yuklab qo'yadi -> bosilganda deyarli darrov ochiladi.
-// Har manzil bir marta; "?id=..." farq qilmaydi, HTML fayl bitta.
+// Когда курсор наводится на ссылку, браузер заранее подгружает эту страницу
+// -> при клике она открывается почти мгновенно.
+// Каждый адрес — один раз; "?id=..." не важен, HTML-файл один.
 function wirePrefetch() {
   const done = new Set();
   document.addEventListener("pointerover", (e) => {
     const link = e.target.closest?.("a");
     if (!link) return;
     const href = link.getAttribute("href") || "";
-    // faqat shu saytdagi oddiy sahifalar (tashqi/yangi oyna emas)
+    // только обычные страницы этого сайта (не внешние/новое окно)
     if (!href.startsWith("/") || href.startsWith("//") || link.target) return;
     const path = href.split("?")[0].split("#")[0];
     if (path === location.pathname || done.has(path)) return;
@@ -154,11 +154,11 @@ function showCartMergeWarning() {
     sessionStorage.removeItem("diploma_shop_cart_merge_warning");
     toast("Some guest items could not sync and remain saved on this device", "error");
   } catch {
-    /* sessionStorage bloklangan bo'lsa ogohlantirishsiz davom etamiz */
+    /* если sessionStorage заблокирован, продолжаем без предупреждения */
   }
 }
 
-// Har sahifa shuni chaqiradi.
+// Вызывается на каждой странице.
 export async function initLayout() {
   await Promise.all([
     loadComponent("header", "header"),
@@ -171,10 +171,10 @@ export async function initLayout() {
   wireImageFade();
   wirePrefetch();
   refreshCartCount();
-  subscribe(refreshCartCount); // savat o'zgarsa "Bag (N)" yangilanadi
+  subscribe(refreshCartCount); // при изменении корзины "Bag (N)" обновляется
   showCartMergeWarning();
 
-  // Animatsiya: GSAP bo'lsa "wow" (motion.js), bo'lmasa oddiy CSS reveal.
+  // Анимация: если есть GSAP — "wow" (motion.js), иначе обычный CSS reveal.
   const motionOn = initMotion();
   if (!motionOn) initReveal();
 }

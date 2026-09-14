@@ -1,13 +1,13 @@
 /* ============================================================
-   pages/profile.js — Profile + "My orders" + "Favorites"
-   Not logged in -> requireAuth() sends to login.
+   pages/profile.js — Профиль + "My orders" + "Favorites"
+   Если нет входа -> requireAuth() отправляет на логин.
      1) header/footer
-     2) profile: cached user (fast) -> GET /me (fresh)
-     3) "Log out" -> doLogout -> home
-     4) "My orders": GET /orders -> flattened product grid (matches Figma —
-        image + title only, no price/date; order data itself has both if
-        ever needed later)
-     5) "Favorites": localStorage (API has no wishlist endpoint)
+     2) профиль: кешированный пользователь (быстро) -> GET /me (актуальный)
+     3) "Log out" -> doLogout -> главная страница
+     4) "My orders": GET /orders -> плоская сетка товаров (как в Figma —
+        только изображение + название, без цены/даты; в самих данных заказа
+        есть и то, и другое, если понадобится позже)
+     5) "Favorites": localStorage (в API нет эндпоинта wishlist)
    ============================================================ */
 
 import { initLayout } from "../components.js";
@@ -30,16 +30,16 @@ if (requireAuth()) {
       <button class="profile-logout" type="button" data-logout>Log out</button>`;
   }
 
-  // 1) render immediately from cache
+  // 1) отрисовать сразу из кеша
   const cached = currentUser();
   if (cached) renderHead(cached);
 
-  // 2) refresh from server
+  // 2) обновить с сервера
   api
     .getMe()
     .then(({ user }) => renderHead(user))
     .catch(() => {
-      /* cached copy is enough */
+      /* кешированной копии достаточно */
     });
 
   headEl.addEventListener("click", async (e) => {
@@ -48,7 +48,7 @@ if (requireAuth()) {
     location.href = "/index.html";
   });
 
-  // 3) orders — flatten every order's items into one grid (Figma: no price)
+  // 3) заказы — собираем товары всех заказов в одну сетку (Figma: без цены)
   api
     .getOrders()
     .then(({ orders }) => {
@@ -69,7 +69,7 @@ if (requireAuth()) {
         </a>`
         )
         .join("");
-      revealCards(ordersEl); // kartochkalar birin-ketin chiqadi
+      revealCards(ordersEl); // карточки появляются друг за другом
     })
     .catch((e) => showError(ordersEl, e.message));
 }

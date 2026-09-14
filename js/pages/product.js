@@ -1,12 +1,12 @@
 /* ============================================================
-   pages/product.js — Mahsulot sahifasi
-   product.html?id=<mahsulot _id>
+   pages/product.js — страница товара
+   product.html?id=<_id товара>
      1) header/footer
-     2) api.getProduct(id) -> galereya + ma'lumot + izohlar
-     3) qty +/- , Add to cart, "Write a Review" (modal), izoh o'chirish
+     2) api.getProduct(id) -> галерея + информация + отзывы
+     3) qty +/- , Add to cart, "Write a Review" (модал), удаление отзыва
 
-   API hujjatida mahsulotning `description` / ko'p rasm yozilmagan —
-   kod ikkalasiga ham tayyor (bo'lmasa yashiramiz).
+   В документации API не описаны `description` товара / несколько
+   изображений — код готов к обоим случаям (если их нет, скрываем).
    ============================================================ */
 
 import { initLayout } from "../components.js";
@@ -34,8 +34,8 @@ const infoEl = document.querySelector("[data-info]");
 const reviewsEl = document.querySelector("[data-reviews]");
 const countEl = document.querySelector("[data-review-count]");
 
-/* Orqaga: tarix bo'lsa bir qadam orqaga, to'g'ridan-to'g'ri havola
-   ochilgan bo'lsa (tarix bo'sh) katalogga qaytamiz. */
+/* Назад: если есть история — на один шаг назад, если страница открыта
+   напрямую по ссылке (история пуста) — возвращаемся в каталог. */
 document.querySelector("[data-back]").addEventListener("click", () => {
   if (history.length > 1) history.back();
   else location.href = "/pages/catalog.html";
@@ -43,11 +43,11 @@ document.querySelector("[data-back]").addEventListener("click", () => {
 
 let product = null;
 
-/* --- HTML qismlari --- */
+/* --- HTML-фрагменты --- */
 function galleryHTML(p) {
   const images = p.images?.length ? p.images : p.image ? [p.image] : [];
-  // O'rovchi div: kulrang joy-tutgich shunda turadi -> rasm yuklangach
-  // yumshoq ochiladi, thumbnail bosilganda esa crossfade bo'ladi.
+  // Обёрточный div: на его месте остаётся серый placeholder -> изображение
+  // плавно появляется после загрузки, а при клике на thumbnail получается crossfade.
   const main = images[0]
     ? `<div class="product-main"><img class="product-main-image img-fallback" src="${esc(images[0])}" alt="${esc(p.title)}" data-main /></div>`
     : `<div class="product-main"><div class="product-main-image"></div></div>`;
@@ -102,10 +102,10 @@ function renderReviews(comments) {
   reviewsEl.innerHTML = comments.length
     ? comments.map(reviewCardHTML).join("")
     : `<p class="state-message">No reviews yet</p>`;
-  revealCards(reviewsEl); // izohlar birin-ketin chiqadi
+  revealCards(reviewsEl); // отзывы появляются друг за другом
 }
 
-// SEO: mahsulot ma'lumoti API'dan kelgach, Product structured data qo'shamiz.
+// SEO: после получения данных о товаре из API добавляем структурированные данные Product.
 function injectProductSchema(p) {
   const script = document.createElement("script");
   script.type = "application/ld+json";
@@ -125,7 +125,7 @@ function injectProductSchema(p) {
   document.head.appendChild(script);
 }
 
-/* --- yuklash --- */
+/* --- загрузка --- */
 async function load() {
   if (!id) return showError(infoEl, "No product selected");
   const canonicalUrl = `${location.origin}${location.pathname}?id=${encodeURIComponent(id)}`;
@@ -138,7 +138,7 @@ async function load() {
     galleryEl.innerHTML = galleryHTML(product);
     infoEl.innerHTML = infoHTML(product);
     renderReviews(data.comments || product.comments || []);
-    injectProductSchema(product); // SEO: JSON-LD (JS orqali — ma'lumot API'dan keladi)
+    injectProductSchema(product); // SEO: JSON-LD (через JS — данные приходят из API)
   } catch (e) {
     showError(infoEl, e.status === 404 ? "Product not found" : e.message);
   }
@@ -149,19 +149,19 @@ async function refreshReviews() {
     const fresh = await api.getProduct(id);
     renderReviews(fresh.comments || fresh.product?.comments || []);
   } catch {
-    /* muhim emas */
+    /* не важно */
   }
 }
 
-/* --- hodisalar --- */
+/* --- события --- */
 galleryEl.addEventListener("click", (e) => {
   const thumb = e.target.closest("[data-thumb]");
   if (!thumb) return;
   const main = galleryEl.querySelector("[data-main]");
   if (main.src === thumb.src) return;
-  // Crossfade: klasslarni olib tashlaymiz -> rasm ko'rinmay qoladi; yangi
-  // src yuklangach components.js dagi "load" ushlagichi ularni qayta
-  // qo'yadi va fade animatsiyasi boshidan ishlaydi.
+  // Crossfade: убираем классы -> изображение становится невидимым; после
+  // загрузки нового src обработчик "load" в components.js вернёт их
+  // обратно, и анимация fade запустится заново.
   main.classList.remove("is-loaded", "img-fade");
   main.src = thumb.src;
   galleryEl
@@ -173,7 +173,7 @@ infoEl.addEventListener("click", async (e) => {
   const qtyEl = infoEl.querySelector("[data-qty]");
   const qty = Number(qtyEl.textContent);
 
-  // Raqam almashganda yuqoridan siljib kelsin (animatsiya tugagach klass o'chadi)
+  // При смене числа оно должно появляться сдвигом сверху (класс убирается после завершения анимации)
   const showQty = (value) => {
     if (String(value) === qtyEl.textContent) return;
     qtyEl.textContent = String(value);
@@ -184,10 +184,10 @@ infoEl.addEventListener("click", async (e) => {
   else if (e.target.closest("[data-inc]")) showQty(Math.min(20, qty + 1));
   else if (e.target.closest("[data-add]")) {
     const btn = infoEl.querySelector("[data-add]");
-    btn.disabled = true; // ketma-ket ikki marta bosilganda ikkita qo'shilmasin
+    btn.disabled = true; // чтобы двойной клик подряд не добавил дважды
     try {
       await cartStore.addItem(product, Number(qtyEl.textContent));
-      // rasm nusxasi header'dagi "Bag (N)" tomon uchadi
+      // копия изображения летит к "Bag (N)" в шапке
       flyToBag(galleryEl.querySelector("[data-main]"));
       toast(`${product.title} added to cart`);
     } catch (err) {
@@ -215,14 +215,14 @@ document.querySelector("[data-write-review]").addEventListener("click", () => {
         return;
       }
       const sendBtn = modalEl.querySelector("[data-confirm]");
-      sendBtn.disabled = true; // ikki marta yuborilmasin
+      sendBtn.disabled = true; // чтобы не отправилось дважды
       try {
         await api.addComment(id, text);
         closeModal();
         openModal({ title: "Thank you!", bodyHTML: "<p>You left new comment</p>", buttonText: "Okey" });
         refreshReviews();
       } catch (err) {
-        toast(friendlyError(err), "error"); // masalan 409: bitta mahsulotga 3 tadan ko'p
+        toast(friendlyError(err), "error"); // например 409: больше 3 отзывов на один товар
         sendBtn.disabled = false;
       }
     },

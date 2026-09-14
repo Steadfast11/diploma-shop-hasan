@@ -1,14 +1,13 @@
 /* ============================================================
-   pages/product.css — Mahsulot sahifasi
-   Figma (1920): chapda rasm galereyasi (610x530 + 152px thumbnaillar),
-   o'ngda ma'lumot (nom / narx / tavsif / qty + Add to cart).
-   Pastda "All Reviews" + izoh kartalari (2 ustun).
+   pages/product.css — страница товара
+   Figma (1920): слева галерея изображений (610x530 + миниатюры 152px),
+   справа информация (название / цена / описание / qty + Add to cart).
+   Внизу "All Reviews" + карточки отзывов (2 колонки).
 
-   SHRIFT (Figma yangilangan): bu sahifada header va footer'dan tashqari
-   HAMMA narsa — sarlavha, matn, tugma — SF Pro Display. Shuning uchun
-   shriftni bitta joyda, <main class="product"> ga beramiz va ichidagi
-   hamma element meros oladi. Header/footer <main> dan tashqarida ->
-   ularga ta'sir qilmaydi.
+   ШРИФТ (обновлено в Figma): на этой странице всё, кроме header и footer —
+   заголовок, текст, кнопка — SF Pro Display. Поэтому задаём шрифт в
+   одном месте, на <main class="product">, а всё внутри его наследует.
+   Header/footer вне <main> -> на них это не влияет.
    ============================================================ */
 
 .product {
@@ -16,12 +15,12 @@
   display: flex;
   flex-direction: column;
   font-family: var(--font-system);   /* -apple-system -> SF Pro Display */
-  letter-spacing: normal;            /* Inter uchun berilgan -0.06em bekor */
+  letter-spacing: normal;            /* отменяет -0.06em, заданный для Inter */
 }
 
-/* ---------- Orqaga qaytish tugmasi (tepa chap burchak) ---------- */
+/* ---------- Кнопка "Назад" (верхний левый угол) ---------- */
 .product-back {
-  align-self: flex-start;      /* .product — flex column, shuning uchun chapga */
+  align-self: flex-start;      /* .product — flex column, поэтому влево */
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -41,10 +40,10 @@
   background: var(--color-surface);
 }
 .product-back img {
-  transform: rotate(90deg);    /* chevron pastga qaraydi -> chapga buramiz */
+  transform: rotate(90deg);    /* chevron смотрит вниз -> разворачиваем влево */
 }
 
-/* ---------- Yuqori: galereya + ma'lumot ---------- */
+/* ---------- Верх: галерея + информация ---------- */
 .product-top {
   display: grid;
   grid-template-columns: 610px 1fr;
@@ -52,19 +51,19 @@
   align-items: start;
 }
 
-/* galereya */
+/* галерея */
 .product-gallery {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-/* Asosiy rasm o'rovchisi — kulrang joy-tutgich shu yerda turadi, shunda
-   rasmning o'zi yuklangach yumshoq ochila oladi.
-   O'lchamni ATAYLAB bermaymiz: balandlik ichidagi rasmdan keladi
-   (aspect-ratio) -> joylashuv avvalgidek, piksel o'zgarmaydi. */
+/* Обёртка основного изображения — здесь серый placeholder, благодаря
+   этому само изображение после загрузки может плавно появиться.
+   Размер СПЕЦИАЛЬНО не задаём: высота берётся из изображения внутри
+   (aspect-ratio) -> расположение как раньше, пиксели не меняются. */
 .product-main {
   width: 100%;
-  background: #f0eeed;        /* Figma: rasm foni (radius YO'Q) */
+  background: #f0eeed;        /* Figma: фон изображения (БЕЗ radius) */
 }
 .product-main-image {
   width: 100%;
@@ -86,7 +85,7 @@
   border-color: var(--black);
 }
 
-/* ma'lumot */
+/* информация */
 .product-info {
   display: flex;
   flex-direction: column;
@@ -126,7 +125,7 @@
 }
 
 
-/* ---------- Izohlar ---------- */
+/* ---------- Отзывы ---------- */
 .reviews {
   margin-top: 76px;
   display: flex;
@@ -215,8 +214,8 @@
     grid-template-columns: 1fr;
   }
 }
-/* Mobil (Figma): nom + narx kichrayadi, "Add to cart" qolgan bo'sh joyni
-   to'ldiradi, "All Reviews" va "Write a Review" esa BITTA qatorda turadi. */
+/* Мобильная версия (Figma): название + цена уменьшаются, "Add to cart"
+   заполняет оставшееся место, а "All Reviews" и "Write a Review" — в ОДНОЙ строке. */
 @media (max-width: 560px) {
   .product-title {
     font-size: 28px;
@@ -230,21 +229,21 @@
     gap: 12px;
   }
   .product-add {
-    flex: 1;                 /* miqdor tugmasidan keyingi hamma joy */
-    padding-inline: 24px;    /* endi kenglik flex'dan keladi */
+    flex: 1;                 /* всё место после кнопки количества */
+    padding-inline: 24px;    /* ширина теперь берётся из flex */
   }
 
   .reviews {
     margin-top: 48px;
   }
   .reviews-head {
-    gap: 12px;               /* ustma-ust emas — yonma-yon (Figma) */
+    gap: 12px;               /* не друг под другом, а рядом (Figma) */
   }
   .reviews-title {
     font-size: 20px;
   }
   .reviews-write {
-    flex: 0 0 auto;          /* sarlavha uzun bo'lsa ham siqilmasin */
+    flex: 0 0 auto;          /* не сжимается, даже если заголовок длинный */
     height: 40px;
     padding-inline: 18px;
     font-size: 14px;

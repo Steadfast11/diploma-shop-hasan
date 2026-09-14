@@ -1,19 +1,19 @@
 /* ============================================================
-   validation.js — Register formasi uchun sof (toza) tekshiruvchilar
-   Har funksiya bitta qiymatni oladi va:
-     - hammasi joyida bo'lsa  -> "" (bo'sh satr)
-     - xato bo'lsa            -> foydalanuvchiga ko'rsatiladigan inglizcha matn
-   DOM bilan ishlamaydi -> oson sinab ko'rsa bo'ladi, doskada tushuntirish oson.
+   validation.js — чистые валидаторы для формы Register
+   Каждая функция принимает одно значение и:
+     - если всё в порядке  -> "" (пустая строка)
+     - если ошибка         -> текст на английском, показываемый пользователю
+   Не работает с DOM -> легко тестировать, легко объяснить на доске.
 
-   Telefon logikasi bu yerda YO'Q: yuzlab davlat qoidasini qo'lda yozib
-   bo'lmaydi -> u alohida `phone-input.js` da (intl-tel-input kutubxonasi).
+   Логики телефона здесь НЕТ: правила сотен стран вручную не пропишешь
+   -> она отдельно в `phone-input.js` (библиотека intl-tel-input).
    ============================================================ */
 
-// Email formati. Qo'lda, lekin qat'iy:
-//  - local qism: harf/raqam/ba'zi belgilar, nuqta bilan ajratiladi
-//    (ketma-ket nuqta yoki chekka nuqta -> rad)
-//  - domen: kamida ikki "label" (masalan  example . com), oxiri >=2 harf
-//  - bo'shliq umuman yo'q
+// Формат email. Вручную, но строго:
+//  - локальная часть: буквы/цифры/некоторые символы, разделённые точкой
+//    (подряд идущие точки или точка по краям -> отклоняется)
+//  - домен: минимум два "label" (например  example . com), в конце >=2 буквы
+//  - пробелов быть не должно вообще
 const LOCAL = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+";
 const LABEL = "[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 export const EMAIL_RE = new RegExp(
@@ -21,8 +21,8 @@ export const EMAIL_RE = new RegExp(
   "i"
 );
 
-// Ism: faqat Unicode harflar, 3–10 belgi.
-// \p{L} — har qanday tildagi harf (kirill, lotin, arab ...). "u" bayrog'i shart.
+// Имя: только Unicode-буквы, 3–10 символов.
+// \p{L} — буква любого языка (кириллица, латиница, арабский ...). Флаг "u" обязателен.
 export function validateName(value) {
   const v = value.trim();
   if (!v) return "Enter your name";
@@ -31,7 +31,7 @@ export function validateName(value) {
   return "";
 }
 
-// Familiya: faqat harflar, 3–15 belgi.
+// Фамилия: только буквы, 3–15 символов.
 export function validateSurname(value) {
   const v = value.trim();
   if (!v) return "Enter your surname";
@@ -40,10 +40,10 @@ export function validateSurname(value) {
   return "";
 }
 
-// Email: kuchli FORMAT tekshiruvi.
-// MUHIM: pochta qutisi haqiqatan mavjudligini frontend BILA OLMAYDI.
-// Buni faqat backend tasdiqlash havolasi (verification link) orqali aniqlash
-// mumkin. Shu sabab bu yerda DNS yoki uchinchi tomon "email checker" API yo'q.
+// Email: строгая проверка ФОРМАТА.
+// ВАЖНО: фронтенд НЕ МОЖЕТ узнать, существует ли почтовый ящик на самом деле.
+// Это можно определить только через письмо-подтверждение (verification link) на
+// бэкенде. Поэтому здесь нет ни DNS-проверки, ни стороннего API "email checker".
 export function validateEmail(value) {
   const v = value.trim();
   if (!v) return "Enter your email";
@@ -53,9 +53,9 @@ export function validateEmail(value) {
   return "";
 }
 
-// Parol: 8–64 belgi, kamida bitta harf va bitta raqam.
-// Regex ekvivalenti: /^(?=.*\p{L})(?=.*\d).{8,64}$/u
-// Alohida tekshiramiz -> xato matni aniq bo'ladi.
+// Пароль: 8–64 символа, минимум одна буква и одна цифра.
+// Эквивалент regex: /^(?=.*\p{L})(?=.*\d).{8,64}$/u
+// Проверяем по отдельности -> текст ошибки получается точным.
 export function validatePassword(value) {
   if (value.length < 8) return "Password must be at least 8 characters";
   if (value.length > 64) return "Password must be at most 64 characters";
@@ -64,7 +64,7 @@ export function validatePassword(value) {
   return "";
 }
 
-// Parolni takrorlash: bo'sh emas va asosiy parol bilan bir xil.
+// Повтор пароля: не пустой и совпадает с основным паролем.
 export function validatePasswordConfirmation(password, confirmation) {
   if (!confirmation) return "Repeat your password";
   if (password !== confirmation) return "Passwords do not match";

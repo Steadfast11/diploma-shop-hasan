@@ -1,28 +1,28 @@
 /* ============================================================
-   pages/catalog.css — Katalog ("All products") sahifasi
-   Figma (1920px): chapda filtr paneli (chetdan 45px), o'ngda
-   sarlavha + 4 ustunli mahsulot to'ri (bosh sahifa bilan bir joyda,
-   1200px, markazda). Filtr paneli SF Pro shriftida.
+   pages/catalog.css — страница Каталога ("All products")
+   Figma (1920px): слева панель фильтра (45px от края), справа
+   заголовок + сетка товаров в 4 колонки (как на главной странице,
+   1200px, по центру). Панель фильтра — шрифт SF Pro.
    ============================================================ */
 
 .catalog {
   position: relative;
-  padding-block: 42px 76px;    /* Figma: header'dan 42, footer'dan oldin 76 */
+  padding-block: 42px 76px;    /* Figma: 42 от header, 76 перед footer */
 }
 
-/* --- o'ng qism: sarlavha + grid (bosh sahifadagi konteyner bilan bir xil) --- */
+/* --- правая часть: заголовок + grid (тот же контейнер, что на главной) --- */
 .catalog-content {
   width: min(100% - 2 * var(--gutter), var(--container));
   margin-inline: auto;
   display: flex;
   flex-direction: column;
-  gap: 32px;                   /* Figma: sarlavha -> grid */
+  gap: 32px;                   /* Figma: заголовок -> grid */
 }
 .catalog-title {
-  font-size: var(--fs-h2);     /* Figma: "All products" 40px (h1 emas, h2 o'lchami) */
+  font-size: var(--fs-h2);     /* Figma: "All products" 40px (не h1, а размер h2) */
 }
 
-/* Sarlavha + qidiruv qatori (Figma'da yo'q — biz qo'shdik) */
+/* Строка заголовка + поиска (в Figma нет — добавили сами) */
 .catalog-head {
   display: flex;
   align-items: center;
@@ -47,13 +47,13 @@
   border-color: var(--black);
 }
 
-/* Figma'da filter tugmasi va xira fon faqat mobil holatda ko'rinadi. */
+/* В Figma кнопка фильтра и затемнённый фон видны только на мобильной версии. */
 .catalog-filter-toggle,
 .filter-backdrop {
   display: none;
 }
 
-/* "Filtrni tozalash" — matn havola, Apply Filter ostida */
+/* "Очистить фильтр" — текстовая ссылка, под Apply Filter */
 .filter-clear {
   align-self: center;
   padding: 0;
@@ -70,8 +70,8 @@
   display: none;
 }
 
-/* "Ko'proq yuklash" — Figma'da yo'q, faqat pages > 1 bo'lsa ko'rinadi.
-   Uslub mos: qora pill tugma, markazda. */
+/* "Load more" — в Figma нет, видна только если pages > 1.
+   Стиль соответствующий: чёрная pill-кнопка, по центру. */
 .catalog-more {
   align-self: center;
   margin-top: 8px;
@@ -93,20 +93,20 @@
   opacity: 0.6;
 }
 
-/* --- chap qism: filtr paneli (Figma: chap bo'sh joyda, left 45px) ---
-   Ustun (.filter-col) sahifa balandligini egallaydi, panelning o'zi esa
-   uning ichida `sticky` — shuning uchun pastga scroll qilganda ekranda
-   qolib, biz bilan birga harakatlanadi. */
+/* --- левая часть: панель фильтра (Figma: в левом пустом поле, left 45px) ---
+   Колонка (.filter-col) занимает высоту страницы, а сама панель внутри
+   неё `sticky` — поэтому при скролле вниз остаётся на экране и
+   движется вместе с нами. */
 .filter-col {
   position: absolute;
   top: 42px;
-  bottom: 76px;              /* .catalog padding-block bilan bir xil */
+  bottom: 76px;              /* совпадает с .catalog padding-block */
   left: 45px;
   width: 295px;
 }
 .filter {
   position: sticky;
-  top: 24px;                 /* ekran tepasidan qoladigan bo'shliq */
+  top: 24px;                 /* отступ, который остаётся от верха экрана */
 
   display: flex;
   flex-direction: column;
@@ -116,7 +116,7 @@
   border-radius: 20px;
 
   font-family: var(--font-system); /* Figma: SF Pro Display */
-  letter-spacing: normal;          /* SF Pro'da manfiy tracking yo'q */
+  letter-spacing: normal;          /* в SF Pro отрицательного tracking нет */
 }
 
 .filter-head {
@@ -131,8 +131,8 @@
   color: #000;
 }
 
-/* Ikonka tugmasi: mobil sheet'da yopish uchun ishlaydi, desktopda esa
-   Figma'dagidek oddiy ikonka bo'lib turadi (bosilmaydi). */
+/* Кнопка-иконка: на мобильном sheet работает как закрытие, на десктопе
+   остаётся обычной иконкой, как в Figma (не кликабельна). */
 .filter-close {
   display: grid;
   place-items: center;
@@ -153,7 +153,7 @@
   gap: 20px;
 }
 
-/* kategoriya qatori — tugma (bosilganda API'ga category=<id>) */
+/* строка категории — кнопка (при клике в API уходит category=<id>) */
 .filter-row {
   display: flex;
   align-items: center;
@@ -167,41 +167,41 @@
   color: rgba(0, 0, 0, 0.6);
   cursor: pointer;
 }
-/* tanlangan kategoriya */
+/* выбранная категория */
 .filter-row[aria-pressed="true"] {
   color: #000;
   font-weight: 600;
 }
 
 .filter-chevron {
-  transform: rotate(-90deg);  /* o'ngga ishora (yopiq/tanlanmagan) */
+  transform: rotate(-90deg);  /* указывает вправо (закрыто/не выбрано) */
   transition: transform 0.2s var(--ease-soft, ease);
 }
-/* tanlangan kategoriya -> pastga ishora ("ochiq") */
+/* выбранная категория -> указывает вниз ("открыто") */
 .filter-row[aria-pressed="true"] .filter-chevron {
   transform: rotate(0deg);
 }
-/* Price sarlavhasi: ochiq -> tepaga, yopiq -> pastga */
+/* Заголовок Price: открыт -> вверх, закрыт -> вниз */
 [data-price-toggle] .filter-chevron {
   transform: rotate(0deg);
 }
 [data-price-toggle][aria-expanded="true"] .filter-chevron {
   transform: rotate(180deg);
 }
-/* yopilgan narx paneli */
+/* закрытая панель цены */
 [data-price-panel][hidden] {
   display: none;
 }
 
-/* --- narx oralig'i (ikki tutqichli slider) --- */
+/* --- диапазон цены (слайдер с двумя ползунками) --- */
 .price {
   position: relative;
   height: 44px;
 }
-/* Chiziq va yozuvlar HTML'da inputlardan KEYIN turadi -> ular ustida
-   chiziladi va tutqichning aynan o'rtasidagi bosishni "yeb" qo'yardi
-   (faqat aylananing tepasi/pasti ushlanardi). Bosishni o'tkazib
-   yuboramiz — endi aylananing istalgan nuqtasi ishlaydi. */
+/* Линия и подписи в HTML идут ПОСЛЕ input'ов -> отрисовываются поверх
+   них и "съедали" клик ровно по центру ползунка (ловился только клик по
+   верху/низу окружности). Пропускаем клики сквозь них — теперь
+   работает клик в любую точку окружности. */
 .price-track,
 .price-fill,
 .price-labels {
@@ -222,7 +222,7 @@
   height: 100%;
   background: #000;
   border-radius: 999px;
-  /* chap/kenglik JS'da hisoblanadi (keyingi bosqich) */
+  /* left/width считаются в JS (следующий этап) */
 }
 .price-input {
   position: absolute;
@@ -232,7 +232,7 @@
   height: 16px;
   margin: 0;
   background: none;
-  pointer-events: none;       /* faqat tutqich bosiladi */
+  pointer-events: none;       /* кликается только ползунок */
   -webkit-appearance: none;
   appearance: none;
 }
@@ -265,11 +265,11 @@
   color: #000;
 }
 
-/* --- Apply Filter tugmasi --- */
+/* --- кнопка Apply Filter --- */
 .filter-apply {
   height: 48px;
   border: 0;
-  border-radius: 62px;        /* Figma: to'liq yumaloq */
+  border-radius: 62px;        /* Figma: полностью скруглённая */
   background: var(--black);
   color: var(--white);
   font: inherit;
@@ -280,21 +280,21 @@
 /* ============================================================
    RESPONSIVE
 
-   Figma faqat 1920px frame beradi. O'sha kenglikda kontent 1200px
-   markazda (bosh sahifa bilan bir xil), filtr paneli esa chap
-   bo'sh joyda (chetdan 45px). Bu joylashuv FAQAT chap margin filtr
-   sig'adigan darajada keng bo'lganda ishlaydi:
-     margin = (100vw - 1200) / 2  >=  filtr eni + oraliq
-     -> amalda brauzer viewporti taxminan 1880px yoki undan keng
+   Figma даёт только фрейм 1920px. При этой ширине контент 1200px
+   по центру (как на главной странице), а панель фильтра — в левом
+   пустом поле (45px от края). Такая раскладка работает, ТОЛЬКО пока
+   левое поле достаточно широкое, чтобы вместить фильтр:
+     margin = (100vw - 1200) / 2  >=  ширина фильтра + отступ
+     -> на практике ширина окна браузера примерно от 1880px
 
-   Shuning uchun keng desktopda absolyut filtr (Figma), undan kichik
-   ekranda esa ikkita haqiqiy ustun: [filtr] [kontent]. 1919px emas:
-   brauzer ramkasi sabab oddiy desktop oynasi 1920px'dan bir oz kichik
-   bo'ladi, lekin Figma'dagi 4 ta karta uchun joy hali ham yetadi.
+   Поэтому на широком десктопе — абсолютно позиционированный фильтр
+   (Figma), на экране уже — две настоящие колонки: [фильтр] [контент].
+   Не 1919px: из-за рамки браузера обычное окно десктопа чуть меньше
+   1920px, но места для 4 карточек из Figma всё ещё хватает.
    ============================================================ */
 @media (max-width: 1879px) {
   .catalog {
-    /* endi butun blok markazda; filtr absolyut emas, grid ustuni */
+    /* теперь весь блок по центру; фильтр не абсолютный, а колонка grid */
     width: min(100% - 2 * var(--gutter), var(--container));
     margin-inline: auto;
     display: grid;
@@ -303,28 +303,28 @@
     align-items: start;
   }
   .filter-col {
-    position: static;         /* endi u oddiy grid ustuni */
+    position: static;         /* теперь это обычная колонка grid */
     width: auto;
-    align-self: stretch;      /* qatorning to'liq balandligi -> sticky yura oladi */
+    align-self: stretch;      /* полная высота строки -> sticky может "ходить" */
   }
   .catalog-content {
-    width: auto;         /* grid ustuni kengligini oladi */
+    width: auto;         /* берёт ширину колонки grid */
     margin-inline: 0;
-    min-width: 0;         /* grid bolasi cho'zilib ketmasin */
+    min-width: 0;         /* чтобы дочерний элемент grid не растягивался */
   }
   .product-grid {
-    grid-template-columns: repeat(3, 1fr); /* joy kamaydi -> 3 ustun */
+    grid-template-columns: repeat(3, 1fr); /* места меньше -> 3 колонки */
   }
 }
 
-/* Kichik noutbuk/planshet — filtr yonida qoladi, mahsulotlar 2 ustun */
+/* Небольшой ноутбук/планшет — фильтр остаётся сбоку, товары в 2 колонки */
 @media (max-width: 1100px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Mobil — Figma: 2 ustunli grid va ikonka orqali ochiladigan filter modal. */
+/* Мобильная версия — Figma: сетка в 2 колонки и модальный фильтр, открываемый через иконку. */
 @media (max-width: 768px) {
   .catalog {
     display: block;
@@ -375,8 +375,8 @@
     visibility: hidden;
     transition: opacity 0.3s var(--ease-soft, ease), visibility 0.3s;
   }
-  /* Figma: filtr pastdan ko'tariladigan "sheet" — ekran tubiga yopishgan,
-     to'liq kenglikda, faqat tepa burchaklari yumaloq. */
+  /* Figma: фильтр — "sheet", поднимающийся снизу — прижат к низу экрана,
+     на всю ширину, скруглены только верхние углы. */
   .filter {
     position: fixed;
     z-index: 91;
@@ -391,7 +391,7 @@
     border: 0;
     border-radius: 20px 20px 0 0;
     background: var(--white);
-    transform: translateY(100%);   /* yopiq holat: ekran ostida */
+    transform: translateY(100%);   /* закрытое состояние: под экраном */
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -411,14 +411,14 @@
     transform: translateY(0);
   }
 
-  /* Sheet tepasidagi filtr ikonkasi = yopish tugmasi (Figma). */
+  /* Иконка фильтра сверху sheet = кнопка закрытия (Figma). */
   .filter-close {
     pointer-events: auto;
     cursor: pointer;
   }
 }
 
-/* Juda tor telefon — matn siqilib qolmasligi uchun 1 ustun. */
+/* Очень узкий телефон — 1 колонка, чтобы текст не сжимался. */
 @media (max-width: 320px) {
   .product-grid {
     grid-template-columns: 1fr;

@@ -1,80 +1,80 @@
-# Sandbox Shop API — qisqa ma'lumotnoma (o'zbekcha)
+# Sandbox Shop API — краткий справочник (на русском)
 
-Manba: `Sandbox_Shop_API_—_документация_для_студентов.docx`
+Источник: `Sandbox_Shop_API_—_документация_для_студентов.docx`
 Base URL: **https://api.wepro.uz/sandbox-shop**
 
-## Umumiy
-- Xato formati: `{ "message": "..." }` + to'g'ri HTTP status
-- Narxlar — USD. Buyurtma jamini **server** hisoblaydi.
-- Limit: **120 so'rov/daqiqa/IP** (cheksiz fetch sikli -> 429). Ro'yxatdan o'tish: 20/soat/IP.
-- O'quv qumdoni: **haqiqiy parol ishlatmang**. Talaba ma'lumoti 45 kundan keyin o'chadi.
-- Izohlar va buyurtma hisoblagichlari — hamma talabalar uchun umumiy ("jonli" do'kon).
+## Общее
+- Формат ошибки: `{ "message": "..." }` + правильный HTTP-статус
+- Цены — в USD. Итог заказа считает **сервер**.
+- Лимит: **120 запросов/минуту/IP** (бесконечный цикл fetch -> 429). Регистрация: 20/час/IP.
+- Учебная песочница: **не используйте настоящий пароль**. Данные студента удаляются через 45 дней.
+- Отзывы и счётчики заказов — общие для всех студентов ("живой" магазин).
 
-## Avtorizatsiya
+## Авторизация
 - `POST /register {name,surname,phone,email,password}` -> `{message, token, user}` (201)
 - `POST /login {email,password}` -> `{message, token, user}` (200)
-- Privat so'rovlarda sarlavha: `Authorization: Bearer <token>`
-- Token **14 kun** yashaydi. `POST /logout` -> eski tokenlar o'ladi (401 -> qayta login).
-- `GET /me` -> `{message, user}` (parolsiz profil)
+- В приватных запросах заголовок: `Authorization: Bearer <token>`
+- Токен живёт **14 дней**. `POST /logout` -> старые токены становятся недействительны (401 -> повторный вход).
+- `GET /me` -> `{message, user}` (профиль без пароля)
 
-### register maydonlari
-| Maydon | Talab |
+### Поля register
+| Поле | Требование |
 |---|---|
-| name | 1–50 belgi |
-| surname | 1–50 belgi |
-| phone | faqat raqam 9–15 ta (bo'shliq, `()`, `-`, `+` tashlab yuboriladi) |
-| email | noyob, kichik registrga o'tkaziladi |
-| password | 4–64 belgi (haqiqiysini emas!) |
+| name | 1–50 символов |
+| surname | 1–50 символов |
+| phone | только цифры, 9–15 шт. (пробел, `()`, `-`, `+` отбрасываются) |
+| email | уникальный, приводится к нижнему регистру |
+| password | 4–64 символа (не настоящий!) |
 
-Xatolar: 400 (maydonlar), 409 (email band), 429 (soatiga 20 dan ko'p).
+Ошибки: 400 (поля), 409 (email занят), 429 (больше 20 в час).
 
-## Katalog (token kerak emas)
+## Каталог (токен не нужен)
 - `GET /products?category=&minPrice=&maxPrice=&page=&limit=`
-  - `limit` default 12, max 50; `page` default 1
-  - javob: `{ total, page, pages, products: [...] }`
-  - mahsulot: `{ _id, title, price, image, categoryId, ordersCount, commentsCount, createdAt }`
-- `GET /products/newest?limit=8` (max 20) -> `{ count, products }`
-- `GET /products/bestsellers?limit=8` -> `{ count, products }` (ordersCount bo'yicha)
-- `GET /products/:id` -> `{ product }` + `comments: [{ _id, author, text, at }]`; 404 topilmasa
+  - `limit` по умолчанию 12, максимум 50; `page` по умолчанию 1
+  - ответ: `{ total, page, pages, products: [...] }`
+  - товар: `{ _id, title, price, image, categoryId, ordersCount, commentsCount, createdAt }`
+- `GET /products/newest?limit=8` (максимум 20) -> `{ count, products }`
+- `GET /products/bestsellers?limit=8` -> `{ count, products }` (по ordersCount)
+- `GET /products/:id` -> `{ product }` + `comments: [{ _id, author, text, at }]`; 404 если не найдено
 - `GET /categories` -> `{ count, categories: [{ _id, title, image, productsCount }] }`
 - `GET /categories/:id/products` -> `{ category, count, products }`
 
-> Hujjatда mahsulotning `description`, bir nechta rasm yoki variant maydonlari
-> yozilmagan. O'qituvchilar katalogni to'ldirгач aniqlaymiz.
+> В документации не описаны поля `description` товара, несколько изображений или
+> варианты. Уточним после того, как преподаватели заполнят каталог.
 
-## Savat (token kerak)
-Barcha javoblar bir xil shaklda:
+## Корзина (нужен токен)
+Все ответы в одинаковом виде:
 `{ items: [{ productId, title, price, image, qty, sum }], total }`
 
 - `GET /cart`
-- `POST /cart {productId, qty}` — qty butun 1–20 (default 1). Bor mahsulotга qo'shilsa —
-  yig'iladi (shift 20). Maksimum **20 xil pozitsiya**. Xatolar: 404 / 400 / 409 (to'la).
-- `PATCH /cart/:productId {qty}` — yangi miqdor 1–20. O'chirish uchun `qty:0` EMAS, `DELETE`.
-- `DELETE /cart/:productId` — pozitsiyani olib tashlash
-- `DELETE /cart` — savatni tozalash
+- `POST /cart {productId, qty}` — qty целое 1–20 (по умолчанию 1). Если товар уже есть —
+  суммируется (лимит 20). Максимум **20 разных позиций**. Ошибки: 404 / 400 / 409 (заполнено).
+- `PATCH /cart/:productId {qty}` — новое количество 1–20. Для удаления НЕ `qty:0`, а `DELETE`.
+- `DELETE /cart/:productId` — убрать позицию
+- `DELETE /cart` — очистить корзину
 
-## Buyurtma (token kerak)
-- `POST /orders` — **tanasi yo'q**. Butun joriy savatdan yig'iladi:
-  - nomlar va narxlar buyurtmaga "snapshot" bo'lib ko'chiriladi
-  - jamini server hisoblaydi
-  - savat tozalanadi
-  - har mahsulotning `ordersCount` oshadi
-  - javob 201: `{ message, order: { _id, items, total, createdAt } }`; 400 — savat bo'sh
-- `GET /orders` -> `{ count, orders }` — faqat meniki, yangi birinchi
+## Заказ (нужен токен)
+- `POST /orders` — **без тела**. Собирается из всей текущей корзины:
+  - названия и цены копируются ("снимок") в заказ
+  - итог считает сервер
+  - корзина очищается
+  - у каждого товара увеличивается `ordersCount`
+  - ответ 201: `{ message, order: { _id, items, total, createdAt } }`; 400 — корзина пуста
+- `GET /orders` -> `{ count, orders }` — только свои, новые сначала
 
-## Izohlar (token kerak)
-- `POST /products/:id/comments {text}` — 2–300 belgi; bitta mahsulotга bir foydalanuvchidan
-  **3 tadan ko'p emas** (409). Muallif profildan olinadi. Javob 201: `{ message, comment }`.
-- `DELETE /products/:id/comments/:commentId` — faqat o'ziniki (aks holda 403)
+## Отзывы (нужен токен)
+- `POST /products/:id/comments {text}` — 2–300 символов; от одного пользователя на один товар
+  **не более 3** (409). Автор берётся из профиля. Ответ 201: `{ message, comment }`.
+- `DELETE /products/:id/comments/:commentId` — только свой (иначе 403)
 
-## HTTP kodlar
-| Kod | Qachon |
+## HTTP-коды
+| Код | Когда |
 |---|---|
-| 200 | O'qish/o'zgartirish/kirish muvaffaqiyatli |
-| 201 | Yaratildi: akkaunt, savat pozitsiyasi, buyurtma, izoh |
-| 400 | So'rov ma'lumotида xato — `message` ni o'qi |
-| 401 | Token yo'q / muddati tugagan / logout qilingan |
-| 403 | Begona obyekt (masalan birovning izohi) |
-| 404 | Topilmadi |
-| 409 | Konflikt: email band, savat/izoh limiti |
-| 429 | Juda ko'p so'rov — sekinlash |
+| 200 | Чтение/изменение/вход прошли успешно |
+| 201 | Создано: аккаунт, позиция корзины, заказ, отзыв |
+| 400 | Ошибка в данных запроса — читай `message` |
+| 401 | Нет токена / истёк / выполнен logout |
+| 403 | Чужой объект (например чужой отзыв) |
+| 404 | Не найдено |
+| 409 | Конфликт: email занят, лимит корзины/отзывов |
+| 429 | Слишком много запросов — сбавь темп |

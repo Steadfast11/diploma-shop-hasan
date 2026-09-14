@@ -1,36 +1,36 @@
-# Figma node ID'lari
+# ID узлов Figma
 
-Fayl (Hasan'ning drafts nusxasi): `tQe7tz6QJxpblTga2hN1TU`
-Barcha ekran bitta canvas (`0:1` "Pages") ustida yonma-yon frame.
+Файл (копия черновика Хасана): `tQe7tz6QJxpblTga2hN1TU`
+Все экраны — фреймы рядом на одном canvas (`0:1` "Pages").
 
-## Desktop frame'lar (TASDIQLANGAN)
+## Фреймы для десктопа (ПОДТВЕРЖДЕНО)
 
-| node | ekran |
+| node | экран |
 |------|-------|
-| `1:346` | Bosh sahifa |
-| `2:3321` | Katalog — "All products" + filtr paneli |
-| ~~`2:8034`~~ | ~~Kategoriya~~ — o'qituvchi Figma'dan OLIB TASHLADI |
-| `2:5782` | Savat — mahsulotlar bilan ("Your bag" + "Order Summary") |
-| `2:6680` | Savat — bo'sh ("No products in your bag") |
-| `2:7339` | Mahsulot sahifasi (asosiy) |
-| `10:10795` | Mahsulot + "Leave a comment" modal ochiq |
-| `15:1020` | Mahsulot + "Thank you!" modal ochiq |
-| `2:8876` | Kirish (Log In) |
-| `10:9291` | Ro'yxatdan o'tish (Register) |
-| `10:9527` | Profil ("My Profile" + "My orders") |
+| `1:346` | Главная страница |
+| `2:3321` | Каталог — "All products" + панель фильтра |
+| ~~`2:8034`~~ | ~~Категория~~ — преподаватель УБРАЛ из Figma |
+| `2:5782` | Корзина — с товарами ("Your bag" + "Order Summary") |
+| `2:6680` | Корзина — пустая ("No products in your bag") |
+| `2:7339` | Страница товара (основная) |
+| `10:10795` | Товар + открыт модал "Leave a comment" |
+| `15:1020` | Товар + открыт модал "Thank you!" |
+| `2:8876` | Вход (Log In) |
+| `10:9291` | Регистрация (Register) |
+| `10:9527` | Профиль ("My Profile" + "My orders") |
 
-## Mobil frame'lar
+## Мобильные фреймы
 
-| node | ekran |
+| node | экран |
 |------|-------|
-| `1:523` | Bosh sahifa (mobil) |
-| `2:3452` | Katalog (mobil) |
-| ~~`2:8153`~~ | ~~Kategoriya (mobil)~~ — olib tashlandi |
-| `2:6495` | Savat (mobil) |
-| `2:7647` | Mahsulot (mobil) |
-| `10:9165` | Kirish (mobil) |
-| `10:9457` | Ro'yxat (mobil) |
-| `10:9876` | Create account (mobil) |
-| `2:6753` | mobil aralash (bir nechta ekran ustma-ust) |
+| `1:523` | Главная страница (мобильная) |
+| `2:3452` | Каталог (мобильный) |
+| ~~`2:8153`~~ | ~~Категория (мобильная)~~ — убрано |
+| `2:6495` | Корзина (мобильная) |
+| `2:7647` | Товар (мобильный) |
+| `10:9165` | Вход (мобильный) |
+| `10:9457` | Регистрация (мобильная) |
+| `10:9876` | Create account (мобильный) |
+| `2:6753` | смешанный мобильный (несколько экранов друг на друге) |
 
-Har frame'ni `get_design_context(nodeId, fileKey)` bilan olamiz.
+Каждый фрейм получаем через `get_design_context(nodeId, fileKey)`.

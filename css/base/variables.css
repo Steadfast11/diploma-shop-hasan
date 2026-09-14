@@ -1,68 +1,68 @@
 /* ============================================================
-   variables.css — dizayn tokenlari. BITTA MANBA.
-   Qiymatlar Figma "Diploma Project 2026" faylidan olingan.
+   variables.css — токены дизайна. ЕДИНЫЙ ИСТОЧНИК.
+   Значения взяты из файла Figma "Diploma Project 2026".
 
-   Figma text style'lari (hammasi Inter Medium 500, line-height 1,
+   Текстовые стили Figma (все Inter Medium 500, line-height 1,
    letter-spacing -6% = -0.06em):
      Text-Base / Sub-Heading : 16px
      Heading 2               : 40px
      Heading 1               : 56px
    ============================================================ */
 :root {
-  /* ---------- SHRIFT ---------- */
+  /* ---------- ШРИФТ ---------- */
   --font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  /* Figma katalog filtri SF Pro Display'da chizilgan (UI-kit qoldig'i).
-     -apple-system Mac'da aynan SF Pro'ni beradi. */
+  /* Фильтр каталога в Figma нарисован в SF Pro Display (остаток от UI-kit).
+     -apple-system на Mac даёт именно SF Pro. */
   --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --fw-medium: 500;             /* butun loyiha shu og'irlikda */
-  --letter-spacing: -0.06em;    /* Figma: barcha matn -6% */
+  --fw-medium: 500;             /* весь проект использует этот вес */
+  --letter-spacing: -0.06em;    /* Figma: весь текст -6% */
   --line-height: 1;             /* Figma: leading-none */
 
-  --fs-base: 16px;             /* oddiy matn, sarlavhacha, tugma, nav */
-  --fs-h2: 40px;               /* seksiya sarlavhasi ("Best sellers") */
-  --fs-h1: 56px;               /* hero sarlavhasi */
+  --fs-base: 16px;             /* обычный текст, подзаголовок, кнопка, nav */
+  --fs-h2: 40px;               /* заголовок секции ("Best sellers") */
+  --fs-h1: 56px;               /* заголовок hero */
 
-  /* ---------- RANGLAR (Figma o'zgaruvchilari) ---------- */
+  /* ---------- ЦВЕТА (переменные Figma) ---------- */
   --white: #ffffff;
-  --black: #000000;            /* matn, header ostidagi chiziq */
-  --gray-2: #e3e3e3;           /* footer tepasidagi chiziq */
-  --gray-3: #999999;           /* kulrang matn (footer sarlavhalar, © , legal) */
+  --black: #000000;            /* текст, линия под header */
+  --gray-2: #e3e3e3;           /* линия над footer */
+  --gray-3: #999999;           /* серый текст (заголовки footer, ©, legal) */
 
-  /* Semantik nomlar (kod o'qilishi uchun) */
+  /* Семантические имена (для читаемости кода) */
   --color-bg: var(--white);
   --color-text: var(--black);
   --color-text-muted: var(--gray-3);
   --color-line: var(--black);        /* header */
   --color-line-soft: var(--gray-2);  /* footer */
 
-  /* qora ustidagi matn (Order Summary kartasi — keyin tekshiramiz) */
+  /* текст на чёрном фоне (карточка Order Summary — проверим позже) */
   --color-invert: var(--black);
   --color-on-invert: var(--white);
 
-  /* holat ranglari */
-  --color-surface: #f0f0f0;    /* Figma: qty pill / bo'sh quti foni */
-  --color-danger: #ff3333;     /* Figma: #f33 — trash, chegirma matni */
-  --color-success: #37b24d;    /* Figma: tekshir (izoh ✓) */
+  /* цвета состояний */
+  --color-surface: #f0f0f0;    /* Figma: фон pill количества / пустого блока */
+  --color-danger: #ff3333;     /* Figma: #f33 — корзина, текст скидки */
+  --color-success: #37b24d;    /* Figma: галочка (отзыв ✓) */
 
-  /* qora karta (Order Summary) ustidagi ranglar */
+  /* цвета на тёмной карточке (Order Summary) */
   --on-dark-muted: rgba(255, 255, 255, 0.6);
   --on-dark-line: rgba(255, 255, 255, 0.1);
 
   /* ---------- LAYOUT ---------- */
-  --container: 1200px;         /* ТЗ + Figma: ichki kontent 1200px */
-  --gutter: 24px;             /* Figma: mobil px-24 */
-  --header-pad-x: 60px;        /* Figma: header 1920px'da chetdan 60px (3.13%) */
-  --header-h: 69px;            /* Figma: header balandligi */
+  --container: 1200px;         /* ТЗ + Figma: внутренний контент 1200px */
+  --gutter: 24px;             /* Figma: мобильный px-24 */
+  --header-pad-x: 60px;        /* Figma: header при 1920px отступ от края 60px (3.13%) */
+  --header-h: 69px;            /* Figma: высота header */
 
-  /* ---------- RADIUS ---------- */
-  --radius: 8px;              /* Figma: rasm / tugma / karta — hammasi 8px */
+  /* ---------- РАДИУС ---------- */
+  --radius: 8px;              /* Figma: изображение / кнопка / карточка — везде 8px */
 
-  /* ---------- ORALIQLAR (Figma: ~8px shkala) ---------- */
+  /* ---------- ОТСТУПЫ (Figma: шкала ~8px) ---------- */
   --space-8: 8px;
   --space-16: 16px;
   --space-24: 24px;
   --space-32: 32px;
   --space-40: 40px;
   --space-56: 56px;
-  --space-72: 72px;   /* seksiya sarlavha -> kontent oralig'i */
+  --space-72: 72px;   /* отступ между заголовком секции и контентом */
 }

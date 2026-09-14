@@ -16,12 +16,12 @@
   <meta name="theme-color" content="#000000" />
   <meta name="robots" content="noindex, nofollow" />
 
-  <!-- API — barcha ma'lumot shu yerdan keladi. Ulanishni oldindan
-       ochib qo'yamiz (DNS + TLS), shunda birinchi so'rov tezroq ketadi. -->
+  <!-- API — отсюда приходят все данные. Устанавливаем соединение заранее
+       (DNS + TLS), чтобы первый запрос прошёл быстрее. -->
   <link rel="preconnect" href="https://api.wepro.uz" crossorigin />
 
-  <!-- Inter shrifti LOYIHA ICHIDA (css/base/fonts.css). Sahifadagi matn lotin
-       bo'lgani uchun brauzer faqat "latin" bo'lagini yuklaydi. -->
+  <!-- Шрифт Inter ВНУТРИ ПРОЕКТА (css/base/fonts.css). Текст на странице
+       латиница, поэтому браузер загружает только блок "latin". -->
   <link rel="preload" as="font" type="font/woff2"
         href="/assets/fonts/inter-latin.woff2" crossorigin />
   <link rel="stylesheet" href="../css/base/fonts.css" />

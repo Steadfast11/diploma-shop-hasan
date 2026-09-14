@@ -1,15 +1,15 @@
 /* ============================================================
-   pages/register.js — Ro'yxatdan o'tish (inline validatsiya)
+   pages/register.js — Регистрация (встроенная валидация)
 
-   Tekshiruv mantig'i bu faylда EMAS — u sodda funksiyalarga bo'lingan:
+   Логика проверки НЕ в этом файле — она разбита на простые функции:
      js/core/validation.js   — name / surname / email / password / confirm
-     js/effects/phone-input.js  — telefon (intl-tel-input, barcha davlatlar)
-   Bu fayl faqat "ulaydi": qachon tekshirish, xatoni qayerga ko'rsatish,
-   valid bo'lса API'ga yuborish.
+     js/effects/phone-input.js  — телефон (intl-tel-input, все страны)
+   Этот файл только "соединяет": когда проверять, куда показывать ошибку,
+   и если всё валидно — отправляет в API.
 
-   API qoidalari (docs/api-reference.md) yumshoqroq (name 1–50 ...), lekin
-   biz qat'iyroq UX qoidalarini qo'llaymiz. Server baribir oxirgi hakam:
-   uning xatosi (masalan 409 — email band) tegishli maydonga bog'lanadi.
+   Правила API (docs/api-reference.md) мягче (name 1–50 ...), но мы
+   применяем более строгие UX-правила. Сервер всё равно последний судья:
+   его ошибка (например 409 — email занят) привязывается к нужному полю.
    ============================================================ */
 
 import { initLayout } from "../components.js";
@@ -28,23 +28,23 @@ import { playOnce } from "../ui.js";
 initLayout();
 
 const form = document.querySelector("[data-register-form]");
-const formError = form.querySelector("[data-error]"); // umumiy / server xatosi
+const formError = form.querySelector("[data-error]"); // общая ошибка / ошибка сервера
 const submitBtn = form.querySelector(".auth-submit");
 
-// next: kirilgach qayerga qaytish (login/register orasida ham uzatamiz)
+// next: куда вернуться после входа (передаём и между login/register)
 const nextUrl = safeNext(new URLSearchParams(location.search).get("next"));
 const loginLink = document.querySelector(".auth-alt a");
 loginLink.href = "/pages/login.html?next=" + encodeURIComponent(nextUrl);
 
-// Telefon maydoni: kutubxona bilan o'raladi. Foydalanuvchi yozа boshlаsa,
-// mavjud telefon xatosini tozalaymiz (pastdagi umumiy qoidага mos).
+// Поле телефона: оборачивается библиотекой. Когда пользователь начинает
+// печатать, убираем текущую ошибку телефона (по тому же общему правилу ниже).
 const phone = createPhoneInput(form.phone, () => {
   if (form.phone.getAttribute("aria-invalid") === "true") clearFieldError("phone");
 });
 
 const FIELDS = ["name", "surname", "email", "phone", "password", "password2"];
 
-/* ---------- xato matnini ekranga qo'yish / olib tashlash ---------- */
+/* ---------- показать / убрать текст ошибки на экране ---------- */
 
 function fieldParts(name) {
   return {
@@ -55,7 +55,7 @@ function fieldParts(name) {
 
 function showFieldError(name, message) {
   const { input, errEl } = fieldParts(name);
-  input.setAttribute("aria-invalid", "true"); // skrinrider "noto'g'ri" deб o'qiydi
+  input.setAttribute("aria-invalid", "true"); // скринридер прочитает как "неверно"
   errEl.textContent = message;
   errEl.hidden = false;
 }
@@ -67,8 +67,8 @@ function clearFieldError(name) {
   errEl.hidden = true;
 }
 
-/* ---------- bitta maydonni tekshirish ---------- */
-// Xato matnini qaytaradi ("" — joyida). Yon ta'siri: ekranni yangilaydi.
+/* ---------- проверка одного поля ---------- */
+// Возвращает текст ошибки ("" — всё в порядке). Побочный эффект: обновляет экран.
 function checkField(name) {
   let message = "";
   if (name === "name") message = validateName(form.name.value);
@@ -84,7 +84,7 @@ function checkField(name) {
   return message;
 }
 
-// Hammasini tekshiradi. Birinchi xato maydon nomini qaytaradi (yoki null).
+// Проверяет всё. Возвращает имя первого невалидного поля (или null).
 function validateForm() {
   let firstInvalid = null;
   for (const name of FIELDS) {
@@ -94,57 +94,57 @@ function validateForm() {
   return firstInvalid;
 }
 
-/* ---------- qachon tekshiramiz ---------- */
+/* ---------- когда проверяем ---------- */
 for (const name of FIELDS) {
   const input = form[name];
-  // maydondan chiqqanда (blur) — o'sha maydonni tekshir
+  // при уходе с поля (blur) — проверить это поле
   input.addEventListener("blur", () => checkField(name));
-  // tuzatishni boshlаsa — faqat mavjud xato bo'lса qayta baholaymiz
+  // если начал исправлять — перепроверяем, только если ошибка уже была
   input.addEventListener("input", () => {
     if (input.getAttribute("aria-invalid") === "true") checkField(name);
   });
 }
-// asosiy parol o'zgarса, "takrorlash" maydoni ham qayta tekshirilsin
+// если меняется основной пароль, поле "повтор" тоже перепроверяется
 form.password.addEventListener("input", () => {
   if (form.password2.getAttribute("aria-invalid") === "true") checkField("password2");
 });
 
-/* ---------- yuborish ---------- */
+/* ---------- отправка ---------- */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   formError.hidden = true;
   formError.textContent = "";
 
-  // telefon kutubxonasi (uzunlik ma'lumotlari) to'liq yuklangunча kutamiz,
-  // shunda isValidNumber() ishonchli javob beradi
+  // ждём, пока библиотека телефона (данные о длине) полностью загрузится,
+  // чтобы isValidNumber() давала достоверный ответ
   try {
     await phone.ready;
   } catch {
-    /* utils yuklanmasa ham davom etamiz — server baribir tekshiradi */
+    /* если utils не загрузился, всё равно продолжаем — сервер в любом случае проверит */
   }
 
   const firstInvalid = validateForm();
   if (firstInvalid) {
     const input = form[firstInvalid];
-    input.focus(); // birinchi noto'g'ri maydonga fokus
-    playOnce(input, "is-shake"); // va yengil silkinadi -> ko'zga tashlanadi
-    return; // valid bo'lmaguncha API'ga so'rov YO'Q
+    input.focus(); // фокус на первое неверное поле
+    playOnce(input, "is-shake"); // и лёгкая тряска -> бросается в глаза
+    return; // пока не валидно — запроса к API НЕТ
   }
 
-  submitBtn.disabled = true; // ikki marta bosishdan himoya
+  submitBtn.disabled = true; // защита от двойного клика
   try {
     await doRegister({
       name: form.name.value.trim(),
       surname: form.surname.value.trim(),
       email: form.email.value.trim(),
-      phone: phone.getE164(), // E.164, masalan +998901234567
+      phone: phone.getE164(), // E.164, например +998901234567
       password: form.password.value,
     });
     await mergeGuestCartIntoAccount();
     location.href = nextUrl;
   } catch (err) {
     submitBtn.disabled = false;
-    // 409 — email allaqachon ro'yxatdan o'tган: xatoni Email maydoniga bog'laymiz
+    // 409 — email уже зарегистрирован: привязываем ошибку к полю Email
     if (err.status === 409 || /email/i.test(err.message || "")) {
       showFieldError("email", "This email is already registered");
       form.email.focus();

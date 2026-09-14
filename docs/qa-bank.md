@@ -1,219 +1,219 @@
-# Savol-javob banki (40 daqiqalik himoyaga tayyorgarlik)
+# Банк вопросов-ответов (подготовка к 40-минутной защите)
 
-O'qituvchi xohlagan fayl/qatordan so'raydi. Har mavzu: **savol → qisqa javob**.
+Преподаватель спросит из любого файла/строки. Каждая тема: **вопрос → краткий ответ**.
 
 ---
 
-## HTML / tuzilish
+## HTML / структура
 
-**`index.html` ildizda, qolganlari `pages/` da — nega?**
-Bosh sahifa saytning "kirish nuqtasi" (`/`). Qolgan sahifalar `pages/` da guruhlangan.
-Shuning uchun `pages/*.html` dagi nisbiy yo'llar `../css/...`.
+**`index.html` в корне, остальные в `pages/` — почему?**
+Главная страница — "точка входа" сайта (`/`). Остальные страницы сгруппированы в `pages/`.
+Поэтому относительные пути в `pages/*.html` — `../css/...`.
 
-**`<script type="module">` — oddiy `<script>` dan farqi?**
-`module`: `import`/`export` ishlaydi, o'z scope'i bor (global o'zgaruvchi hosil qilmaydi),
-avtomatik `defer` (HTML tayyor bo'lgach ishlaydi), `"use strict"`.
+**Чем `<script type="module">` отличается от обычного `<script>`?**
+`module`: работает `import`/`export`, есть своя область видимости (не создаёт глобальную переменную),
+автоматический `defer` (выполняется после готовности HTML), `"use strict"`.
 
-**`<div id="header">` bo'sh — kim to'ldiradi?**
-`js/components.js` `fetch("/components/header.html?v=1")` qilib, javob matnini
-`div.innerHTML` ga qo'yadi. Header 7 marta yozilmaydi — 1 marta `components/` da.
+**`<div id="header">` пустой — кто заполняет?**
+`js/components.js` делает `fetch("/components/header.html?v=1")` и вставляет ответ
+в `div.innerHTML`. Header не пишется 7 раз — 1 раз в `components/`.
 
-**`data-*` va `id` farqi? Nega `data-cart-count`?**
-`id` sahifada YAGONA bo'lishi kerak. `data-*` — JS uchun erkin "belgi", takrorlanishi mumkin.
-`data-cart-count` — JS shu `<span>` ni topib son yozadi.
+**Разница между `data-*` и `id`? Почему `data-cart-count`?**
+`id` должен быть ЕДИНСТВЕННЫМ на странице. `data-*` — свободная "метка" для JS, может повторяться.
+`data-cart-count` — по нему JS находит этот `<span>` и записывает число.
 
-**`aria-label` nega bor?**
-Sahifada 2 ta `<nav>` — screen reader ularni ajrata olsin ("Asosiy menyu" / "Akkaunt menyusi").
+**Зачем нужен `aria-label`?**
+На странице два `<nav>` — чтобы screen reader мог их различить ("Main menu" / "Account menu").
 
 ---
 
 ## CSS
 
-**`.container` markazlashuvi qanday ishlaydi?**
-`width: min(100% - 48px, 1200px)` + `margin-inline: auto`. `auto` — ortiqcha bo'sh joyni
-chap/o'ng teng bo'ladi → markaz. `min()` → katta ekranda 1200px, kichikda `100% - 48px`.
+**Как работает центрирование `.container`?**
+`width: min(100% - 48px, 1200px)` + `margin-inline: auto`. `auto` — лишнее свободное место
+поровну слева/справа → центр. `min()` → на большом экране 1200px, на маленьком `100% - 48px`.
 
-**Nega `min()`, oddiy `max-width` emas?**
-`max-width: 1200px` + `padding: 24px` → desktop'da kontent 1152px chiqadi (padding ichkarida).
-`min()` bilan desktop'da AYNAN 1200px (Figma talabi).
+**Почему `min()`, а не обычный `max-width`?**
+`max-width: 1200px` + `padding: 24px` → на десктопе контент получится 1152px (padding внутри).
+С `min()` на десктопе РОВНО 1200px (требование Figma).
 
-**CSS o'zgaruvchisi (`--color-*`) nega `:root` da?**
-`:root` = `<html>`, eng yuqori element. O'zgaruvchi meros bo'yicha pastga tarqaladi →
-hamma element ko'radi. Rang o'zgarsa — bitta qator.
+**Почему CSS-переменная (`--color-*`) в `:root`?**
+`:root` = `<html>`, самый верхний элемент. Переменная распространяется вниз по наследованию →
+её видят все элементы. Если цвет меняется — одна строка.
 
-**`box-sizing: border-box` nima beradi?**
-`width` ichiga `padding` va `border` kiradi. `width: 282px` desak — aynan 282px,
-grid buzilmaydi.
+**Что даёт `box-sizing: border-box`?**
+`padding` и `border` входят внутрь `width`. Если написать `width: 282px` — будет ровно 282px,
+grid не ломается.
 
-**`reset.css` nima uchun?**
-Brauzerlar (Chrome/Safari/FF) default `margin`, `font-size` beradi — har xil.
-Reset ularni tenglaydi → toza asos, har piksel bizniki (pixel-perfect).
+**Зачем нужен `reset.css`?**
+Браузеры (Chrome/Safari/FF) задают разные `margin`, `font-size` по умолчанию.
+Reset их выравнивает → чистая основа, каждый пиксель наш (pixel-perfect).
 
-**Nega ba'zi joyda SF Pro, ba'zi joyda Inter?**
-Figma shunday chizilgan (dizayner UI-kit aralashtirgan). Filtr paneli, Order Summary,
-mahsulot sahifasi — SF Pro (`--font-system`, Mac'da `-apple-system`). Qolgani — Inter.
+**Почему местами SF Pro, местами Inter?**
+Так нарисовано в Figma (дизайнер смешал UI-kit). Панель фильтра, Order Summary,
+страница товара — SF Pro (`--font-system`, на Mac `-apple-system`). Остальное — Inter.
 
-**Breakpoint qiymatlari qayerdan?**
-768px — mobil (Figma mobil frame 390px), 900/1024/560 — grid ustunlarini kamaytirish uchun
-oraliq nuqtalar (kontent siqilib qolmasin).
+**Откуда значения breakpoint'ов?**
+768px — мобильная версия (мобильный фрейм Figma 390px), 900/1024/560 — промежуточные точки
+для уменьшения колонок grid (чтобы контент не сжимался).
 
-**`flex` yoki `grid` — qayerda qaysi?**
-Bir o'lchovli qatorlar (nav, tugmalar yonma-yon) → `flex`. Ikki o'lchovli to'r
-(mahsulotlar 4 ustun) → `grid`. Header `grid: 1fr auto 1fr` — logo aniq markazda.
+**`flex` или `grid` — где что?**
+Одномерные строки (nav, кнопки рядом) → `flex`. Двумерная сетка
+(товары в 4 колонки) → `grid`. Header `grid: 1fr auto 1fr` — логотип точно по центру.
 
-**Trash ikonka qanday qizil bo'ldi?**
-SVG qora edi. `.cart-item-remove img { filter: ... }` — CSS filter bilan qizilga bo'yadik.
+**Как иконка корзины стала красной?**
+SVG был чёрным. `.cart-item-remove img { filter: ... }` — покрасили в красный через CSS filter.
 
 ---
 
 ## JavaScript
 
-**`api.js` nima uchun kerak? Har joyda `fetch` yozsak nima yomon?**
-Base URL, token qo'shish, xato ishlovi — takrorlanadi. `api.js` da bir marta.
-Endpoint o'zgarsa — bitta joy.
+**Зачем нужен `api.js`? Что плохого, если писать `fetch` в каждом месте?**
+Base URL, добавление токена, обработка ошибок — повторялись бы. В `api.js` один раз.
+Если эндпоинт изменится — одно место.
 
-**`async/await` — `.then()` dan farqi?**
-Ikkalasi ham "Promise" bilan ishlaydi. `await` kodni tepadan pastga o'qiladigan qiladi
-(`const x = await fn()`). `try/catch` bilan xatoni ushlash oson.
+**Чем `async/await` отличается от `.then()`?**
+Оба работают с "Promise". `await` делает код читаемым сверху вниз
+(`const x = await fn()`). Ошибку легко поймать через `try/catch`.
 
-**`request()` da `if (!res.ok)` — nega `throw`, `return` emas?**
-`throw` bilan chaqiruvchi `try { muvaffaqiyat } catch { xato }` deb yozadi.
-`return` bo'lsa har joyda `if (result.error)` tekshirish kerak edi.
+**В `request()` при `if (!res.ok)` — почему `throw`, а не `return`?**
+С `throw` вызывающий код пишет `try { успех } catch { ошибка }`.
+При `return` пришлось бы везде проверять `if (result.error)`.
 
-**401 kelganda nima bo'ladi?**
-`request()` `clearToken()` chaqiradi (sessiya tugagan). Keyingi `isLoggedIn()` — `false`.
-Foydalanuvchi qayta kirishi kerak.
+**Что происходит при получении 401?**
+`request()` вызывает `clearToken()` (сессия истекла). Следующий `isLoggedIn()` — `false`.
+Пользователю нужно войти заново.
 
-**Mehmon savati va kirgan foydalanuvchi savati — farqi, qayerda?**
-Mehmon → `localStorage` (`storage.js`). Kirgan → server (`api.js`).
-`cart-store.js` ikkisini yashiradi — sahifa "qaysi holat?" demайdi.
-Login paytida serverga o'tmagan mahsulot o'chirilmaydi; mahalliy savatda qoladi.
+**В чём разница между гостевой корзиной и корзиной вошедшего пользователя, и где это?**
+Гость → `localStorage` (`storage.js`). Вошёл → сервер (`api.js`).
+`cart-store.js` скрывает оба варианта — страница не спрашивает "какое сейчас состояние?".
+При входе товар, который не перенёсся на сервер, не удаляется; остаётся в локальной корзине.
 
-**`localStorage` va `sessionStorage`?**
-`localStorage` — brauzer yopilsa ham qoladi. `sessionStorage` — tab yopilsa o'chadi.
-Bizga token uzoq turishi kerak → `localStorage`.
+**`localStorage` и `sessionStorage`?**
+`localStorage` — сохраняется даже после закрытия браузера. `sessionStorage` — исчезает при закрытии вкладки.
+Нам нужно, чтобы токен держался долго → `localStorage`.
 
-**`storage.js` da `try/catch` nega?**
-`localStorage` to'la bo'lsa yoki brauzer bloklagan bo'lsa — xato beradi.
-Bir joyda ushlab, `null` qaytaramiz, sayt yiqilmaydi.
+**Почему в `storage.js` есть `try/catch`?**
+Если `localStorage` заполнен или заблокирован браузером — будет ошибка.
+Ловим в одном месте, возвращаем `null`, сайт не падает.
 
-**`esc()` nima qiladi va nega kerak?**
-Mahsulot nomi / izoh backenddan keladi. Ichida `<script>` yoki `<` `>` bo'lsa —
-ular MATN bo'lib chizilsin, HTML kod bo'lib emas. XSS himoyasi.
+**Что делает `esc()` и зачем он нужен?**
+Название товара / отзыв приходят с бэкенда. Если внутри `<script>` или `<` `>` —
+они должны отрисовываться как ТЕКСТ, а не как HTML-код. Защита от XSS.
 
-**Event delegation nima? (`cart.js` da)**
-Har `.cart-item` ga alohida `addEventListener` o'rniga, BITTA listener ota elementга
-(`[data-cart-main]`). Bosilganda `e.target.closest(...)` bilan qaysi element ekanini topamiz.
-Kamroq listener, dinamik qo'shilgan elementlar ham ishlaydi.
+**Что такое делегирование событий? (в `cart.js`)**
+Вместо отдельного `addEventListener` на каждый `.cart-item`, ОДИН listener на родительский элемент
+(`[data-cart-main]`). При клике через `e.target.closest(...)` определяем, какой это элемент.
+Меньше listener'ов, работает и с динамически добавленными элементами.
 
-**`IntersectionObserver` — nima?**
-Brauzer elementning ekranда ko'rinishini kuzatadi. Ko'ringanda callback → `.is-visible`
-klassi → CSS animatsiyani boshlaydi. Scroll hodisasini har millisekund tekshirishdan tez.
+**Что такое `IntersectionObserver`?**
+Браузер следит за видимостью элемента на экране. Когда виден, вызывается callback → добавляется класс
+`.is-visible` → запускается CSS-анимация. Быстрее, чем проверять событие scroll каждую миллисекунду.
 
-**Animatsiya xavfsizlik to'ri — nega?**
-Agar observer biror sabab bilan ishlamasa, `[data-reveal]` element `opacity: 0` bo'lib
-abadiy yashirin qolardi. `setTimeout(1500)` — har holda ko'rsatamiz.
+**Зачем страховочная сетка для анимации?**
+Если observer по какой-то причине не сработает, элемент `[data-reveal]` остался бы `opacity: 0`
+навсегда скрытым. `setTimeout(1500)` — в любом случае показываем.
 
-**`URLSearchParams` — nima uchun?**
-URL query'ni (`?category=1&minPrice=10`) o'qish/yozishning toza yo'li.
-Qo'lда `split("&")` qilmaymiz.
+**Зачем нужен `URLSearchParams`?**
+Чистый способ читать/писать URL query (`?category=1&minPrice=10`).
+Не делаем `split("&")` вручную.
 
-**Filtr o'zgarganда nega butun sahifa qayta yuklanadi?**
-Holat bitta joyда — URL. Qayta chizish mantig'i shart emas. "Orqaga" tugmasi va
-havola ulashish (`?category=...`) ishlaydi. Kod sodda.
+**Почему при изменении фильтра вся страница не перезагружается?**
+Состояние в одном месте — URL. Логика перерисовки не нужна. Работают кнопка "назад" и
+шаринг ссылки (`?category=...`). Код проще.
 
-**`Promise.all` (components.js) — nega?**
-Header va footer'ni PARALLEL yuklaydi (biri ikkinchisini kutmaydi) → tezroq.
+**Зачем `Promise.all` (components.js)?**
+Загружает header и footer ПАРАЛЛЕЛЬНО (один не ждёт другого) → быстрее.
 
-**Rasm nega `opacity: 0` dan boshlanadi, ko'rinmay qolib ketmaydimi?**
-Yo'q. `img.img-fallback:not(.is-loaded)` — ya'ni FAQAT hali yuklanmagan
-rasm ko'rinmaydi (ortida kulrang joy-tutgich turadi). Yuklangach
-`components.js` `is-loaded` qo'yadi va `opacity` o'zining oddiy 1
-qiymatiga qaytadi; fade esa `animation` bilan ustidan qo'shiladi.
-Ataylab `transition` ishlatmadik: unda asosiy holat `opacity: 0` bo'lardi
-va animatsiya ishlamay qolsa rasm butunlay ko'rinmay ketardi.
+**Почему изображение начинается с `opacity: 0`, не остаётся ли оно невидимым навсегда?**
+Нет. `img.img-fallback:not(.is-loaded)` — то есть невидимо ТОЛЬКО ещё
+не загруженное изображение (за ним серый placeholder). После загрузки
+`components.js` добавляет `is-loaded`, и `opacity` возвращается к своему обычному
+значению 1; fade добавляется поверх через `animation`.
+Специально не использовали `transition`: тогда основным состоянием был бы `opacity: 0`,
+и если бы анимация не сработала, изображение осталось бы полностью невидимым.
 
-**`revealCards()` nima qiladi?**
-Uchta ish: (1) `ScrollTrigger.refresh()` — kontent API'dan keyin qo'shilgani
-uchun skroll o'lchovlari eskirgan bo'ladi; (2) ekranda ko'rinib turgan
-grid bolalarini birin-ketin chiqaradi; (3) "Load more" da `from` argumenti
-bilan faqat YANGI kartochkalarni. GSAP yo'q yoki `prefers-reduced-motion`
-bo'lsa hech narsa qilmaydi — kartochkalar shundoq ham ko'rinadi.
+**Что делает `revealCards()`?**
+Три вещи: (1) `ScrollTrigger.refresh()` — так как контент добавлен после API,
+замеры скролла устарели бы; (2) отображает друг за другом видимые на экране
+дочерние элементы grid; (3) при "Load more" с аргументом `from` —
+только НОВЫЕ карточки. Если нет GSAP или включён `prefers-reduced-motion`,
+ничего не делает — карточки и так видны.
 
-**Savatda `+` bosilganda nega butun ro'yxat qayta chizilmaydi?**
-Chizilsa ro'yxat ko'z oldida "yaltirab" ketardi. Endi faqat o'sha qatordagi
-son va "Order Summary" yangilanadi (`countUp` bilan raqam sanab o'tadi).
-O'chirishda esa qator avval so'nadi (0.28s), keyin ro'yxat yangilanadi.
+**Почему при нажатии `+` в корзине весь список не перерисовывается?**
+Если бы перерисовывался, список "мигал" бы на глазах. Теперь обновляется только
+число в этой строке и "Order Summary" (число отсчитывается через `countUp`).
+При удалении же строка сначала гаснет (0.28с), затем список обновляется.
 
-**`.cart-item` da `transition` nega alohida qoidada?**
-Agar `transition` `.is-removing` ichida bo'lsa, klass qo'shilgan payt
-transition ham, yangi qiymat ham bir vaqtda paydo bo'ladi — brauzer bunda
-animatsiya qilmaydi, element birdan yo'qoladi. Shuning uchun `transition`
-asosiy `.cart-item` da turadi, `.is-removing` faqat yakuniy holatni beradi.
+**Почему `transition` у `.cart-item` в отдельном правиле?**
+Если бы `transition` был внутри `.is-removing`, то в момент добавления класса
+transition и новое значение появились бы одновременно — браузер в этом случае не
+анимирует, элемент исчез бы резко. Поэтому `transition` стоит в основном
+правиле `.cart-item`, а `.is-removing` задаёт только конечное состояние.
 
-**`[data-split]` nima?**
-Bo'lim sarlavhasini hero kabi so'zlarga bo'lib, maska ortidan chiqaradi
-(`motion.js` -> `splitWords`). Matni JS bilan almashadigan sarlavhalarga
-qo'yilmagan, chunki `splitWords` `innerHTML` ni qayta yozadi va ichidagi
-elementlarni (masalan `<span data-review-count>`) yo'qotadi.
+**Что такое `[data-split]`?**
+Заголовок раздела разбивается на слова, как у hero, и выезжает из-за маски
+(`motion.js` -> `splitWords`). Не применён к заголовкам, чей текст меняется через JS,
+потому что `splitWords` перезаписывает `innerHTML` и уничтожает вложенные
+элементы (например `<span data-review-count>`).
 
-**Prefetch nima uchun kerak?**
-Sichqoncha havola ustiga kelganda brauzer sahifani fon rejimida yuklab
-qo'yadi -> bosilganda deyarli darrov ochiladi. Har manzil bir marta,
-`?id=...` hisobga olinmaydi (HTML fayl bitta), tashqi havolalar tegilmaydi.
+**Зачем нужен prefetch?**
+Когда мышь наводится на ссылку, браузер загружает страницу в фоне -> при клике
+она открывается почти мгновенно. Каждый адрес один раз,
+`?id=...` не учитывается (HTML-файл один), внешние ссылки не затрагиваются.
 
-**Register formasi qanday tekshiriladi?**
-Har maydon ostida alohida `.field-error`. `blur` da tekshiramiz; xato chiqса
-`input` da qayta baholaymiz; `submit` da hammasini. Noto'g'ri maydon —
-`aria-invalid="true"` + `aria-describedby`. Birinchi noto'g'riga `focus`.
-Valid bo'lmaguncha API'ga so'rov yubormaymiz. Mantiq `js/core/validation.js` daги
-sodda funksiyalarда (`validateName` va h.k.), `register.js` faqat ulaydi.
+**Как проверяется форма регистрации?**
+Под каждым полем отдельная `.field-error`. Проверяем при `blur`; если возникла ошибка,
+перепроверяем при `input`; при `submit` — всё. Неверное поле —
+`aria-invalid="true"` + `aria-describedby`. `focus` на первое неверное.
+Пока не валидно, запрос к API не отправляем. Логика в простых функциях
+в `js/core/validation.js` (`validateName` и т.д.), `register.js` только соединяет их.
 
-**Nega telefon uchun kutubxona (intl-tel-input), qo'lда regex emas?**
-190+ davlat, har birининг telefon uzunligи/formати har xil. Qo'лда regex —
-xato va tez eskиради. Kutubxona (libphonenumber ma'lумотлари) `isValidNumber()`
-bilan har davlатни tekshiради. Loyиха ичида (`js/vendor/`), CDN yo'q → CSP toza.
-`initialCountry:"uz"`, `separateDialCode` (`+998`), `strictMode`. API'ga E.164.
-`isValidNumberPrecise()` ni ishlатмадик — docs uni beqарор deydi.
+**Почему для телефона библиотека (intl-tel-input), а не regex вручную?**
+190+ стран, у каждой своя длина/формат телефона. Regex вручную — источник
+ошибок и быстро устаревает. Библиотека (на основе данных libphonenumber) через `isValidNumber()`
+проверяет каждую страну. Внутри проекта (`js/vendor/`), без CDN → CSP чистый.
+`initialCountry:"uz"`, `separateDialCode` (`+998`), `strictMode`. В API — E.164.
+`isValidNumberPrecise()` не использовали — в документации сказано, что он нестабилен.
 
-**Email haqiqий эканини tekshirасанми?**
-Yo'q — frontend pochta қутиси borлигини BILA OLMAYDI. Faqat qat'iy format
-tekshiруви. Haqiqийлигини faqat backend tasдиқлаш havolаси aniqлаyди. Server
-409 (email band) qайтарса — xatoни Email maydonига bog'лаймиз.
+**Проверяете ли вы, что email настоящий?**
+Нет — фронтенд НЕ МОЖЕТ узнать, существует ли почтовый ящик. Только строгая проверка
+формата. Реальность может подтвердить только письмо-подтверждение от бэкенда. Если сервер
+вернул 409 (email занят) — ошибка привязывается к полю Email.
 
 ---
 
 ## API
 
-**Token qayerда saqlanadi va qanday yuboriladi?**
-`localStorage` (`storage.setToken`). Har privat so'rovда `request()`
-`headers["Authorization"] = "Bearer " + token` qo'shadi.
+**Где хранится токен и как отправляется?**
+`localStorage` (`storage.setToken`). При каждом приватном запросе `request()`
+добавляет `headers["Authorization"] = "Bearer " + token`.
 
-**429 xatosi nima? Undan qanday qochamiz?**
-"Juda ko'p so'rov" (120/daqiqa). Cheksiz `fetch` sikli yozmaymiz, keraksiz
-so'rovlarni takrorlamaymiz.
+**Что такое ошибка 429? Как её избегаем?**
+"Слишком много запросов" (120/мин). Не пишем бесконечные циклы `fetch`, не повторяем
+лишние запросы.
 
-**Buyurtмадаги narx nega "snapshot"?**
-`POST /orders` da server narx/nomни buyurtmага ko'chiradi. Keyin mahsulot narxi
-o'zgarsa ham, tarixда eski narx qoladi.
+**Почему цена в заказе — "снимок"?**
+При `POST /orders` сервер копирует цену/название в заказ. Даже если цена товара
+потом изменится, в истории останется старая цена.
 
-**`GET /cart` javobi qanday keladi?**
-`{ message, cart: { items, total } }`. `api.js` `unwrapCart` bilan ichini
-(`{ items, total }`) qaytaradi.
+**В каком виде приходит ответ `GET /cart`?**
+`{ message, cart: { items, total } }`. `api.js` через `unwrapCart` возвращает
+содержимое (`{ items, total }`).
 
-**"My orders" narxsiz — nega?**
-Figma shunday (faqat rasm + nom). Har buyurtмадаги `items` ni yig'ib grid qilamiz.
+**Почему в "My orders" нет цены?**
+Так в Figma (только изображение + название). Собираем `items` каждого заказа в grid.
 
 ---
 
-## Loyihaviy
+## О проекте
 
-**Nega framework ishlatmadingiz?**
-ТЗ talabi. Va pixel-perfect uchun CSS'ни to'liq nazorat qilish kerak.
+**Почему не использовали фреймворк?**
+Требование ТЗ. И для pixel-perfect нужен полный контроль над CSS.
 
-**Deploy qanday?**
-Statik sayt → GitHub → Netlify. `netlify.toml`: `publish = "."`, build yo'q.
+**Как происходит деплой?**
+Статичный сайт → GitHub → Netlify. `netlify.toml`: `publish = "."`, без сборки.
 
-**Pixel-perfect'ni qanday ta'minladingiz?**
-Figma MCP bilan har frame'дан aniq o'lchov/rang/shrift olinди, `variables.css` da
-token qilinди, har komponent brauzerда Figma qiymati bilan solиштирилди (±1px).
+**Как обеспечили pixel-perfect?**
+Через Figma MCP с каждого фрейма сняты точные размер/цвет/шрифт, оформлены в виде
+токенов в `variables.css`, каждый компонент сравнивался в браузере со значением Figma (±1px).

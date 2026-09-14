@@ -1,15 +1,15 @@
 /* ============================================================
-   pages/catalog.js — "Katalog" sahifasi
+   pages/catalog.js — страница "Каталог"
      1) header/footer
-     2) URL query'dan filtr holatini o'qish
-     3) API'dan kategoriyalar + mahsulotlar
-     4) kategoriya bosish / slider / Apply Filter hodisalari
+     2) чтение состояния фильтра из URL query
+     3) из API: категории + товары
+     4) события клика по категории / слайдера / Apply Filter
 
-   MUHIM QAROR: kategoriya bosish / slider surish SAHIFANI QAYTA
-   YUKLAMAYDI. Ular faqat "kutilayotgan" tanlovni belgilaydi. Filtr
-   faqat "Apply Filter" bosilganda ishga tushadi: mahsulotlar qayta
-   olinadi (grid almashadi), URL query esa reload'siz yangilanadi
-   (history.replaceState) — havola ulashish/orqaga tugmasi ishlaydi.
+   ВАЖНОЕ РЕШЕНИЕ: клик по категории / перетаскивание слайдера НЕ
+   ПЕРЕЗАГРУЖАЕТ страницу. Они только задают "ожидающий" выбор. Фильтр
+   применяется только при нажатии "Apply Filter": товары запрашиваются
+   заново (grid обновляется), а URL query обновляется без reload
+   (history.replaceState) — работают шаринг ссылки и кнопка "назад".
    ============================================================ */
 
 import { initLayout } from "../components.js";
@@ -19,7 +19,7 @@ import { productCardHTML, showError, showEmpty, esc, toast, friendlyError, skele
 
 initLayout();
 
-/* --- 1. URL query'dan filtr holati --- */
+/* --- 1. Состояние фильтра из URL query --- */
 const params = new URLSearchParams(location.search);
 const filter = {
   category: params.get("category") || "",
@@ -32,10 +32,10 @@ const grid = document.querySelector("[data-products]");
 const categoryList = document.querySelector("[data-category-list]");
 const categoryGroup = categoryList.closest(".filter-group");
 
-/* --- Mobil filter modal --- */
+/* --- Мобильное модальное окно фильтра --- */
 const filterPanel = document.querySelector(".filter");
 const filterOpenBtn = document.querySelector("[data-filter-open]");
-/* Yopish tugmalari ikkita: xira fon va sheet tepasidagi ikonka. */
+/* Кнопок закрытия две: затемнённый фон и иконка сверху sheet. */
 const filterCloseBtns = document.querySelectorAll("[data-filter-close]");
 const mobileFilter = window.matchMedia("(max-width: 768px)");
 
@@ -54,8 +54,8 @@ function setMobileFilter(open, returnFocus = false) {
     filterPanel.removeAttribute("aria-label");
   }
 
-  // Orqa fon skroll qilinmasin. Sensorli ekranda Lenis yo'q (motion.js),
-  // shuning uchun body'ning o'zini ham qulflaymiz.
+  // Фон не должен скроллиться. На сенсорном экране Lenis нет (motion.js),
+  // поэтому блокируем скролл самого body.
   document.body.style.overflow = shouldOpen ? "hidden" : "";
 
   if (shouldOpen) {
@@ -78,12 +78,12 @@ document.addEventListener("keydown", (e) => {
 });
 mobileFilter.addEventListener("change", () => setMobileFilter(false));
 
-/* --- 2. Kategoriyalar --- */
+/* --- 2. Категории --- */
 async function loadCategories() {
   try {
     const { categories } = await api.getCategories();
     if (!categories.length) {
-      categoryGroup.hidden = true; // hali kategoriya yo'q -> guruhni yashiramiz
+      categoryGroup.hidden = true; // категорий пока нет -> скрываем группу
       return;
     }
     categoryList.innerHTML = categories
@@ -102,13 +102,13 @@ async function loadCategories() {
   }
 }
 
-/* --- 3. Mahsulotlar --- */
+/* --- 3. Товары --- */
 const moreBtn = document.querySelector("[data-load-more]");
 let shownPage = 1;
 
-// Grid o'zgarganda Lenis eski sahifa balandligida qolib ketmasin.
-// Ikki kadr kutamiz: brauzer avval yangi kartalarni joylashtirib oladi,
-// keyin skroll chegarasi va ScrollTrigger nuqtalari qayta hisoblanadi.
+// Чтобы при изменении grid Lenis не застревал на старой высоте страницы.
+// Ждём два кадра: сначала браузер размещает новые карточки,
+// затем заново пересчитываются границы скролла и точки ScrollTrigger.
 function refreshScrollLayout() {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
@@ -128,21 +128,21 @@ function fetchPage(page) {
   });
 }
 
-// "pages" > 1 bo'lsagina "Load more" tugmasi ko'rinadi.
+// Кнопка "Load more" видна, только если "pages" > 1.
 function updateMoreBtn(totalPages) {
   moreBtn.hidden = shownPage >= totalPages;
 }
 
 async function loadProducts() {
   grid.innerHTML = skeletonCardsHTML(PAGE_SIZE);
-  grid.setAttribute("aria-busy", "true"); // skrinrider: "yuklanmoqda"
+  grid.setAttribute("aria-busy", "true"); // для скринридера: "загружается"
   moreBtn.hidden = true;
   try {
     const data = await fetchPage(1);
     shownPage = 1;
     if (!data.products.length) return showEmpty(grid, "No products found");
     grid.innerHTML = data.products.map(productCardHTML).join("");
-    revealCards(grid); // kartochkalar birin-ketin chiqadi
+    revealCards(grid); // карточки появляются друг за другом
     updateMoreBtn(data.pages);
     refreshScrollLayout();
   } catch (e) {
@@ -152,14 +152,14 @@ async function loadProducts() {
   }
 }
 
-// keyingi sahifani grid oxiriga QO'SHADI (almashtirmaydi)
+// следующую страницу ДОБАВЛЯЕТ в конец grid (не заменяет)
 moreBtn.addEventListener("click", async () => {
   moreBtn.disabled = true;
   try {
     const data = await fetchPage(shownPage + 1);
     shownPage += 1;
-    // yangi kartochkalar qayerdan boshlanishini eslab qolamiz ->
-    // faqat ULAR animatsiya bilan chiqadi, eskilariga tegilmaydi
+    // запоминаем, с чего начинаются новые карточки ->
+    // анимация появления только у НИХ, старые не трогаем
     const firstNew = grid.children.length;
     grid.insertAdjacentHTML("beforeend", data.products.map(productCardHTML).join(""));
     revealCards(grid, firstNew);
@@ -172,29 +172,29 @@ moreBtn.addEventListener("click", async () => {
   }
 });
 
-/* --- 4. Hodisalar ---
-   MUHIM: kategoriya bosish yoki slider surish SAHIFANI QAYTA YUKLAMAYDI va
-   darrov filtrlamaydi. Ular faqat "kutilayotgan" tanlovni belgilaydi.
-   Filtr faqat "Apply Filter" bosilganda ishlaydi (mahsulotlar qayta
-   olinadi, sahifa yangilanmaydi). URL ham shu payt yangilanadi
-   (history.replaceState) — havola ulashsa bo'ladi, lekin reload yo'q. */
+/* --- 4. События ---
+   ВАЖНО: клик по категории или перетаскивание слайдера НЕ ПЕРЕЗАГРУЖАЕТ
+   страницу и не фильтрует сразу. Они только задают "ожидающий" выбор.
+   Фильтр срабатывает только при нажатии "Apply Filter" (товары
+   запрашиваются заново, страница не обновляется). URL тоже обновляется
+   в этот момент (history.replaceState) — ссылкой можно поделиться, но reload не происходит. */
 
-// kutilayotgan (hali qo'llanmagan) kategoriya tanlovi
+// ожидающий (ещё не применённый) выбор категории
 let pendingCategory = filter.category;
 
 categoryList.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-category]");
   if (!btn) return;
   const id = btn.dataset.category;
-  // toggle: shu kategoriya tanlangan bo'lsa -> bekor
+  // toggle: если эта категория уже выбрана -> отмена
   pendingCategory = pendingCategory === id ? "" : id;
-  // bitta kategoriya rejimida — boshqalarning belgisini olib tashlaymiz
+  // режим одной категории — снимаем отметку с остальных
   categoryList.querySelectorAll("[data-category]").forEach((row) => {
     row.setAttribute("aria-pressed", String(row.dataset.category === pendingCategory));
   });
 });
 
-// Price sarlavhasini bosish -> slider panelini och/yop
+// Клик по заголовку Price -> открыть/закрыть панель слайдера
 const priceToggle = document.querySelector("[data-price-toggle]");
 const pricePanel = document.querySelector("[data-price-panel]");
 priceToggle.addEventListener("click", () => {
@@ -203,7 +203,7 @@ priceToggle.addEventListener("click", () => {
   pricePanel.hidden = open;
 });
 
-// slider
+// слайдер
 const minInput = document.querySelector(".price-input-min");
 const maxInput = document.querySelector(".price-input-max");
 const fillEl = document.querySelector(".price-fill");
@@ -224,12 +224,12 @@ maxInput.addEventListener("input", syncSlider);
 
 const clearBtn = document.querySelector("[data-clear-filter]");
 
-// Filtr faol bo'lsa "Clear filters" ko'rinadi
+// "Clear filters" виден, если фильтр активен
 function refreshClearBtn() {
   clearBtn.hidden = !(filter.category || filter.minPrice || filter.maxPrice);
 }
 
-// filter holatini URL query'ga yozadi (reload YO'Q — faqat manzil satri)
+// записывает состояние фильтра в URL query (reload НЕТ — только адресная строка)
 function syncUrl() {
   const q = new URLSearchParams();
   if (filter.category) q.set("category", filter.category);
@@ -239,7 +239,7 @@ function syncUrl() {
   history.replaceState(null, "", s ? "?" + s : location.pathname);
 }
 
-// Apply Filter -> kutilayotgan tanlovlarni qo'llaymiz va mahsulotlarni qayta olamiz
+// Apply Filter -> применяем ожидающий выбор и заново запрашиваем товары
 document.querySelector("[data-apply-filter]").addEventListener("click", () => {
   filter.category = pendingCategory;
   filter.minPrice = String(Math.min(Number(minInput.value), Number(maxInput.value)));
@@ -250,7 +250,7 @@ document.querySelector("[data-apply-filter]").addEventListener("click", () => {
   setMobileFilter(false);
 });
 
-// "Clear filters" -> hamma filtrni bekor qilamiz (reload YO'Q)
+// "Clear filters" -> сбрасываем все фильтры (reload НЕТ)
 clearBtn.addEventListener("click", () => {
   filter.category = "";
   filter.minPrice = "";
@@ -259,7 +259,7 @@ clearBtn.addEventListener("click", () => {
   categoryList.querySelectorAll("[data-category]").forEach((row) => {
     row.setAttribute("aria-pressed", "false");
   });
-  minInput.value = 0;   // Figma (yangilangan): oraliq 0-100$
+  minInput.value = 0;   // Figma (обновлено): диапазон 0-100$
   maxInput.value = 100;
   syncSlider();
   syncUrl();
@@ -268,9 +268,9 @@ clearBtn.addEventListener("click", () => {
 });
 refreshClearBtn();
 
-/* --- Qidiruv: API'da server-tomon qidiruv yo'q (tekshirildi — ?search=
-   e'tiborsiz qoldiriladi). Shuning uchun HOZIR YUKLANGAN kartochkalarni
-   nomi bo'yicha mahalliy (client-side) filtrlaymiz. --- */
+/* --- Поиск: в API нет поиска на стороне сервера (проверено — ?search=
+   игнорируется). Поэтому фильтруем УЖЕ ЗАГРУЖЕННЫЕ карточки локально
+   (client-side) по названию. --- */
 const searchInput = document.querySelector("[data-search]");
 searchInput.addEventListener("input", () => {
   const q = searchInput.value.trim().toLowerCase();
@@ -295,7 +295,7 @@ searchInput.addEventListener("input", () => {
   }
 });
 
-/* --- boshlash --- */
+/* --- инициализация --- */
 if (filter.minPrice) minInput.value = filter.minPrice;
 if (filter.maxPrice) maxInput.value = filter.maxPrice;
 syncSlider();

@@ -1,177 +1,177 @@
-# Loyiha rejasi — WEPRO / Skin—Clinic do'koni
+# План проекта — магазин WEPRO / Skin—Clinic
 
-Figma maketi asosida. Backend: `https://api.wepro.uz/sandbox-shop` (`api-reference.md`).
+На основе макета Figma. Бэкенд: `https://api.wepro.uz/sandbox-shop` (`api-reference.md`).
 
 ---
 
-## 1. Ekranlar (sahifalar)
+## 1. Экраны (страницы)
 
-| # | Sahifa | Fayl | API |
+| # | Страница | Файл | API |
 |---|--------|------|-----|
-| 1 | Bosh sahifa | `index.html` | `GET /products/bestsellers`, `GET /categories`, `GET /products/newest` (yoki `/products`) |
-| 2 | Katalog (All products) | `pages/catalog.html` | `GET /categories`, `GET /products?category=&minPrice=&maxPrice=&page=&limit=` |
-| 3 | ~~Kategoriya (Creams)~~ | O'CHIRILDI — o'qituvchi Figma'dan olib tashladi (kategoriya endi katalog filtri orqali) | — |
-| 4 | Mahsulot sahifasi | `pages/product.html` | `GET /products/:id` (+ comments), `POST /cart`, `POST /products/:id/comments`, `DELETE .../comments/:id` |
-| 5 | Savatcha (Your bag) | `pages/cart.html` | `GET/PATCH/DELETE /cart`, `POST /orders` |
-| 6 | Kirish (Log in) | `pages/login.html` | `POST /login` |
-| 7 | Ro'yxatdan o'tish (Register) | `pages/register.html` | `POST /register` |
-| 8 | Profil (Profile + My orders) | `pages/profile.html` | `GET /me`, `GET /orders`, `POST /logout` |
+| 1 | Главная страница | `index.html` | `GET /products/bestsellers`, `GET /categories`, `GET /products/newest` (или `/products`) |
+| 2 | Каталог (All products) | `pages/catalog.html` | `GET /categories`, `GET /products?category=&minPrice=&maxPrice=&page=&limit=` |
+| 3 | ~~Категория (Creams)~~ | УДАЛЕНО — преподаватель убрал из Figma (теперь категория через фильтр каталога) | — |
+| 4 | Страница товара | `pages/product.html` | `GET /products/:id` (+ comments), `POST /cart`, `POST /products/:id/comments`, `DELETE .../comments/:id` |
+| 5 | Корзина (Your bag) | `pages/cart.html` | `GET/PATCH/DELETE /cart`, `POST /orders` |
+| 6 | Вход (Log in) | `pages/login.html` | `POST /login` |
+| 7 | Регистрация (Register) | `pages/register.html` | `POST /register` |
+| 8 | Профиль (Profile + My orders) | `pages/profile.html` | `GET /me`, `GET /orders`, `POST /logout` |
 
-Holatlar (bo'sh/xato) ham maketda bor:
-- Savat bo'sh — "No products in your bag"
-- Katalog: filtrdan keyin natija yo'q
-- Profil: buyurtma yo'q
-- Mahsulot: izoh yo'q
+Состояния (пусто/ошибка) тоже есть в макете:
+- Корзина пуста — "No products in your bag"
+- Каталог: нет результата после фильтра
+- Профиль: нет заказов
+- Товар: нет отзывов
 
 ---
 
-## 2. Umumiy komponentlar (`components/`)
+## 2. Общие компоненты (`components/`)
 
-| Komponent | Qayerda | Tarkib |
+| Компонент | Где | Содержимое |
 |-----------|---------|--------|
-| `header` | hamma sahifa | chapda `Home` · `Products`; markazda `WEPRO` logo; o'ngda `Account`, `Bag (N)` — N jonli savat soni |
-| `footer` | hamma sahifa | `Skin—Clinic` brend + ijtimoiy ikonlar; `PRODUCTS` / `SUPPORT` / `COMPANY` ustunlari; `© 2025` + Terms/Privacy/Cookies |
-| `modal` | mahsulot sahifasi | "Leave a comment" (textarea + Send) va "Thank you!" (Okey) oynalari |
+| `header` | все страницы | слева `Home` · `Products`; по центру логотип `WEPRO`; справа `Account`, `Bag (N)` — N живое число товаров в корзине |
+| `footer` | все страницы | бренд `Skin—Clinic` + иконки соцсетей; колонки `PRODUCTS` / `SUPPORT` / `COMPANY`; `© 2025` + Terms/Privacy/Cookies |
+| `modal` | страница товара | окна "Leave a comment" (textarea + Send) и "Thank you!" (Okey) |
 
-Takrorlanadigan UI (`css/ui.css` + `js/ui.js`):
-- `.btn` (qora, to'la kenglikda formalar uchun) va `.btn--pill` (yumaloq: "Add to cart", "Write a Review")
-- `.card` — rasm + nom + narx (bosh sahifa, katalog, kategoriya, profil — hammasida bir xil)
-- `.qty` — miqdor tanlagich (`−` `1` `+`) — mahsulot va savat sahifalarida
-- `.field` — label + input (formalar)
-- `.stars` / verified belgi (izohlar)
-- spinner, toast, bo'sh-holat quti
-
----
-
-## 3. Maket ↔ API mos kelmagan joylar (QAROR kerak)
-
-> Bularni oldindan hal qilamiz — himoyada "nega bunday?" degan savol bo'ladi.
-
-### 3.1. Kirish: telefon (maket) ↔ email (API) — HAL QILINDI
-O'qituvchi: **email bilan**. "Phone" input o'rniga "Email". (`decisions.md`)
-
-### 3.2. Savatдаgi chegirma / eski narx — HAL QILINDI
-Maketдаgi eski narx / "-20%" real emas (dizayner to'ldiruvi). Kartochka **universal**:
-faqat backend maydonlari (`image, title, price`). "Order Summary" strukturasi maketдаgiday,
-lekin `Subtotal = Total` = API `total`, `Discount = 0 (~0%)`. (`decisions.md`)
-
-### 3.3. Mahsulot sahifasi: tavsif va bir nechta rasm
-Maket: katta rasm + 3 thumbnail + tavsif matni.
-API hujjati: mahsulotда `title, price, image` (bitta). `description` va rasm massivi **hujjatда yo'q**.
-- **Qaror:** o'qituvchilar katalogni to'ldirгач tekshiramiz. Agar `description`/`images` bo'lsa — ishlatamiz;
-  bo'lmasa: bitta rasm ko'rsatamiz, thumbnail bloki yashiriladi, tavsif o'rniga qisqa placeholder yoki yashiramiz.
-  Kod ikkalasига ham tayyor bo'ladi (defensiv).
-
-### 3.4. Izohlar: "verified" belgisi, sana, hisob (451)
-API izoh: `{ _id, author, text, at }`.
-- `author`, `text`, `at` (sana) — bor. "Verified" ✓ — **bezak**, hammaga qo'yamiz yoki olib tashlaymiz.
-- "All Reviews (451)" — son = `comments.length`.
-- Maketда izohni **o'chirish** tugmasi yo'q, lekin API + ТЗ "o'zinikini o'chirish" ni talab qiladi
-  → o'z izohing ustида kichik "o'chirish" tugmasi qo'shamiz (hover'да).
-
-### 3.5. Brend nomi: header "WEPRO" ↔ footer "Skin—Clinic"
-Maket qoldig'i. Bittasini tanlaymiz (taklif: hamma joyда **WEPRO**).
-
-### 3.6. "Account" havolasi
-Kirilmagan → `login.html`. Kirilgan → `profile.html`.
+Повторяющийся UI (`css/ui.css` + `js/ui.js`):
+- `.btn` (чёрная, на всю ширину для форм) и `.btn--pill` (скруглённая: "Add to cart", "Write a Review")
+- `.card` — изображение + название + цена (одинаково на главной, в каталоге, категории, профиле)
+- `.qty` — переключатель количества (`−` `1` `+`) — на страницах товара и корзины
+- `.field` — label + input (формы)
+- `.stars` / значок verified (отзывы)
+- спиннер, toast, блок пустого состояния
 
 ---
 
-## 4. Bosqichma-bosqich qurilish rejasi (~2 hafta)
+## 3. Места, где макет ↔ API не совпадают (нужно РЕШЕНИЕ)
 
-Har bosqichда: men tushuntiraman → sen yozasan → men savol beraman → `docs/` ga qaror yoziladi.
+> Решаем это заранее — на защите будет вопрос "почему так?".
 
-### HAFTA 1 — asos + pixel-perfect statik
+### 3.1. Вход: телефон (макет) ↔ email (API) — РЕШЕНО
+Преподаватель: **по email**. Вместо input "Phone" — "Email". (`decisions.md`)
 
-**B0. Tayyorgarlik**
-- [ ] Figma o'lchov usuli (drafts nusxa yoki REST token)
-- [ ] `variables.css` — ranglar, shriftlar, oraliqlar, radius, breakpoint'lar
-- [ ] `reset.css` + `base.css` + `.container` (1200px, markazda)
-- [ ] shrift ulash (Figmadagi shrift; Google Fonts yoki self-host)
+### 3.2. Скидка / старая цена в корзине — РЕШЕНО
+Старая цена / "-20%" в макете нереальны (заполнение дизайнера). Карточка **универсальная**:
+только поля бэкенда (`image, title, price`). Структура "Order Summary" как в макете,
+но `Subtotal = Total` = API `total`, `Discount = 0 (~0%)`. (`decisions.md`)
 
-**B1. Umumiy layout**
-- [ ] `components.js` — header/footer injeksiya (dev-server bilan test)
-- [ ] `header` — HTML + CSS, pixel-perfect, `Bag (N)` soni (hozircha 0)
+### 3.3. Страница товара: описание и несколько изображений
+Макет: крупное изображение + 3 миниатюры + текст описания.
+Документация API: у товара `title, price, image` (одно). `description` и массив изображений **в документации нет**.
+- **Решение:** проверим после того, как преподаватели заполнят каталог. Если `description`/`images` есть — используем;
+  если нет: показываем одно изображение, блок миниатюр скрывается, вместо описания короткий placeholder или скрываем.
+  Код готов к обоим случаям (защитно).
+
+### 3.4. Отзывы: значок "verified", дата, счётчик (451)
+Отзыв в API: `{ _id, author, text, at }`.
+- `author`, `text`, `at` (дата) — есть. "Verified" ✓ — **украшение**, ставим всем или убираем.
+- "All Reviews (451)" — число = `comments.length`.
+- В макете нет кнопки **удаления** отзыва, но API + ТЗ требуют "удаление своего"
+  → добавляем маленькую кнопку "удалить" над своим отзывом (при наведении).
+
+### 3.5. Название бренда: header "WEPRO" ↔ footer "Skin—Clinic"
+Остаток макета. Выбираем одно (предложение: везде **WEPRO**).
+
+### 3.6. Ссылка "Account"
+Нет входа → `login.html`. Есть вход → `profile.html`.
+
+---
+
+## 4. Пошаговый план сборки (~2 недели)
+
+На каждом этапе: я объясняю → ты пишешь → я задаю вопрос → решение записывается в `docs/`.
+
+### НЕДЕЛЯ 1 — основа + pixel-perfect статика
+
+**B0. Подготовка**
+- [ ] способ снятия размеров в Figma (копия черновика или REST-токен)
+- [ ] `variables.css` — цвета, шрифты, отступы, radius, breakpoint'ы
+- [ ] `reset.css` + `base.css` + `.container` (1200px, по центру)
+- [ ] подключение шрифта (шрифт из Figma; Google Fonts или self-host)
+
+**B1. Общий layout**
+- [ ] `components.js` — инъекция header/footer (тест с dev-сервером)
+- [ ] `header` — HTML + CSS, pixel-perfect, число `Bag (N)` (пока 0)
 - [ ] `footer` — HTML + CSS, pixel-perfect
-- [ ] responsive: header mobil (burger yoki soddalashtirilgan)
+- [ ] адаптив: header на мобильном (бургер или упрощённый)
 
-**B2. Bosh sahifa (statik, mock data bilan)**
-- [ ] hero (rasm + matn + "Shop now")
-- [ ] `.card` komponenti (bu yerда bir marta, keyin hamma joyда)
-- [ ] "Best sellers" (4 kartochka), "Shop by category" (3 karta), "Featured products" (12)
-- [ ] to'liq responsive
+**B2. Главная страница (статика, с mock-данными)**
+- [ ] hero (изображение + текст + "Shop now")
+- [ ] компонент `.card` (здесь один раз, потом везде)
+- [ ] "Best sellers" (4 карточки), "Shop by category" (3 карточки), "Featured products" (12)
+- [ ] полный адаптив
 
-**B3. Katalog + Kategoriya (statik)**
-- [ ] filtr paneli (kategoriyalar, narx slider, Apply Filter)
-- [ ] mahsulot grid + paginatsiya ko'rinishi
-- [x] ~~`category.html`~~ — Figma'dan olib tashlandi
-- [ ] bo'sh-natija holati
-- [ ] responsive (filtr panel mobil'да yuqoriга yoki drawer)
+**B3. Каталог + Категория (статика)**
+- [ ] панель фильтра (категории, слайдер цены, Apply Filter)
+- [ ] сетка товаров + вид пагинации
+- [x] ~~`category.html`~~ — убрано из Figma
+- [ ] состояние пустого результата
+- [ ] адаптив (панель фильтра на мобильном сверху или drawer)
 
-**B4. Mahsulot sahifasi (statik)**
-- [ ] rasm + thumbnaillar, nom, narx, tavsif, `.qty`, "Add to cart"
-- [ ] "All Reviews" — izoh kartochkalari (2 ustun), "Write a Review"
+**B4. Страница товара (статика)**
+- [ ] изображение + миниатюры, название, цена, описание, `.qty`, "Add to cart"
+- [ ] "All Reviews" — карточки отзывов (2 колонки), "Write a Review"
 - [ ] `modal` — "Leave a comment" + "Thank you"
-- [ ] responsive
+- [ ] адаптив
 
-**B5. Savat + Auth + Profil (statik)**
-- [ ] savat: pozitsiya kartochkasi, `.qty`, o'chirish, "Order Summary" (qora karta)
-- [ ] savat bo'sh holati
-- [ ] login / register formalari + validatsiya ko'rinishi
-- [ ] profil: ma'lumot + "Log out" + "My orders" grid
-- [ ] responsive
-- [ ] **1-hafta oxiri: barcha sahifalar pixel-perfect va responsive, lekin "jonsiz"**
+**B5. Корзина + Auth + Профиль (статика)**
+- [ ] корзина: карточка позиции, `.qty`, удаление, "Order Summary" (чёрная карточка)
+- [ ] пустое состояние корзины
+- [ ] формы login / register + вид валидации
+- [ ] профиль: данные + "Log out" + сетка "My orders"
+- [ ] адаптив
+- [ ] **конец 1-й недели: все страницы pixel-perfect и адаптивны, но "неживые"**
 
-### HAFTA 2 — funksiya (API) + animatsiya + sayqal
+### НЕДЕЛЯ 2 — функциональность (API) + анимация + полировка
 
 **B6. `api.js` + `config.js`**
-- [ ] `request()` yordamchisi (base URL, `Authorization`, xato → `{message}`)
-- [ ] barcha endpoint funksiyalari
-- [ ] real API bilan test (katalog to'lgan bo'lsa)
+- [ ] помощник `request()` (base URL, `Authorization`, ошибка → `{message}`)
+- [ ] все функции эндпоинтов
+- [ ] тест с реальным API (когда каталог заполнен)
 
-**B7. Katalog jonli**
-- [ ] `storage.js`, `ui.js` yordamchilar
-- [ ] bosh sahifa: bestsellers / categories / featured — API'dan
-- [ ] katalog: `getProducts` + filtr (kategoriya, narx) + paginatsiya, URL query bilan holat
-- [ ] kategoriya sahifasi jonli
-- [ ] `429` dan himoya (kesh, ortiqcha so'rov yo'q)
+**B7. Каталог оживает**
+- [ ] помощники `storage.js`, `ui.js`
+- [ ] главная страница: bestsellers / categories / featured — из API
+- [ ] каталог: `getProducts` + фильтр (категория, цена) + пагинация, состояние через URL query
+- [ ] страница категории оживает
+- [ ] защита от `429` (кеш, без лишних запросов)
 
-**B8. Auth jonli**
+**B8. Auth оживает**
 - [ ] `auth.js` — `doLogin` / `doRegister` / `doLogout` / `isLoggedIn` / `requireAuth`
-- [ ] login / register — validatsiya + API + xato xabarlari (400/401/409)
-- [ ] header holatga qarab: `Account` → login yoki profil, `Log out`
-- [ ] profil: `GET /me` + `GET /orders`
+- [ ] login / register — валидация + API + сообщения об ошибках (400/401/409)
+- [ ] header в зависимости от состояния: `Account` → login или профиль, `Log out`
+- [ ] профиль: `GET /me` + `GET /orders`
 
-**B9. Savat + buyurtma jonli**
-- [ ] `cart-store.js` — mehmon (localStorage) + kirgan (API)
-- [ ] mahsulot sahifasidan "Add to cart"
-- [ ] savat sahifasi: `PATCH` / `DELETE`, jami, chegirma (3.2 qaroriga ko'ra)
-- [ ] "Go to checkout": mehmon bo'lsa → login majburiy; kirgan bo'lsa → `POST /orders`
-- [ ] login paytida mehmon savatini serverга ko'chirish
-- [ ] header `Bag (N)` jonli yangilanadi
+**B9. Корзина + заказ оживают**
+- [ ] `cart-store.js` — гость (localStorage) + вошёл (API)
+- [ ] "Add to cart" со страницы товара
+- [ ] страница корзины: `PATCH` / `DELETE`, итог, скидка (по решению 3.2)
+- [ ] "Go to checkout": если гость → обязательный вход; если вошёл → `POST /orders`
+- [ ] перенос гостевой корзины на сервер при входе
+- [ ] `Bag (N)` в header обновляется живо
 
-**B10. Izohlar jonli**
-- [ ] mahsulot sahifasida izohlar ro'yxati (`at` sana formati)
-- [ ] "Write a Review" → modal → `POST .../comments` → "Thank you" modal
-- [ ] o'z izohini o'chirish (403 ni hisobga olish)
-- [ ] limit: bitta mahsulotга 3 ta (409 xabari)
+**B10. Отзывы оживают**
+- [ ] список отзывов на странице товара (формат даты `at`)
+- [ ] "Write a Review" → модал → `POST .../comments` → модал "Thank you"
+- [ ] удаление своего отзыва (с учётом 403)
+- [ ] лимит: 3 на один товар (сообщение 409)
 
-**B11. Animatsiya + sayqal**
-- [ ] scroll-reveal (seksiyalar paydo bo'lishi), hover holatlar, tugma bosilishi
-- [ ] sahifa/rasm yuklanish skeletonlari
-- [ ] modal ochilish/yopilish animatsiyasi
-- [ ] mayda: `Bag` soni o'zgarganда animatsiya, toast
+**B11. Анимация + полировка**
+- [ ] scroll-reveal (появление секций), состояния hover, нажатие кнопок
+- [ ] skeleton'ы загрузки страницы/изображения
+- [ ] анимация открытия/закрытия модала
+- [ ] мелочи: анимация при изменении числа `Bag`, toast
 
-**B12. Yakun**
-- [ ] barcha qurilmalarda test (mobil/planshet/desktop), bug-hunt
-- [ ] `401` / tarmoq uzilishi / bo'sh javob holatlari
-- [ ] `docs/` yakunlash: `decisions.md`, `data-flow.md`, `qa-bank.md`
-- [ ] GitHub + Netlify deploy
-- [ ] **Mock himoya: 40 daqiqa, tasodifiy fayl/qatorlar**
+**B12. Финал**
+- [ ] тест на всех устройствах (мобильный/планшет/десктоп), поиск багов
+- [ ] состояния `401` / обрыв сети / пустой ответ
+- [ ] завершение `docs/`: `decisions.md`, `data-flow.md`, `qa-bank.md`
+- [ ] деплой GitHub + Netlify
+- [ ] **пробная защита: 40 минут, случайный файл/строки**
 
 ---
 
-## 5. Skelet o'zgarishlari (bajarildi)
-- `orders.html/js/css` → `profile.html/js/css` (maketда profil + buyurtmalar bitta ekran)
-- ~~`pages/category.html` + `js/pages/category.js`~~ — keyinchalik Figma'dan olib tashlandi
-- `components/modal.html` + `modal.css` qo'shildi
+## 5. Изменения структуры (выполнено)
+- `orders.html/js/css` → `profile.html/js/css` (в макете профиль + заказы один экран)
+- ~~`pages/category.html` + `js/pages/category.js`~~ — позже убрано из Figma
+- добавлены `components/modal.html` + `modal.css`

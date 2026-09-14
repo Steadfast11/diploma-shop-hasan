@@ -1,7 +1,7 @@
 /* ============================================================
-   modal.css — umumiy modal oynasi (izoh yozish / "Thank you")
-   Figma: markazda oq karta, radius 20, ichida sarlavha + mazmun +
-   qora yumaloq tugma. Orqa fon qorayadi.
+   modal.css — общее модальное окно (написание отзыва / "Thank you")
+   Figma: белая карточка по центру, radius 20, внутри заголовок + содержимое +
+   чёрная скруглённая кнопка. Фон затемняется.
    ============================================================ */
 
 .modal {
@@ -42,8 +42,8 @@
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-/* Figma: yirik qalin sarlavha, ostida kulrang izoh — ikkalasi bir-biriga
-   yaqin (shuning uchun umumiy 24px oraliqni bu juftlik uchun kamaytiramiz). */
+/* Figma: крупный жирный заголовок, под ним серый комментарий — они близко
+   друг к другу (поэтому для этой пары уменьшаем общий отступ 24px). */
 .modal-title {
   font-weight: 700;
   font-size: 32px;
@@ -77,7 +77,7 @@
   outline: none;
   border-color: var(--black);
 }
-/* Figma: to'liq kenglikdagi qora tugma — burchaklari to'g'ri, yumaloq emas. */
+/* Figma: чёрная кнопка на всю ширину — углы прямые, не скруглённые. */
 .modal-btn {
   height: 56px;
   border: 0;

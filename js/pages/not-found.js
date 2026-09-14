@@ -1,6 +1,6 @@
 /* ============================================================
-   pages/not-found.js — 404 sahifasi
-   Faqat header/footer + animatsiya kerak, boshqa mantiq yo'q.
+   pages/not-found.js — страница 404
+   Нужны только header/footer + анимация, другой логики нет.
    ============================================================ */
 
 import { initLayout } from "../components.js";

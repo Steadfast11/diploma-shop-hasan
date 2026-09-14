@@ -1,32 +1,32 @@
 /* ============================================================
-   footer.css — FAQAT footer komponentining stili.
-   Figma: 1280px kenglik markazda, ichki padding 40px (chap/o'ng)
-   va 56px (tepa/past), tepasida 1px #e3e3e3 chiziq.
-   Struktura: tepa qism (4 ustun) -> bo'linish chizig'i -> past qism.
+   footer.css — стиль ТОЛЬКО компонента footer.
+   Figma: ширина 1280px по центру, внутренний padding 40px (слева/справа)
+   и 56px (сверху/снизу), сверху линия 1px #e3e3e3.
+   Структура: верхняя часть (4 колонки) -> разделительная линия -> нижняя часть.
    ============================================================ */
 
 .footer-inner {
-  max-width: 1280px;              /* Figma: footer frame kengligi */
+  max-width: 1280px;              /* Figma: ширина фрейма footer */
   margin-inline: auto;
   padding: 56px 40px;            /* Figma: py-56 px-40 */
   border-top: 1px solid var(--color-line-soft); /* Figma: 1px #e3e3e3 */
 
   display: flex;
   flex-direction: column;
-  gap: 40px;                     /* Figma: tepa/chiziq/past oralig'i */
+  gap: 40px;                     /* Figma: отступ верх/линия/низ */
 }
 
-/* ---- tepa qism: 4 teng ustun ---- */
+/* ---- верхняя часть: 4 равные колонки ---- */
 .footer-top {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;                     /* Figma: ustunlar orasi */
+  gap: 24px;                     /* Figma: отступ между колонками */
 }
 
 .footer-brand {
   display: flex;
   flex-direction: column;
-  gap: 32px;                     /* Figma: logo va ijtimoiy tarmoq orasi */
+  gap: 32px;                     /* Figma: отступ между логотипом и соцсетями */
 }
 .footer-logo {
   width: 121px;
@@ -34,18 +34,18 @@
 }
 .footer-social {
   display: flex;
-  gap: 16px;                     /* Figma: ikonlar orasi */
+  gap: 16px;                     /* Figma: отступ между иконками */
 }
 .footer-social img {
   width: 16px;
   height: 16px;
 }
 
-/* ---- link ustunlari ---- */
+/* ---- колонки ссылок ---- */
 .footer-col {
   display: flex;
   flex-direction: column;
-  gap: 32px;                     /* Figma: sarlavha va ro'yxat orasi */
+  gap: 32px;                     /* Figma: отступ между заголовком и списком */
 }
 .footer-heading {
   color: var(--color-text-muted); /* #999 */
@@ -54,9 +54,9 @@
 .footer-col ul {
   display: flex;
   flex-direction: column;
-  gap: 16px;                     /* Figma: havolalar orasi */
+  gap: 16px;                     /* Figma: отступ между ссылками */
 }
-/* Barcha footer havolalari bir xil ishlaydi: hover'da tagchiziq. */
+/* Все ссылки footer ведут себя одинаково: подчёркивание при hover. */
 .footer-col a:hover,
 .footer-legal a:hover {
   text-decoration: underline;
@@ -65,13 +65,13 @@
   display: inline-flex;
 }
 
-/* ---- bo'linish chizig'i ---- */
+/* ---- разделительная линия ---- */
 .footer-divider {
   height: 1px;
   background: var(--color-line-soft);
 }
 
-/* ---- past qism ---- */
+/* ---- нижняя часть ---- */
 .footer-bottom {
   display: flex;
   justify-content: space-between;
@@ -82,7 +82,7 @@
   gap: 16px;
 }
 
-/* ---------- MOBIL (Figma: ustunlar tik, px-24) ---------- */
+/* ---------- МОБИЛЬНАЯ ВЕРСИЯ (Figma: колонки вертикально, px-24) ---------- */
 @media (max-width: 768px) {
   .footer-inner {
     padding: 56px 24px;

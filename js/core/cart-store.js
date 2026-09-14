@@ -1,11 +1,11 @@
 /* ============================================================
-   cart-store.js — SAVAT mantig'i (bitta manba).
-   Ikki holat, tashqaridan bir xil ko'rinadi:
-     - MEHMON  : savat localStorage'da (storage.js)
-     - KIRGAN  : savat serverda (api.js)
-   Sahifa "qaysi holat?" deb o'ylamaydi — faqat addItem/setQty/... deydi.
+   cart-store.js — логика КОРЗИНЫ (единый источник).
+   Два состояния, снаружи выглядят одинаково:
+     - ГОСТЬ    : корзина в localStorage (storage.js)
+     - ВОШЁЛ    : корзина на сервере (api.js)
+   Страница не думает "какое сейчас состояние?" — просто вызывает addItem/setQty/...
 
-   Har javob bir xil shaklda:
+   Каждый ответ в одном и том же виде:
      { items: [{ productId, title, price, image, qty, sum }], total }
    ============================================================ */
 
@@ -13,7 +13,7 @@ import * as api from "./api.js";
 import { isLoggedIn } from "./auth.js";
 import { getGuestCart, setGuestCart, clearGuestCart } from "./storage.js";
 
-/* --- obunachilar (header'dagi "Bag (N)" yangilanib tursin) --- */
+/* --- подписчики (чтобы "Bag (N)" в шапке всегда обновлялся) --- */
 const listeners = new Set();
 export function subscribe(fn) {
   listeners.add(fn);
@@ -23,14 +23,14 @@ function notify() {
   listeners.forEach((fn) => fn());
 }
 
-/* --- mehmon savatini { items, total } shakliga keltirish --- */
+/* --- приводит гостевую корзину к виду { items, total } --- */
 function guestCartShaped() {
   const items = getGuestCart().map((it) => ({ ...it, sum: it.price * it.qty }));
   const total = items.reduce((s, it) => s + it.sum, 0);
   return { items, total };
 }
 
-/* --- O'QISH --- */
+/* --- ЧТЕНИЕ --- */
 export async function getCart() {
   return isLoggedIn() ? api.getCart() : guestCartShaped();
 }
@@ -44,14 +44,14 @@ export async function getCount() {
   }
 }
 
-/* --- YOZISH --- */
+/* --- ЗАПИСЬ --- */
 export async function addItem(product, qty = 1) {
   if (isLoggedIn()) {
     await api.addToCart(product._id, qty);
   } else {
     const cart = getGuestCart();
     const found = cart.find((it) => it.productId === product._id);
-    if (found) found.qty = Math.min(20, found.qty + qty); // API bilan bir xil shift
+    if (found) found.qty = Math.min(20, found.qty + qty); // тот же лимит, что и в API
     else {
       if (cart.length >= 20) {
         const err = new Error("Your bag can contain at most 20 different products");
@@ -96,13 +96,13 @@ export async function clear() {
   notify();
 }
 
-// Server savatni o'zi o'zgartirgan holatda (masalan buyurtmadan keyin)
-// header sonini ortiqcha API so'rovisiz qayta o'qitadi.
+// Когда сервер сам изменил корзину (например, после заказа) —
+// заставляет перечитать число в шапке без лишнего запроса к API.
 export function refresh() {
   notify();
 }
 
-/* Login paytida: mehmon savatidagilarni serverga ko'chiramiz, keyin tozalaymiz. */
+/* Во время входа: переносим товары из гостевой корзины на сервер, затем очищаем её. */
 export async function mergeGuestCartIntoAccount() {
   const guest = getGuestCart();
   const failed = [];
@@ -110,7 +110,7 @@ export async function mergeGuestCartIntoAccount() {
     try {
       await api.addToCart(it.productId, it.qty);
     } catch {
-      // O'tmagan mahsulotni yo'qotmaymiz — mehmon savatida qoldiramiz.
+      // Товар, который не удалось перенести, не теряем — оставляем в гостевой корзине.
       failed.push(it);
     }
   }
@@ -119,7 +119,7 @@ export async function mergeGuestCartIntoAccount() {
     try {
       sessionStorage.setItem("diploma_shop_cart_merge_warning", "1");
     } catch {
-      /* sessionStorage bloklangan bo'lsa ogohlantirishsiz davom etamiz */
+      /* если sessionStorage заблокирован, продолжаем без предупреждения */
     }
   } else {
     clearGuestCart();
