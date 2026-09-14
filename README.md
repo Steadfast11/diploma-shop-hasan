@@ -8,8 +8,6 @@
 `fetch()` (header/footer и API) не работает через `file://` — нужен небольшой сервер:
 
 ```bash
-npm run dev
-# или:
 npx serve -l 5173 .
 # или:
 python3 -m http.server 5173
@@ -33,7 +31,8 @@ python3 -m http.server 5173
 ## Структура папок
 
 ```
-components/     header, footer, modal — HTML + CSS. Вставляются в страницу через JS.
+components/     header, footer — HTML + CSS. Вставляются в страницу через JS.
+                (стиль modal.css используется, а modal.html — нет: JS создаёт modal сам)
 css/
   reset.css       выравнивание стандартных стилей браузера
   variables.css   токены Figma (переменные :root)
@@ -52,7 +51,6 @@ js/
   ui.js           помощники: money, esc, productCardHTML, openModal
   pages/          стартовый скрипт для каждого HTML-файла
 assets/         icons / images / favicon.svg
-docs/           plan, decisions, data-flow, qa-bank, api-reference, figma-nodes
 ```
 
 ## Деплой (Netlify)
@@ -65,9 +63,3 @@ docs/           plan, decisions, data-flow, qa-bank, api-reference, figma-nodes
 4. Deploy
 
 Или: `npx netlify deploy --prod --dir=.`
-
-## Материал для защиты
-
-`docs/qa-bank.md` — ожидаемые вопросы-ответы.
-`docs/data-flow.md` — поток каждого действия.
-`docs/decisions.md` — почему написано именно так.
